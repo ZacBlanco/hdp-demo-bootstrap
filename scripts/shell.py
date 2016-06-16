@@ -1,5 +1,18 @@
 import os, subprocess
 
+# The shell class defines just a few functions which can make executing commands easier
+# run
+# 	This command has two possible ways to be called
+# 	(command) which is just a single line with all arguments
+# 	(command, args) which simply just joins a string with the command and arguments
+# 
+# It is also possible to change the current working directory (cwd)
+# for commands which are sensitive to file locations
+# (Unfortunately 'cd' doesn't work)
+
+# If no arguments are passed for args, then it is assumed to be a string of length 0
+# If no arguments are passed to the constructor we assume default cwd
+
 class Shell:
 	
 	cwd = ''
@@ -20,6 +33,7 @@ class Shell:
 
 	# set_cwd
 	# equivalent to doing a 'cd' command at the command line
+	# Error if the directory doesn't exist
 	def set_cwd(self, new_cwd):
 		if not os.path.exists(new_cwd):
 			raise IOError(' '.join([self.cwd, 'does not exist']))
