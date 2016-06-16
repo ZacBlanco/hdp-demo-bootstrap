@@ -3,20 +3,20 @@ python:
   - "2.6"
   - "2.7"
 notifications:
-	email:
-		recipients:
-			- zblanco@hortonworks.com
-		on_success: never
-		on_failure: always
+ email:
+  recipients:
+   - zblanco@hortonworks.com
+  on_success: never
+  on_failure: always
 
 
 # command to install dependencies
 install: 
-	- pip install -r requirements.txt
-	- pip install coveralls
+ - pip install -r requirements.txt
+ - pip install coveralls
 # command to run tests
 script:
-	nosetests --with-coverage -w tests
-	
+ nosetests --with-coverage -w tests
+ 
 after_success:
-	coveralls
+ coveralls
