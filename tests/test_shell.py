@@ -24,9 +24,16 @@ class TestShell(unittest.TestCase):
 			self.fail('Valid path should pass here')
 
 	def test_simple_run(self):
-		
 		try:
 			cmd = Shell('/tmp');
+			out = cmd.run('bash --version')
+			out = cmd.run('bash', '--version')
+		except Exception:
+			self.fail('Exception should not have been raised')
+			
+	def test_default_cwd(self):
+		try:
+			cmd = Shell('');
 			out = cmd.run('bash --version')
 			out = cmd.run('bash', '--version')
 		except Exception:
