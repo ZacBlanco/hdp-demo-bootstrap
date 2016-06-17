@@ -1,7 +1,6 @@
 import unittest
 import mock
 from mock import MagicMock, Mock
-#from unittest.mock import MagicMock
 from env import scripts
 from scripts.curl_client import CurlClient
 
@@ -11,9 +10,9 @@ res3 = ['\'key3\':value3', '']
 resErr = ['', '\'msg\':\'err\'']
 
 def mocked_request(*args, **kwargs):
-	if args[0] == 'curl -u admin:admin -X GET http://demo-server:9090/api/v1/test?':
+	if args[0] == 'curl -s -u admin:admin -X GET http://demo-server:9090/api/v1/test?':
 		return res1
-	elif args[0] == 'curl -u admin:admin -X GET http://demo-server:9090/api/v1/bad?':
+	elif args[0] == 'curl -s -u admin:admin -X GET http://demo-server:9090/api/v1/bad?':
 		return res2
 	else:
 		return res3
@@ -40,7 +39,6 @@ class TestCurlClient(unittest.TestCase):
 		assert output == res2
 		output = client.make_request('GET', '')
 		assert output == res3
-		
 		
 	def test_bad_port(self):
 		ports = [-1, 0, 65536, 'strPort']

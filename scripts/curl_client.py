@@ -58,7 +58,7 @@ class CurlClient:
 		
 		method = '-X ' + verb
 		
-		call = ' '.join(['curl', credentials, method, url])
+		call = ' '.join(['curl -s', credentials, method, url])
 		output = self.cmd.run(call)
 		return output
 		
