@@ -43,7 +43,7 @@ class TestCurlClient(unittest.TestCase):
 		
 		
 	def test_bad_port(self):
-		ports = [-1, 0, 65536]
+		ports = [-1, 0, 65536, 'strPort']
 		for pt in ports:
 			try:
 				client = CurlClient(port=pt)
@@ -87,6 +87,7 @@ class TestCurlClient(unittest.TestCase):
 				self.fail('Should throw error on verb: ' + v)
 			except:
 				pass
+			
 			
 			
 			
