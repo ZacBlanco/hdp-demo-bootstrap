@@ -51,38 +51,38 @@ class Ambari:
 	
 	def set_username(self, user):
 		self.username = user
-		client.set_username(self.username)
+		self.client.set_username(self.username)
 		
 	def set_password(self, password):
 		self.password = password
-		client.set_password(self.password)
+		self.client.set_password(self.password)
 		
 	def set_proto(self, proto):
 		self.proto = proto
-		client.set_proto(self.proto)
+		self.client.set_proto(self.proto)
 	
 	def set_server(self, server):
 		self.server = server
-		client.set_server(self.server)
+		self.client.set_server(self.server)
 	
-	def set_username(self, user):
-		self.username = user
-		client.set_username(self.username)
+	def set_port(self, port):
+		self.port = port
+		self.client.set_port(self.port)
 		
 	
-	def __init__(self, username='', password='', proto='http', server='127.0.0.1', port=''):
+	def __init__(self, username='', password='', proto='http', server='127.0.0.1', port=8080):
 		self.client = CurlClient()
 		if not username == '':
-			self.client.set_username(username)
+			self.set_username(username)
 			
 		if not password == '':
-			self.client.set_password(password)
+			self.set_password(password)
 			
 		if not proto == '':
-			self.client.set_proto(proto)
+			self.set_proto(proto)
 		
 		if not server == '':
-			self.client.set_server(server)
+			self.set_server(server)
 			
-		if not str(port) == '':
-			self.client.set_port(port)
+		if not len(str(port)) == 0:
+			self.set_port(port)
