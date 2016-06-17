@@ -26,7 +26,7 @@ class Shell:
 		if len(self.cwd) > 0:
 			process = subprocess.Popen(command, shell=True, cwd=path, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 		else:
-			process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+			process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
 		output = process.communicate()
 		return output
 
