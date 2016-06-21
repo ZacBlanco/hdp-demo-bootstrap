@@ -15,13 +15,11 @@ class Ambari:
 		elif not len(output[1]) == 0:
 			# StdErr output
 			json_str = '{ "message": "" }'
-			try:
-				res = json.loads(json_str)
-				res['message'] = output[1]
-				return res
-			except ValueError as e:
-				raise ValueError(e)
-
+			res = json.loads(json_str) # Built from json_str no chance for error
+			res['message'] = output[1]
+			return res
+		
+		
 		else:
 			json_str = '{ "message" : "No output was returned." }'
 		

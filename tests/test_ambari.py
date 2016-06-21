@@ -10,6 +10,11 @@ sample_services_res = '{"href":"http://demo-server:8080/api/v1/clusters/demo_clu
 
 no_cluster_res = '{"status":404,"message":"The requested resource doesn\'t exist: Cluster not found, clusterName=d"}'
 
+err_res = 'error message here'
+empty_res = ''
+bad_res = '{}]}}}'
+bad_err_res = '{}{}{}{}{}{}{}{}STRY()'
+
 def mocked_request(*args, **kwargs):
 	
 	if '/api/v1/clusters?' in args[0]:
@@ -18,6 +23,14 @@ def mocked_request(*args, **kwargs):
 		return [sample_services_res, '']
 	elif ('/api/v1/clusters/demo_cluster/services?' in args[0]):
 		return [sample_services_res, '']
+	elif ('bad/request' in args[0]):
+		return ['', err_res]
+	elif ('empty/res' in args[0]):
+		return ['', empty_res]
+	elif ('bad/json/res' in args[0]):
+		return [bad_res, '']
+	elif ('err/json/res' in args[0]):
+		return ['', bad_err_res]
 	else:
 		return [no_cluster_res, '']
 
@@ -60,6 +73,38 @@ class TestAmbariClient(unittest.TestCase):
 		data = client.getClusterInfo('');
 		assert data['status'] == 404
 		assert 'resource doesn\'t exist' in data['message']
+		
+	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	def test_err_str(self, mock):
+		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
+		data = client.getClusterInfo('bad/request');
+		assert not len(data['message']) == 0
+		assert data['message'] == err_res
+		
+	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	def test_empty_str(self, mock):
+		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
+		data = client.getClusterInfo('empty/res');
+		assert not len(data['message']) == 0
+		assert data['message'] == 'No output was returned.'
+		
+	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	def test_bad_json_res(self, mock):
+		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
+		try:
+			data = client.getClusterInfo('bad/json/res');
+			self.fail('Should have thrown an exception: ValueError')
+		except ValueError as e:
+			assert ('Extra data:' in str(e.message))
+			assert not len(str(e.message)) == 0
+			pass
+		
+	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	def test_err_json_res(self, mock):
+		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
+		data = client.getClusterInfo('err/json/res');
+		assert not len(str(data['message'])) == 0
+		assert data['message'] == bad_err_res
 		
 		
 		
