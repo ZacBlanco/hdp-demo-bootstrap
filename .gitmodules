@@ -1,0 +1,3 @@
+[submodule "ambari-services/ambari-zeppelin-service"]
+	path = ambari-services/ambari-zeppelin-service
+	url = https://github.com/hortonworks-gallery/ambari-zeppelin-service
