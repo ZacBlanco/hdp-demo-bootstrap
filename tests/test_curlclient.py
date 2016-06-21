@@ -10,9 +10,9 @@ res3 = ['\'key3\':value3', '']
 resErr = ['', '\'msg\':\'err\'']
 
 def mocked_request(*args, **kwargs):
-	if args[0] == 'curl -s -u admin:admin -X GET http://demo-server:9090/api/v1/test?':
+	if args[0] == 'curl -sS -u admin:admin -X GET http://demo-server:9090/api/v1/test?':
 		return res1
-	elif args[0] == 'curl -s -u admin:admin -X GET http://demo-server:9090/api/v1/bad?':
+	elif args[0] == 'curl -sS -u admin:admin -X GET http://demo-server:9090/api/v1/bad?':
 		return res2
 	else:
 		return res3
