@@ -47,7 +47,7 @@ def install_hdp_select():
 		output = cmd.run('dpkg -i ' + './hdp-select.deb')
 		res = cmd.run('which hdp-select')
 		
-	if len(res) == 0:
+	if len(res[0]) == 0:
 		return False
 	else:
 		return True
@@ -55,11 +55,42 @@ def install_hdp_select():
 def is_hdp_select_installed():
 	sh = Shell()
 	output = sh.run('which hdp-select')
-	if len(output) == 0:
+	if len(output[0]) == 0:
 		return False
 	else:
 		return True
 
+def is_ambari_installed():
+	sh = Shell()
+	output = sh.run('which ambari-server')
+	if len(output[0]) == 0:
+		return False
+	else:
+		return True
+
+
+def install_zeppelin(conf_file):
+	
+	if not is_ambari_installed():
+		raise EnvironmentError('You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing')
+	
+	
+	if not is_hdp_select_installed():
+		installed = install_hdp_select()
+		if not installed:
+			raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
+	
+	conf = config.read_config(conf_file)
+	cmds = conf['ZEPPELIN']['install-commands']
+	cmds = json.loads(conf['ZEPPELIN']['install-commands'])
+	
+	sh = Shell()
+	version = sh.run(cmds[0])
+	
+	fixed_cmd = cmds[1].replace('$VERSION', str(version))
+	copy = sh.run(fixed_ver)
+	
+	restart = sh.run(cmds[2])
 
 
 
