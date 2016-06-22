@@ -16,11 +16,11 @@ def install_hdp_select():
 	if 'centos' in distro: # Get First 1/2 nums in version string
 		fullname = fullname + dist_info[1][0]
 	elif 'ubuntu' in distro:
-		if len(dist_info[1]) < 2:
+		if (len(dist_info[1]) < 2):
 			fullname = fullname + dist_info[1][0]
 		else:
-			fullname = fullname + dist_info[1][0] + dist_info[1][1] 
-		
+			fullname = fullname + dist_info[1][0] + dist_info[1][1]
+	
 	conf = config.read_config('../conf/service-installer.conf')
 	urls = conf['HDP-SELECT']
 	url = ''
@@ -60,16 +60,6 @@ def is_hdp_select_installed():
 	else:
 		return True
 
-#def install_zeppelin(conf_file):
-#	install
-#	conf = config.read_config(conf_file)
-#	cmds = conf['ZEPPELIN']['install-commands']
-#	cmds = json.loads(conf['ZEPPELIN']['install-commands'])
-#	sh = Shell()
-#	for cmd in cmds:
-#		print(cmd)
-#		print('')
-#		print(sh.run(cmd))
 
 
 
