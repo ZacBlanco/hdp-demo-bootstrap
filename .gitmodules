@@ -1,3 +1,6 @@
 [submodule "ambari-services/ambari-zeppelin-service"]
 	path = ambari-services/ambari-zeppelin-service
 	url = https://github.com/hortonworks-gallery/ambari-zeppelin-service
+[submodule "ambari-services/ambari-nifi-service"]
+	path = ambari-services/ambari-nifi-service
+	url = https://github.com/abajwa-hw/ambari-nifi-service
