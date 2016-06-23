@@ -12,8 +12,7 @@ import os, ConfigParser
 # All params are read as strings
 
 def read_config(configFile):
-	cwd = os.getcwd()
-	path = cwd + '/' + configFile
+	path = get_conf_dir() + configFile
 	
 	if not os.path.isfile(path):
 		raise IOError('could not find file at '+path )
@@ -28,3 +27,18 @@ def read_config(configFile):
 			params[section][key] = config.get(section, key)
 	
 	return params
+
+def get_conf_dir():
+	dirs = [str(os.getcwd()), str(os.curdir), '../']
+	
+	for loc in dirs:
+		if not (str(loc).endswith('/')):
+			loc += '/'
+		loc += 'conf/'
+		if(os.path.exists(loc)):
+			return loc
+	
+	raise EnvironmentError('Could not find conf directory')
+	
+	
+	
