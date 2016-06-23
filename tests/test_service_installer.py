@@ -1,4 +1,4 @@
-import unittest, json, mock
+import unittest, json, mock, scripts
 from env import scripts
 from mock import Mock
 from scripts import service_installer
@@ -83,7 +83,7 @@ class TestHDPSelectInstall(unittest.TestCase):
 		except EnvironmentError as e:
 			assert str(e.message) == 'Must be using one of: CentOS 6.x, CentOS 7.x, Ubuntu 12.x, Ubuntu 14.x'
 
-class TestHDPSelectCheck(unittest.TestCase):
+class TestComponentCheck(unittest.TestCase):
 
 	@mock.patch('scripts.shell.Shell.run', return_value=['/usr/bin/hdp-select', ''])
 	def test_hdp_select_good(self, mock):
@@ -92,9 +92,76 @@ class TestHDPSelectCheck(unittest.TestCase):
 	@mock.patch('scripts.shell.Shell.run', return_value=['', ''])
 	def test_hdp_select_bad(self, mock):
 			assert service_installer.is_hdp_select_installed() == False
-
-	
 			
+	@mock.patch('scripts.shell.Shell.run', return_value=['/usr/bin/ambari-server', ''])
+	def test_ambari_good(self, mock):
+		assert service_installer.is_ambari_installed() == True
+			
+	@mock.patch('scripts.shell.Shell.run', return_value=['', ''])
+	def test_ambari_bad(self, mock):
+			assert service_installer.is_ambari_installed() == False
+			
+class TestZeppelinInstall(unittest.TestCase):
+
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=False)
+	def test_zeppelin_ambari_bad(self, mock):
+		try:
+			service_installer.install_zeppelin('../conf/service-installer.conf')
+			self.fail('Cannot continue installation without Ambari')
+		except EnvironmentError as e:
+			assert str(e.message) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
+			
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=False)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=False)
+	def test_zeppelin_ambari_good(self, mock, mock2, mock3): #Also HDP select bad
+		try:
+			service_installer.install_zeppelin('../conf/service-installer.conf')
+			self.fail('Cannot continue installation without hdp-select')
+		except EnvironmentError as e:
+			assert str(e.message) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
+			
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=True)
+	@mock.patch('__builtin__.raw_input', return_value='y')
+	def test_zeppelin_check_is_good(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_zeppelin('../conf') == True
+			
+			
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'y'])
+	def test_zeppelin_no_ambari_contact_continue(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_zeppelin('../conf') == True
+			
+	
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
+	def test_zeppelin_no_ambari_contact_no_continue(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_zeppelin('../conf') == False
+			
+class TestAmbariServiceCheck(unittest.TestCase):
+	
+
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['', ''], ['200 OK', '']])
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
+	def test_ambari_check_good(self, mock, mock2):
+		conf = scripts.config.read_config('../conf/global-config.conf')['AMBARI']
+		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == True
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['200 OK', ''], ['200 OK', '']])
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
+	def test_ambari_check_good(self, mock, mock2):
+		conf = scripts.config.read_config('../conf/global-config.conf')['AMBARI']
+		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == True
+	
 			
 			
 			
