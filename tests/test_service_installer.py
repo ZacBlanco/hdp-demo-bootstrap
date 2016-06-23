@@ -206,7 +206,14 @@ class TestNiFiInstall(unittest.TestCase):
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'y'])
 	def test_nifi_no_ambari_contact_continue(self, mock, mock2, mock3, mock4, mock5):
 			assert service_installer.install_nifi('../conf') == True
-			
+	
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
+	def test_nifi_no_ambari_contact_no_continue(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_nifi('../conf') == False
 
 class TestZeppelinAddNotebook(unittest.TestCase):
 	
