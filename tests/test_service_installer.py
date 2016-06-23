@@ -106,7 +106,7 @@ class TestZeppelinInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=False)
 	def test_zeppelin_ambari_bad(self, mock):
 		try:
-			service_installer.install_zeppelin('../conf/service-installer.conf')
+			service_installer.install_zeppelin()
 			self.fail('Cannot continue installation without Ambari')
 		except EnvironmentError as e:
 			assert str(e.message) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
@@ -116,7 +116,7 @@ class TestZeppelinInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.install_hdp_select', return_value=False)
 	def test_zeppelin_ambari_good(self, mock, mock2, mock3): #Also HDP select bad
 		try:
-			service_installer.install_zeppelin('../conf/service-installer.conf')
+			service_installer.install_zeppelin()
 			self.fail('Cannot continue installation without hdp-select')
 		except EnvironmentError as e:
 			assert str(e.message) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
@@ -127,7 +127,7 @@ class TestZeppelinInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=True)
 	@mock.patch('__builtin__.raw_input', return_value='y')
 	def test_zeppelin_check_is_good(self, mock, mock2, mock3, mock4, mock5):
-			assert service_installer.install_zeppelin('../conf') == True
+			assert service_installer.install_zeppelin() == True
 			
 			
 	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
@@ -136,7 +136,7 @@ class TestZeppelinInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'y'])
 	def test_zeppelin_no_ambari_contact_continue(self, mock, mock2, mock3, mock4, mock5):
-			assert service_installer.install_zeppelin('../conf') == True
+			assert service_installer.install_zeppelin() == True
 			
 	
 	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
@@ -145,7 +145,7 @@ class TestZeppelinInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
 	def test_zeppelin_no_ambari_contact_no_continue(self, mock, mock2, mock3, mock4, mock5):
-			assert service_installer.install_zeppelin('../conf') == False
+			assert service_installer.install_zeppelin() == False
 			
 class TestAmbariServiceCheck(unittest.TestCase):
 	
@@ -153,55 +153,25 @@ class TestAmbariServiceCheck(unittest.TestCase):
 	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['', ''], ['200 OK', '']])
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
 	def test_ambari_check_good(self, mock, mock2):
-		conf = scripts.config.read_config('../conf/global-config.conf')['AMBARI']
+		conf = scripts.config.read_config('global-config.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == True
 		
 	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['200 OK', ''], ['200 OK', '']])
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
 	def test_ambari_check_false(self, mock, mock2):
-		conf = scripts.config.read_config('../conf/global-config.conf')['AMBARI']
+		conf = scripts.config.read_config('global-config.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == True
 		
 		
 	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['', ''],['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']])
 	@mock.patch('__builtin__.raw_input', side_effect=['', '', '', '', '', '', '', '', '', '', ''])
 	def test_ambari_check_many_attempts(self, mock, mock2):
-		conf = scripts.config.read_config('../conf/global-config.conf')['AMBARI']
+		conf = scripts.config.read_config('global-config.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == False
 	
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+#
+#class TestZeppelinAddNotebook(unittest.TestCase):
+#	
+#	
 			
 			
