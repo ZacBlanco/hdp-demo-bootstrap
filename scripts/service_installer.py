@@ -1,5 +1,5 @@
 # Script which installs Zeppelin as an Ambari Service
-import config, sys, platform, json, time
+import config, sys, platform, json, time, os
 from shell import Shell
 from curl_client import CurlClient
 
@@ -52,7 +52,7 @@ def install_hdp_select():
 		return False
 	else:
 		return True
-
+	
 def is_hdp_select_installed():
 	sh = Shell()
 	output = sh.run('which hdp-select')
@@ -70,9 +70,33 @@ def is_ambari_installed():
 	else:
 		return True
 
+# Uses the conf/zeppelin/notes directory to upload pre-made notebooks
 def add_zeppelin_notebooks():
-	return
+	all_success = True
+	note_dir = config.get_conf_dir() + 'zeppelin/notes'
+	for item in os.listdir(note_dir):
+		item_path = note_dir + '/' + item
+		if os.path.isfile(item_path) and str(item).endswith('.json'):
+			result = post_notebook(item_path)
+			if not result:
+				all_success = False
+	return all_success
+			
+#			log ("POSTED NOTEBOOK: " + str(post_notebook(item_path)))
 
+
+def post_notebook(notebook_path):
+	conf = config.read_config('service-installer.conf')['ZEPPELIN']
+	client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
+	path = '/api/notebook'
+	
+	output = client.make_request('POST', path, options='-i -H "Content-Type: application/json" -d @' + notebook_path )
+	if '201 created' in output[0].lower():
+#		log successful note created
+		return True
+	else:
+#		log failed note creation (and to import manually)
+		return False
 
 def install_zeppelin():
 	

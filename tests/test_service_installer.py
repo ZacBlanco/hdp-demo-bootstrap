@@ -169,9 +169,49 @@ class TestAmbariServiceCheck(unittest.TestCase):
 		conf = scripts.config.read_config('global-config.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == False
 	
-#
-#class TestZeppelinAddNotebook(unittest.TestCase):
-#	
-#	
+
+class TestZeppelinAddNotebook(unittest.TestCase):
+	
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['201 Created', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['note1.json', 'note2.json', 'note3.json'])
+	def test_good(self, mock1, mock2, mock3):
+		assert (service_installer.add_zeppelin_notebooks())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['500 err', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['note1.json', 'note2.json', 'note3.json'])
+	def test_bad(self, mock1, mock2, mock3):
+		assert (not service_installer.add_zeppelin_notebooks())
+	
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['500 err', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['note1.json', 'note2.json', 'note3.xml'])
+	def test_mixed(self, mock1, mock2, mock3):
+		assert (not service_installer.add_zeppelin_notebooks())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['500 err', ''], ['201 Created', ''], ['201 Created', '']])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['note1.json', 'note2.json', 'note3.xml'])
+	def test_mixed_response(self, mock1, mock2, mock3):
+		assert (not service_installer.add_zeppelin_notebooks())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['500 err', ''], ['201 Created', ''], ['201 Created', '']])
+	@mock.patch('os.path.isfile', return_value=True)
+	def test_post_notebook(self, mock1, mock2):
+		
+		paths = ['note1.json', 'note2.json', 'note3.xml']
+		assert not service_installer.post_notebook(paths[0])
+		
+		assert service_installer.post_notebook(paths[1])
+		
+		assert service_installer.post_notebook(paths[2])
+		
+		
+		
+	
+		
+		
+	
 			
 			
