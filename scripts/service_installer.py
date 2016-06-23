@@ -99,7 +99,6 @@ def post_notebook(notebook_path):
 		return False
 
 def install_zeppelin():
-	
 	if not is_ambari_installed():
 		raise EnvironmentError('You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing')
 	
@@ -149,6 +148,65 @@ def install_zeppelin():
 	elif cont == 'y':
 		return True
 
+
+
+def install_nifi(conf_dir):
+	
+	if not conf_dir.endswith('/'):
+		conf_dir += '/'
+	
+	if not is_ambari_installed():
+		raise EnvironmentError('You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing')
+	
+	
+	if not is_hdp_select_installed():
+		installed = install_hdp_select()
+		if not installed:
+			raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
+
+	conf = config.read_config(conf_dir + 'service-installer.conf')
+	cmds = json.loads(conf['NIFI']['install-commands'])
+	
+	sh = Shell()
+#	print(sh.run('pwd')[0])
+	version = sh.run(cmds[0])
+#	print("HDP-VERSION: " + str(version[0]))
+	fixed_copy = cmds[2].replace('$VERSION', str(version[0])).replace('\n', '')
+#	print('FIXED COPY COMMAND: ' + fixed_cmd)
+	fixed_remove = cmds[1].replace('$VERSION', str(version[0])).replace('\n', '')
+	remove = sh.run(fixed_remove)
+	copy = sh.run(fixed_copy)
+#	print("COPY OUTPUT: " + copy[0])
+	restart = sh.run(cmds[3])
+#	print("Restart output: " + restart[0])
+
+
+	print("Please open the Ambari Interface and manually deploy the NiFi Service.")
+	raw_input("Press enter twice to continue...")
+	raw_input("Press enter once to continue...")
+	
+#	 We've copied the necessary files. Once that completes we need to add it to Ambari
+	
+	print('Checking to make sure service is installed')
+	ambari = config.read_config(conf_dir + 'global-config.conf')['AMBARI']
+	installed = check_ambari_service_installed('NIFI', ambari)
+	cont = ''
+	if not installed:
+		print('Unable to contact Ambari Server. Unsure whether or not Zeppelin was installed')
+		while not (cont == 'y' or cont == 'n'):
+			cont = raw_input('Continue attempt to set up NiFi for demo?(y/n)')
+			if not (cont == 'y' or cont == 'n'):
+				print('Please enter "y" or "n"')
+	else:
+		cont = 'y'
+	
+	if cont == 'n':
+		return False
+	elif cont == 'y':
+		return True
+
+
+	
 def check_ambari_service_installed(service_name, ambari_config):
 	
 	curl = CurlClient(username=ambari_config['username'], password=ambari_config['password'], port=ambari_config['port'], server=ambari_config['server'], proto=ambari_config['proto'])
