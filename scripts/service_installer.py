@@ -150,11 +150,8 @@ def install_zeppelin():
 
 
 
-def install_nifi(conf_dir):
-	
-	if not conf_dir.endswith('/'):
-		conf_dir += '/'
-	
+def install_nifi():
+
 	if not is_ambari_installed():
 		raise EnvironmentError('You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing')
 	
@@ -164,7 +161,7 @@ def install_nifi(conf_dir):
 		if not installed:
 			raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
 
-	conf = config.read_config(conf_dir + 'service-installer.conf')
+	conf = config.read_config('service-installer.conf')
 	cmds = json.loads(conf['NIFI']['install-commands'])
 	
 	sh = Shell()
@@ -188,7 +185,7 @@ def install_nifi(conf_dir):
 #	 We've copied the necessary files. Once that completes we need to add it to Ambari
 	
 	print('Checking to make sure service is installed')
-	ambari = config.read_config(conf_dir + 'global-config.conf')['AMBARI']
+	ambari = config.read_config('global-config.conf')['AMBARI']
 	installed = check_ambari_service_installed('NIFI', ambari)
 	cont = ''
 	if not installed:
