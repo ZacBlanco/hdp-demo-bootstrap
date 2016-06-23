@@ -28,10 +28,14 @@ class CurlClient:
 	
 	# A number between 0 and 65535 
 	def set_port(self, port):
-		if not type(port) is int:
+		int_port = -1
+		try:
+			int_port = int(port)
+		except ValueError as e:
 			raise ValueError('Server port was not of type: int')
-		if port > 0 and port <= 65535:
-			self.port = port
+		
+		if int_port > 0 and int_port <= 65535:
+			self.port = int_port
 		else:
 			raise ValueError('Server port must be between 0 and 65535. Value was ' + str(port))
 	
@@ -42,7 +46,7 @@ class CurlClient:
 	# A list of query parameters
 	# 	['param1=value1', 'param2=value2']
 	
-	def make_request(self, verb, request, query=''):
+	def make_request(self, verb, request, options='', query=''):
 		
 		if not (verb == 'GET' or verb == 'POST' or verb == 'PUT' or verb == 'DELETE'):
 			raise ValueError('HTTP Verb must be one of GET|PUT|POST|DELETE')
@@ -58,7 +62,7 @@ class CurlClient:
 		
 		method = '-X ' + verb
 		
-		call = ' '.join(['curl -sS', credentials, method, url])
+		call = ' '.join(['curl -sS', credentials, method, options, url])
 		output = self.cmd.run(call)
 		return output
 		
