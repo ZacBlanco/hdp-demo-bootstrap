@@ -168,7 +168,53 @@ class TestAmbariServiceCheck(unittest.TestCase):
 	def test_ambari_check_many_attempts(self, mock, mock2):
 		conf = scripts.config.read_config('../conf/global-config.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == False
+
+
+class TestNiFiInstall(unittest.TestCase):
+
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=False)
+	def test_nifi_ambari_bad(self, mock):
+		try:
+			service_installer.install_nifi('../conf/')
+			self.fail('Cannot continue installation without Ambari')
+		except EnvironmentError as e:
+			assert str(e.message) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
+			
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=False)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=False)
+	def test_nifi_ambari_good(self, mock, mock2, mock3): #Also HDP select bad
+		try:
+			service_installer.install_nifi('../conf')
+			self.fail('Cannot continue installation without hdp-select')
+		except EnvironmentError as e:
+			assert str(e.message) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
+			
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=True)
+	@mock.patch('__builtin__.raw_input', return_value='y')
+	def test_nifi_check_is_good(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_nifi('../conf') == True
+			
+			
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'y'])
+	def test_nifi_no_ambari_contact_continue(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_nifi('../conf') == True
+			
 	
+	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
+	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
+	@mock.patch('scripts.service_installer.install_hdp_select', return_value=True)
+	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
+	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
+	def test_nifi_no_ambari_contact_no_continue(self, mock, mock2, mock3, mock4, mock5):
+			assert service_installer.install_nifi('../conf') == False
 			
 			
 			
