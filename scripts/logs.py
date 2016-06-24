@@ -18,8 +18,10 @@ class Logger():
 				return logging.ERROR
 			elif 'CRITICAL' == level:
 				return logging.CRITICAL
+			else:
+				return logging.WARN
 		except:
-			return logging.WARNING
+			return logging.WARN
 	
 	def getLogger(self):
 		return self.logger
