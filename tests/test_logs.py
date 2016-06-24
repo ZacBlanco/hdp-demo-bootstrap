@@ -44,7 +44,7 @@ class TestLogs(unittest.TestCase):
 		print('HANDLER NAME: ' +logger.name)
 		
 	@mock.patch('scripts.config.read_config', return_value={'LOGGING': {'log-level': 'MISSING'}})
-	def test_bad(self, mock1):
+	def test_missing(self, mock1):
 		logger = Logger('bad_level_test').getLogger()
 		handler = logger.handlers[0]
 		assert handler.level == 30
