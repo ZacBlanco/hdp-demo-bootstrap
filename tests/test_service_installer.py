@@ -251,7 +251,45 @@ class TestZeppelinAddNotebook(unittest.TestCase):
 		assert service_installer.post_notebook(paths[1])
 		
 		assert service_installer.post_notebook(paths[2])
+
 		
+class TestNiFiAddTemplate(unittest.TestCase):
+	
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['201 Created', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 'template3.xml'])
+	def test_good(self, mock1, mock2, mock3):
+		assert (service_installer.add_nifi_templates())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['500 err', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 'template3.xml'])
+	def test_bad(self, mock1, mock2, mock3):
+		assert (not service_installer.add_nifi_templates())
+	
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['500 err', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 't3.xml'])
+	def test_mixed(self, mock1, mock2, mock3):
+		assert (not service_installer.add_nifi_templates())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['500 err', ''], ['201 Created', ''], ['201 Created', '']])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 'note3.xml'])
+	def test_mixed_response(self, mock1, mock2, mock3):
+		assert (not service_installer.add_nifi_templates())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['500 err', ''], ['201 Created', ''], ['201 Created', '']])
+	@mock.patch('os.path.isfile', return_value=True)
+	def test_post_notebook(self, mock1, mock2):
+		
+		paths = ['template1.xml', 'template2.xml', 'note3.xml']
+		assert not service_installer.post_notebook(paths[0])
+		
+		assert service_installer.post_notebook(paths[1])
+		
+		assert service_installer.post_notebook(paths[2])
+
 		
 		
 			
