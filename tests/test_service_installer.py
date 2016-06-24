@@ -175,7 +175,7 @@ class TestNiFiInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=False)
 	def test_nifi_ambari_bad(self, mock):
 		try:
-			service_installer.install_nifi('../conf/')
+			service_installer.install_nifi()
 			self.fail('Cannot continue installation without Ambari')
 		except EnvironmentError as e:
 			assert str(e.message) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
@@ -185,7 +185,7 @@ class TestNiFiInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.install_hdp_select', return_value=False)
 	def test_nifi_ambari_good(self, mock, mock2, mock3): #Also HDP select bad
 		try:
-			service_installer.install_nifi('../conf')
+			service_installer.install_nifi()
 			self.fail('Cannot continue installation without hdp-select')
 		except EnvironmentError as e:
 			assert str(e.message) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
@@ -196,7 +196,7 @@ class TestNiFiInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=True)
 	@mock.patch('__builtin__.raw_input', return_value='y')
 	def test_nifi_check_is_good(self, mock, mock2, mock3, mock4, mock5):
-			assert service_installer.install_nifi('../conf') == True
+			assert service_installer.install_nifi() == True
 			
 			
 	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
@@ -205,7 +205,7 @@ class TestNiFiInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'y'])
 	def test_nifi_no_ambari_contact_continue(self, mock, mock2, mock3, mock4, mock5):
-			assert service_installer.install_nifi('../conf') == True
+			assert service_installer.install_nifi() == True
 	
 	@mock.patch('scripts.service_installer.is_ambari_installed', return_value=True)
 	@mock.patch('scripts.service_installer.is_hdp_select_installed', return_value=True)
@@ -213,7 +213,7 @@ class TestNiFiInstall(unittest.TestCase):
 	@mock.patch('scripts.service_installer.check_ambari_service_installed', return_value=False)
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
 	def test_nifi_no_ambari_contact_no_continue(self, mock, mock2, mock3, mock4, mock5):
-			assert service_installer.install_nifi('../conf') == False
+			assert service_installer.install_nifi() == False
 
 class TestZeppelinAddNotebook(unittest.TestCase):
 	
@@ -251,7 +251,45 @@ class TestZeppelinAddNotebook(unittest.TestCase):
 		assert service_installer.post_notebook(paths[1])
 		
 		assert service_installer.post_notebook(paths[2])
+
 		
+class TestNiFiAddTemplate(unittest.TestCase):
+	
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['201 Created', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 'template3.xml'])
+	def test_good(self, mock1, mock2, mock3):
+		assert (service_installer.add_nifi_templates())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['500 err', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 'template3.xml'])
+	def test_bad(self, mock1, mock2, mock3):
+		assert (not service_installer.add_nifi_templates())
+	
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=['500 err', ''])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 't3.xml'])
+	def test_mixed(self, mock1, mock2, mock3):
+		assert (not service_installer.add_nifi_templates())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['500 err', ''], ['201 Created', ''], ['201 Created', '']])
+	@mock.patch('os.path.isfile', return_value=True)
+	@mock.patch('os.listdir', return_value=['template1.xml', 'template2.xml', 'note3.xml'])
+	def test_mixed_response(self, mock1, mock2, mock3):
+		assert (not service_installer.add_nifi_templates())
+		
+	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['500 err', ''], ['201 Created', ''], ['201 Created', '']])
+	@mock.patch('os.path.isfile', return_value=True)
+	def test_post_notebook(self, mock1, mock2):
+		
+		paths = ['template1.xml', 'template2.xml', 'note3.xml']
+		assert not service_installer.post_notebook(paths[0])
+		
+		assert service_installer.post_notebook(paths[1])
+		
+		assert service_installer.post_notebook(paths[2])
+
 		
 		
 			

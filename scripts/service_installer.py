@@ -98,10 +98,34 @@ def post_notebook(notebook_path):
 #		log failed note creation (and to import manually)
 		return False
 
+def add_nifi_templates():
+	all_success = True
+	template_dir = config.get_conf_dir() + 'nifi/templates'
+	for item in os.listdir(template_dir):
+		item_path = template_dir + '/' + item
+		if os.path.isfile(item_path) and str(item).endswith('.xml'):
+			result = post_template(item_path)
+			if not result:
+				all_success = False
+	return all_success
+
+
+def post_template(template_path):
+	conf = config.read_config('service-installer.conf')['NIFI']
+	client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
+	path = '/nifi-api/controller/templates'
+	
+	output = client.make_request('POST', path, options='-i -F template=@' + template_path )
+	if '201 Created' in output[0] or '200 OK' in output[0]:
+#		log successful note created
+		return True
+	else:
+#		log failed note creation (and to import manually)
+		return False
+
 def install_zeppelin():
 	if not is_ambari_installed():
 		raise EnvironmentError('You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing')
-	
 	
 	if not is_hdp_select_installed():
 		installed = install_hdp_select()
@@ -150,11 +174,8 @@ def install_zeppelin():
 
 
 
-def install_nifi(conf_dir):
-	
-	if not conf_dir.endswith('/'):
-		conf_dir += '/'
-	
+def install_nifi():
+
 	if not is_ambari_installed():
 		raise EnvironmentError('You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing')
 	
@@ -164,7 +185,7 @@ def install_nifi(conf_dir):
 		if not installed:
 			raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
 
-	conf = config.read_config(conf_dir + 'service-installer.conf')
+	conf = config.read_config('service-installer.conf')
 	cmds = json.loads(conf['NIFI']['install-commands'])
 	
 	sh = Shell()
@@ -188,7 +209,7 @@ def install_nifi(conf_dir):
 #	 We've copied the necessary files. Once that completes we need to add it to Ambari
 	
 	print('Checking to make sure service is installed')
-	ambari = config.read_config(conf_dir + 'global-config.conf')['AMBARI']
+	ambari = config.read_config('global-config.conf')['AMBARI']
 	installed = check_ambari_service_installed('NIFI', ambari)
 	cont = ''
 	if not installed:
