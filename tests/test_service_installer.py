@@ -153,20 +153,20 @@ class TestAmbariServiceCheck(unittest.TestCase):
 	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['', ''], ['200 OK', '']])
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
 	def test_ambari_check_good(self, mock, mock2):
-		conf = scripts.config.read_config('global-config.conf')['AMBARI']
+		conf = scripts.config.read_config('global.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == True
 		
 	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['200 OK', ''], ['200 OK', '']])
 	@mock.patch('__builtin__.raw_input', side_effect=['\n', '\n', 'v', 'n'])
 	def test_ambari_check_false(self, mock, mock2):
-		conf = scripts.config.read_config('global-config.conf')['AMBARI']
+		conf = scripts.config.read_config('global.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == True
 		
 		
 	@mock.patch('scripts.curl_client.CurlClient.make_request', side_effect=[['', ''],['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']])
 	@mock.patch('__builtin__.raw_input', side_effect=['', '', '', '', '', '', '', '', '', '', ''])
 	def test_ambari_check_many_attempts(self, mock, mock2):
-		conf = scripts.config.read_config('global-config.conf')['AMBARI']
+		conf = scripts.config.read_config('global.conf')['AMBARI']
 		assert service_installer.check_ambari_service_installed('ZEPPELIN', conf) == False
 
 

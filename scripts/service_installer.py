@@ -172,8 +172,12 @@ def install_zeppelin():
 	print("Please open the Ambari Interface and manually deploy the Zeppelin Service.")
 	raw_input("Press enter twice to continue...")
 	raw_input("Press enter once to continue...")
-	logger.info('Checking to see if Ambari service is installed successfully')
-	ambari = config.read_config('global-config.conf')['AMBARI']
+	
+#	 We've copied the necessary files. Once that completes we need to add it to Ambari
+	
+	print('Checking to make sure service is installed')
+	ambari = config.read_config('global.conf')['AMBARI']
+	
 	installed = check_ambari_service_installed('ZEPPELIN', ambari)
 	logger.info('Zeppelin installed successfully: ' + str(installed))
 	cont = ''
@@ -230,7 +234,7 @@ def install_nifi():
 #	 We've copied the necessary files. Once that completes we need to add it to Ambari
 	logger.info('Waiting for user to install service in Ambari to continue')
 	print('Checking to make sure service is installed')
-	ambari = config.read_config('global-config.conf')['AMBARI']
+	ambari = config.read_config('global.conf')['AMBARI']
 	installed = check_ambari_service_installed('NIFI', ambari)
 	logger.info('NiFi installed successfully')
 	cont = ''
