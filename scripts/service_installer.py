@@ -155,7 +155,7 @@ def install_zeppelin():
 #	 We've copied the necessary files. Once that completes we need to add it to Ambari
 	
 	print('Checking to make sure service is installed')
-	ambari = config.read_config('global-config.conf')['AMBARI']
+	ambari = config.read_config('global.conf')['AMBARI']
 	installed = check_ambari_service_installed('ZEPPELIN', ambari)
 	cont = ''
 	if not installed:
@@ -209,7 +209,7 @@ def install_nifi():
 #	 We've copied the necessary files. Once that completes we need to add it to Ambari
 	
 	print('Checking to make sure service is installed')
-	ambari = config.read_config('global-config.conf')['AMBARI']
+	ambari = config.read_config('global.conf')['AMBARI']
 	installed = check_ambari_service_installed('NIFI', ambari)
 	cont = ''
 	if not installed:
