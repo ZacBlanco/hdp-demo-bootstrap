@@ -188,7 +188,7 @@ The above demonstrates configuration of boolean generator which produces True/Fa
 In this example we see a boolean generator where `True` is generated 20% of the time and `False` is generated 80% of the time.
 
 
-### **Map** - (`BooleanDatum`)
+### **Map** - (`MapDatum`)
 
 A map datum is denoted when the **type** property is set to `map`
 
