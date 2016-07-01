@@ -1,7 +1,8 @@
-import unittest, json, mock
+import unittest, json, mock, random
 from env import scripts
 from mock import Mock
 from scripts.generator import DataGenerator
+from scripts.generator import AbstractDatum
 
 class TestDataGenerator(unittest.TestCase):
 	
@@ -84,6 +85,28 @@ class TestDataGenerator(unittest.TestCase):
 			self.fail('Should have failed with KeyError')
 		except KeyError as e:
 			assert('Missing key: values in field3' in str(e))
+
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_gen_abstract_datum(self, mock1):
+		try:
+			field = {}
+			field['fieldName'] = "ABC123"
+			field['type'] = "ABC123"
+			dat = AbstractDatum(field)
+			dat.check()
+			self.fail('Should raise not implemented error')
+		except NotImplementedError as e:
+			assert('AbstractDatum: This method should have been implemented by a sublcass' in str(e))
+			
+		try:
+			field = {}
+			field['fieldName'] = "ABC123"
+			field['type'] = "ABC123"
+			dat = AbstractDatum(field)
+			dat.generate(random)
+			self.fail('Should raise not implemented error')
+		except NotImplementedError as e:
+			assert('AbstractDatum: This method should have been implemented by a sublcass' in str(e))
 
 		
 		

@@ -65,11 +65,11 @@ class AbstractDatum(object):
 	# A method to determine whether or not the schema object has the necessary fields.
 	@abstractmethod
 	def check(self):
-		pass
+		raise NotImplementedError('AbstractDatum: This method should have been implemented by a sublcass')
 	
 	@abstractmethod
 	def generate(self, rand):
-		pass
+		raise NotImplementedError('AbstractDatum: This method should have been implemented by a sublcass')
 
 class StringDatum(AbstractDatum):
 	values = []
