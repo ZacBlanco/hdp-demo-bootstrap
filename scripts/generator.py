@@ -5,10 +5,12 @@ from abc import abstractmethod
 class DataGenerator():
 	
 	def __init__(self, schema, seed=''):
+		self.rand = random.Random()
 		self.data_fields = []
+		self.field_names = []
 		self.schema = schema
 		if not seed == '':
-			random.seed(seed)
+			self.rand.seed(seed)
 		self.check_schema(schema)
 				
 	# Returns true/false whether or not the schema is valid
@@ -32,8 +34,16 @@ class DataGenerator():
 				
 				field_type = field['type']
 				datum = AbstractDatum(field)
+				if not datum.field_name in self.field_names:
+					self.field_names.append(datum.field_name)
+				else:
+					raise ValueError('Cannot have duplicate field names')
 				if 'string' == field_type:
 					datum = StringDatum(field)
+				elif 'int' == field_type:
+					datum = IntDatum(field)
+				elif 'decimal' == field_type:
+					datum = DecimalDatum(field)
 				else:
 					raise RuntimeError('Field type was not found. Please change the field type or implement a new datum')
 					
@@ -42,10 +52,11 @@ class DataGenerator():
 				self.data_fields.append(datum)
 		
 	def generate(self):
-		data = []
-		for field in self.data_fields:
-			val = field.generate(random)
-			data.append(val)
+		data = {}
+		for datum in self.data_fields:
+			val = datum.generate(self.rand)
+			
+			data[datum.field_name] = val
 		return data
 
 
@@ -72,8 +83,8 @@ class AbstractDatum(object):
 		raise NotImplementedError('AbstractDatum: This method should have been implemented by a sublcass')
 
 class StringDatum(AbstractDatum):
-	values = []
 	def __init__(self, field):
+		self.values = []
 		AbstractDatum.__init__(self, field)
 		self.check()
 		#calculate CDF if necessary
@@ -105,9 +116,74 @@ class StringDatum(AbstractDatum):
 			for i in range(len(self.values)):
 				if val < self.values[i]['prob']:
 					return self.values[i]['key']			
+
+class NumberDatum(AbstractDatum):
+	def __init__(self, field):
+		AbstractDatum.__init__(self, field)
+		self.check()			
+		
+	def check(self):
+		self.check_for_key('type')
+		self.check_for_key('distribution')
+		assert (self.field['type'] == 'int' or self.field['type'] == 'decimal')
+		val_type = type(self.field['distribution'])  
+		assert val_type == str or val_type == unicode
+		d_type = self.field['distribution']
+		assert (d_type == 'uniform' or d_type == 'exponential' or d_type == 'gaussian' or d_type == 'gamma')
+		
+		self.a = 0
+		self.b = 1
+		self.lambd = 1
+		self.mu = 0
+		self.sigma = 1
+		self.alpha = 1
+		self.beta = 1
+		
+		
+		if 'a' in self.field:
+				self.a = self.field['a']
+		if 'b' in self.field:
+				self.b = self.field['b']
+		if 'lambda' in self.field:
+				self.lambd = self.field['lambda']
+		if 'mu' in self.field:
+				self.mu = self.field['mu']
+		if 'sigma' in self.field:
+				self.sigma = self.field['sigma']
+		if 'alpha' in self.field:
+				self.alpha = self.field['alpha']
+		if 'beta' in self.field:
+				self.beta = self.field['beta']
+		
+		
+		
+	def generate(self, rand):
+		distribution = self.field['distribution']
+		num = 0
+		if distribution == 'uniform':
+			num = rand.uniform(self.a, self.b)
+		elif distribution == 'exponential':
+			num = rand.expovariate(self.lambd)
+		elif distribution == 'gaussian':
+			num = rand.gauss(self.mu, self.sigma)
+		elif distribution == 'gamma':
+			num = rand.gammavariate(self.alpha, self.beta)
+		else:
+			raise ValueError('Distribution can only be one of: uniform, exponential, gaussian, or gamma')
+			
+		return num
+
+class DecimalDatum(NumberDatum):
+	def __init__(self, field):
+		NumberDatum.__init__(self, field)
+		
+class IntDatum(NumberDatum):
 	
-	
-	
+	def __init__(self, field):
+		NumberDatum.__init__(self, field)
+		
+	def generate(self, rand):
+		return int(round(NumberDatum.generate(self, rand)))
 	
 	
 	

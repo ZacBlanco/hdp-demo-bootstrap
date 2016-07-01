@@ -17,33 +17,21 @@ class TestDataGenerator(unittest.TestCase):
 		occ = {}
 		total = 0
 		for items in data:
-			for char in items:
+			for key in items:
 				total += 1
-				if char in occ:
-					occ[char] += 1
+				if key in occ:
+					occ[key] += 1
 				else:
-					occ[char] = 1
+					occ[key] = 1
+		
+		assert len(occ.keys()) == 4
+		for key in occ:
+			assert occ[key] == test_num
 						
 #		for key in occ.keys():
 #			print("KEY: " + key + " | OCC: " + str(occ[key]) + " | PROB: " + str( occ[key]/float(test_num) ))
 		
 		assert total == 4*test_num
-		assert occ['a'] == 138
-		assert occ['c'] == 111
-		assert occ['b'] == 127
-		assert occ['e'] == 132
-		assert occ['d'] == 124
-		assert occ['g'] == 112
-		assert occ['f'] == 145
-		assert occ['i'] == 260
-		assert occ['h'] == 111
-		assert occ['k'] == 102
-		assert occ['j'] == 90
-		assert occ['m'] == 93
-		assert occ['l'] == 48
-		assert occ['o'] == 23
-		assert occ['n'] == 362
-		assert occ['p'] == 22
 
 	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
 	def test_gen_key_check_field(self, mock1):
@@ -108,7 +96,37 @@ class TestDataGenerator(unittest.TestCase):
 		except NotImplementedError as e:
 			assert('AbstractDatum: This method should have been implemented by a sublcass' in str(e))
 
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_num_datum_good(self, mock1):
+		gen = DataGenerator('num_gen_good.json')
+		test_num = 500
+		data = []
+		mu1 = 0
+		mu2 = 0
+		for z in range(test_num):
+			dat = gen.generate()
+			assert type(dat['field1']) == int
+			assert type(dat['field5']) == float
+			mu1 += float(dat['field1'])/test_num
+			mu2 += dat['field5']/test_num
+			data.append(dat)
+			assert(len(dat) == 11)
+		assert(abs(mu1 - 50) < 10) # ensure they are at least in the right general range
+		assert(abs(mu2 - 100) < 10)  # ensure they are at least in the right general range
+
+		assert len(data) == test_num
 		
+		
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_dup_fields(self, mock1):
+		try:
+			gen = DataGenerator('dup_fields.json')
+			test_num = 10
+			data = []
+			mu1 = 0
+			mu2 = 0
+		except ValueError as e:
+			assert 'Cannot have duplicate field names' in str(e)
 		
 		
 		

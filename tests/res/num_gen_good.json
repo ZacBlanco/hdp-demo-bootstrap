@@ -1,0 +1,70 @@
+[
+	{
+		"fieldName": "field1",
+		"type": "int",
+		"distribution": "gaussian",
+		"mu": 50,
+		"sigma": 10
+	},
+	{
+		"fieldName": "field2",
+		"type": "decimal",
+		"distribution": "uniform",
+		"a": 10,
+		"b": 50
+	},
+	{
+		"fieldName": "field3",
+		"type": "int",
+		"distribution": "gamma",
+		"alpha": 50,
+		"beta": 10
+	},
+	{
+		"fieldName": "field4",
+		"type": "decimal",
+		"distribution": "exponential",
+		"lambda": 0.5
+	},
+	{
+		"fieldName": "field5",
+		"type": "decimal",
+		"distribution": "gaussian",
+		"mu": 100,
+		"sigma": 25
+	},
+	{
+		"fieldName": "field6",
+		"type": "decimal",
+		"distribution": "uniform",
+		"a": 50,
+		"b": 10
+	},
+	{
+		"fieldName": "field7",
+		"type": "int",
+		"distribution": "gaussian",
+		"mu": 50,
+		"sigma": 10
+	},
+	{
+		"fieldName": "field8",
+		"type": "decimal",
+		"distribution": "uniform"
+	},
+	{
+		"fieldName": "field9",
+		"type": "int",
+		"distribution": "gamma"
+	},
+	{
+		"fieldName": "field10",
+		"type": "decimal",
+		"distribution": "exponential"
+	},
+	{
+		"fieldName": "field11",
+		"type": "decimal",
+		"distribution": "gaussian"
+	}
+]
