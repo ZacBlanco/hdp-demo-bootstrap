@@ -175,8 +175,15 @@ class TestDataGenerator(unittest.TestCase):
 		except ValueError as e:
 			print str(e)
 			assert 'Expected mapFromField key to be a dict object' in str(e)
-		
-		
+		finally:
+			missing_fields['mapFromField'] = 'field3'
+			
+		try:
+			md = MapDatum(missing_fields)
+			data = {}
+			md.generate(random, data)
+		except ValueError as e:
+			assert 'Could not get key: ' in str(e)
 		
 		
 		
