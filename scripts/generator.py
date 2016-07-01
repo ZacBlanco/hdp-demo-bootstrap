@@ -46,6 +46,8 @@ class DataGenerator():
 					datum = DecimalDatum(field)
 				elif 'map' == field_type:
 					datum = MapDatum(field)
+				elif 'boolean' == field_type:
+					datum = BooleanDatum(field)
 				else:
 					raise RuntimeError('Field type was not found. Please change the field type or implement a new datum')
 					
@@ -227,8 +229,33 @@ class MapDatum(AbstractDatum):
 			return self.maps[key] # Get the mapped value from the given key
 		except KeyError as e:
 			return ''
+class BooleanDatum(AbstractDatum):
 	
+	def __init__(self, field):
+		AbstractDatum.__init__(self, field)
+		self.field = field
+		self.check()
+		# Create CDF
+		if 'values' in self.field:
+			self.cdf_cutoff = self.field['values']['True']
+		else:
+			self.cdf_cutoff = 0.5
 	
+	def check(self):
+		if 'values' in self.field:
+			assert type(self.field['values']) == dict
+			vals = self.field['values']
+			assert 'True' in vals, 'True must in values'
+			assert 'False' in vals, 'False must in values'
+			assert vals['True'] + vals['False'] == 1.0, 'Probabilities must equal 1.0'
+			
+		
+	def generate(self, rand):
+		val = rand.random()
+		if val < self.cdf_cutoff:
+			return True
+		else:
+			return False
 	
 	
 	

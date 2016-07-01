@@ -4,6 +4,7 @@ from mock import Mock
 from scripts.generator import DataGenerator
 from scripts.generator import AbstractDatum
 from scripts.generator import MapDatum
+from scripts.generator import BooleanDatum
 
 class TestDataGenerator(unittest.TestCase):
 	
@@ -184,7 +185,42 @@ class TestDataGenerator(unittest.TestCase):
 			md.generate(random, data)
 		except ValueError as e:
 			assert 'Could not get key: ' in str(e)
+			
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_boolean_dat(self, mock1):
+		gen = DataGenerator('boolean_gen.json')
+		data = gen.generate()
+		assert data['field1'] == True or data['field1'] == False
 		
+		bool_dat = {}
+		bool_dat['type'] = 'boolean'
+		bool_dat['fieldName'] = 'f1'
+		bool_dat['values'] = []
+		try:
+			datum = BooleanDatum(bool_dat)
+			self.fail('value was not of correct type')
+		except AssertionError as e:
+			pass
+		finally:
+			bool_dat['values'] = {}
+			bool_dat['values']['True'] = 0.1
+			
+		try:
+			datum = BooleanDatum(bool_dat)
+			self.fail('Probabilities were not all present')
+		except AssertionError as e:
+			pass
+		finally:
+			bool_dat['values']['False'] = 0.9
+			
+		try:
+			datum = BooleanDatum(bool_dat)
+			val = datum.generate(random)
+		except AssertionError as e:
+			self.fail('Should not have thrown error here')
+			
+		
+			
 		
 		
 		
