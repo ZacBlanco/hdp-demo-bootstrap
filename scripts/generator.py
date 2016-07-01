@@ -129,7 +129,8 @@ class NumberDatum(AbstractDatum):
 		val_type = type(self.field['distribution'])  
 		assert val_type == str or val_type == unicode
 		d_type = self.field['distribution']
-		assert (d_type == 'uniform' or d_type == 'exponential' or d_type == 'gaussian' or d_type == 'gamma')
+		if not (d_type == 'uniform' or d_type == 'exponential' or d_type == 'gaussian' or d_type == 'gamma'):
+			raise ValueError('Distribution can only be one of: uniform, exponential, gaussian, or gamma')
 		
 		self.a = 0
 		self.b = 1
@@ -168,8 +169,6 @@ class NumberDatum(AbstractDatum):
 			num = rand.gauss(self.mu, self.sigma)
 		elif distribution == 'gamma':
 			num = rand.gammavariate(self.alpha, self.beta)
-		else:
-			raise ValueError('Distribution can only be one of: uniform, exponential, gaussian, or gamma')
 			
 		return num
 

@@ -128,6 +128,12 @@ class TestDataGenerator(unittest.TestCase):
 		except ValueError as e:
 			assert 'Cannot have duplicate field names' in str(e)
 		
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_bad_distribution(self, mock1):
+		try:
+			gen = DataGenerator('bad_dist.json')
+		except ValueError as e:
+			assert 'Distribution can only be one of: uniform, exponential, gaussian, or gamma' in str(e)
 		
 		
 		
