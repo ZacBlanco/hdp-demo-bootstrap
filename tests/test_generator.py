@@ -3,6 +3,7 @@ from env import scripts
 from mock import Mock
 from scripts.generator import DataGenerator
 from scripts.generator import AbstractDatum
+from scripts.generator import MapDatum
 
 class TestDataGenerator(unittest.TestCase):
 	
@@ -136,7 +137,44 @@ class TestDataGenerator(unittest.TestCase):
 			assert 'Distribution can only be one of: uniform, exponential, gaussian, or gamma' in str(e)
 		
 		
-		
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_map_gen_good(self, mock1):
+		try:
+			gen = DataGenerator('map_gen-01.json')
+			try:
+				for i in range(50):
+					data = gen.generate()
+					if data['field1'] == 'y':
+						assert data['field2'] == ''
+					elif data['field1'] == 'a':
+						assert data['field2'] == 'vowel'
+					else:
+						assert data['field2'] == 'consonant'
+			except ValueError as e:
+				print e
+				pass
+		except ValueError as e:
+			print e
+			pass
+	
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_map_datum_bad(self, mock1):
+		missing_fields= {'fieldName': '1111'}
+		missing_fields['type'] = 'map'
+		missing_fields['map'] = ''
+		missing_fields['mapFromField'] = 1
+		try:
+			md = MapDatum(missing_fields)
+		except ValueError as e:
+			print str(e)
+			assert 'Expected map key to be a dict object' in str(e)
+		finally:
+			missing_fields['map'] = {}
+		try:
+			md = MapDatum(missing_fields)
+		except ValueError as e:
+			print str(e)
+			assert 'Expected mapFromField key to be a dict object' in str(e)
 		
 		
 		

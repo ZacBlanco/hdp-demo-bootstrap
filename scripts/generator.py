@@ -44,28 +44,42 @@ class DataGenerator():
 					datum = IntDatum(field)
 				elif 'decimal' == field_type:
 					datum = DecimalDatum(field)
+				elif 'map' == field_type:
+					datum = MapDatum(field)
 				else:
 					raise RuntimeError('Field type was not found. Please change the field type or implement a new datum')
 					
 				datum.check() # Check to make sure the field has necessary attributes	
-#				print("FIELD LENGTH: " + str(len(self.data_fields)))
 				self.data_fields.append(datum)
 		
 	def generate(self):
 		data = {}
+		maps = []
 		for datum in self.data_fields:
+			if datum.type == 'map':
+				maps.append(datum)
+				continue # put off mappers until end
+			
 			val = datum.generate(self.rand)
 			
 			data[datum.field_name] = val
+			
+		for mapper in maps:
+			val = mapper.generate(self.rand, data)
+			data[mapper.field_name] = val
+		
 		return data
 
 
 class AbstractDatum(object):
 		
 	def __init__(self, field):
-		self.field_name = field['fieldName']
 		self.field = field
 		self.check_for_key('fieldName')
+		self.check_for_key('type')
+		self.field_name = field['fieldName']
+		self.type = field['type']
+		
 	
 	def check_for_key(self, key_name):
 		if not key_name in self.field:
@@ -183,8 +197,36 @@ class IntDatum(NumberDatum):
 		
 	def generate(self, rand):
 		return int(round(NumberDatum.generate(self, rand)))
+
+class MapDatum(AbstractDatum):
 	
+	def __init__(self, field):
+		AbstractDatum.__init__(self, field)
+		self.field = field
+		self.check()
 	
+	def check(self):
+		self.check_for_key('map')
+		self.check_for_key('mapFromField')
+		if not type(self.field['map']) == dict:
+			raise ValueError('Expected map key to be a dict object')
+		if not (type(self.field['mapFromField']) == str or type(self.field['mapFromField']) == unicode):
+			raise ValueError('Expected mapFromField key to be a dict object')
+			
+		self.maps = self.field['map']
+		self.map_from = str(self.field['mapFromField'])
+		
+	def generate(self, rand, data):
+		
+		if not self.map_from in data:
+			raise ValueError('Could not get key: ' + self.map_from + ' in data')
+			
+		key = data[self.map_from] # Get data from the map_from field
+		
+		try:
+			return self.maps[key] # Get the mapped value from the given key
+		except KeyError as e:
+			return ''
 	
 	
 	
