@@ -1,0 +1,38 @@
+[
+	{
+		"fieldName": "string_data",
+		"type": "string",
+		"values": {
+			"a": 0.1,
+			"b": 0.2
+		},
+		"valuesA": ["a", "b", "c", "d"]
+	}, 
+	{
+		"fieldName": "int_data",
+		"type": "int",
+		"distribution": "uniform"
+	},
+	{
+		"fieldName": "float_data",
+		"type": "float",
+		"valuesA": ["a", "b", "c", "d"],
+		"distribution": "gaussian"
+	}, 
+	{
+		"fieldName": "boolean_data",
+		"type": "boolean",
+		"values": {
+			"a": 0.1,
+			"b": 0.2
+		}
+	},
+	{
+		"fieldName": "map_data",
+		"type": "map",
+		"values": {
+			"a": 'c',
+			"b": 'd'
+		}
+	}
+]
