@@ -114,9 +114,20 @@ Required fields:
 The distribution field is key here because it determines the other parameters you need to use generate values. Because we use the built-in python random number generator there are a number of functions which can generate different types of distributions. The number datum have access to the following distributions (with their respective arguments)
 
 - **uniform(a, b)**
+  - Defaults
+    - `a`: 0
+	- `b`: 1
 - **exponential(lambda)**
+  - Defaults
+    - `lambda`: 1
 - **gaussian(mu, sigma)**
+  - Defaults
+    - `mu`: 0
+	- `sigma`: 1
 - **gamma(alpha, beta)**
+  - Defaults
+    - `alpha`: 1
+	- `beta`: 1
 
 _For more information on python's `random` module [please refer to the documentation](https://docs.python.org/2/library/random.html)_.
 
