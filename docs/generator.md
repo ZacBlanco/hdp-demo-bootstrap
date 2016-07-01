@@ -7,7 +7,7 @@
 ## Methods
 
 
-### `generator.__init__(schema, Exporter, seed='')`
+### `generator.__init__(schema, seed="")`
 
 The constructor method for the generator takes 2 arguments (minimum).
 
@@ -71,7 +71,7 @@ Samples:
 	{
 		"type": "string",
 		"fieldName": "Sample_Field",
-		"values": ['a', 'b', 'c', 'd', 'e']
+		"values": ["a", "b", "c", "d", "e"]
 	}
 	
 The above demonstrates a string datum in which any value of `[a, b, c, d, e]` has equal probability of being generated.
@@ -80,11 +80,11 @@ The above demonstrates a string datum in which any value of `[a, b, c, d, e]` ha
 		"type": "string",
 		"fieldName": "Sample_Field",
 		"values": {
-			'a': 0.5,
-			'b': 0.1,
-			'c': 0.05,
-			'd': 0.15,
-			'e': 0.2
+			"a": 0.5,
+			"b": 0.1,
+			"c": 0.05,
+			"d": 0.15,
+			"e": 0.2
 		}
 	}
 
@@ -237,19 +237,53 @@ Samples:
 		"fieldName": "Sample_Mapped_Field",
 		"mapFromField": "Sample_Field",
 		"map": {
-			'a': 'vowel',
-			'b': 'consonant',
-			'c': 'consonant',
-			'd': 'consonant',
-			'e': 'vowel'
+			"a": "vowel",
+			"b": "consonant",
+			"c": "consonant",
+			"d": "consonant",
+			"e": "vowel"
 		}
+	}
 	
 
 In this example we see a map generator where given different keys from the field named `Sample_Field` we create a new field called `Sample_Mapped_Field` which uses the corresponding values from the `map` object
 
 
+### Sample Schemas
 
 
+**Basic Sale Data**
+
+	[
+		{
+			"type": "int",
+			"fieldName": "price",
+			"distribution": "gaussian"
+			"mu": 50,
+			"sigma": 20
+		},
+		{
+			"type": "int",
+			"fieldName": "store_number",
+			"distribution": "gaussian"
+			"mu": 10000,
+			"sigma": 50
+		},
+		{
+			"type": "boolean",
+			"fieldName": "on_sale",
+			"values": {
+				"True": 0.23
+				"False": 0.77
+			}
+		},
+		{
+			"type": "string",
+			"fieldName": "service_rep",
+			"values": ["Kate", "Billy", "John", "Michelle"]
+		}
+	]
+		
 
 
 
