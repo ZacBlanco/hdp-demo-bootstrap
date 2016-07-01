@@ -35,7 +35,7 @@ class DataGenerator():
 				if 'string' == field_type:
 					datum = StringDatum(field)
 				else:
-					raise RuntimeError('Field type was not found. Please change the field type or implement the datum correctly')
+					raise RuntimeError('Field type was not found. Please change the field type or implement a new datum')
 					
 				datum.check() # Check to make sure the field has necessary attributes	
 #				print("FIELD LENGTH: " + str(len(self.data_fields)))
@@ -65,16 +65,17 @@ class AbstractDatum(object):
 	# A method to determine whether or not the schema object has the necessary fields.
 	@abstractmethod
 	def check(self):
-		raise NotImplementedError('AbstractDatum: This method should have been implemented by a sublcass')
+		pass
 	
 	@abstractmethod
 	def generate(self, rand):
-		raise NotImplementedError('AbstractDatum This method should have been implemented by a sublcass')
+		pass
 
 class StringDatum(AbstractDatum):
 	values = []
 	def __init__(self, field):
 		AbstractDatum.__init__(self, field)
+		self.check()
 		#calculate CDF if necessary
 		self.values = [] # list will be sorted by cumulative probability
 		if type(self.field['values']) == dict:
@@ -89,6 +90,7 @@ class StringDatum(AbstractDatum):
 		
 	def check(self):
 		self.check_for_key('type')
+		self.check_for_key('values')
 		assert (self.field['type'] == 'string')
 		val_type = type(self.field['values'])  
 		assert (val_type == list or val_type == dict)

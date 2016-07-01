@@ -75,7 +75,15 @@ class TestDataGenerator(unittest.TestCase):
 			gen = DataGenerator('char_gen_bad-04.json', seed='1234567890')
 			self.fail('Should have failed with TypeError')
 		except RuntimeError as e:
-			assert('Field type was not found. Please change the field type or implement the datum correctly' in str(e))
+			assert('Field type was not found. Please change the field type or implement a new datum' in str(e))
+			
+	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	def test_gen_check_values(self, mock1):
+		try:
+			gen = DataGenerator('char_gen_bad-05.json', seed='1234567890')
+			self.fail('Should have failed with KeyError')
+		except KeyError as e:
+			assert('Missing key: values in field3' in str(e))
 
 		
 		
