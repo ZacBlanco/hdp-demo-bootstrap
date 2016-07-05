@@ -1,5 +1,8 @@
 import json, config, random
 from abc import abstractmethod
+from logs import Logger
+
+logger = Logger('Generator').getLogger()
 
 
 class DataGenerator():
@@ -11,7 +14,9 @@ class DataGenerator():
 		self.schema = schema
 		if not seed == '':
 			self.rand.seed(seed)
+			logger.info('Using seed: ' + seed)
 		self.check_schema(schema)
+		logger.info('Generator using Schema at: ' + str(schema))
 				
 	# Returns true/false whether or not the schema is valid
 	# Raises an exception?
@@ -22,20 +27,25 @@ class DataGenerator():
 			conf = json.load(data_file)
 			
 			if not type(conf) == list:
+				logger.error('JSON Schema not formatted properly')
 				raise TypeError('Root of JSON Schema is not a list')
 			
 			for field in conf:
 				if not 'fieldName' in field:
+					logger.error('fieldName not found in schema at ' + path)
 					raise KeyError('Could not find \'fieldName\' in field of schema: ' + schema )
 					
 				if not 'type' in field:
+					logger.error('type not found in schema at ' + path)
 					raise KeyError('Could not find \'type\' in field of schema: ' + schema)
 				
 				
 				field_type = field['type']
+				logger.debug('Attempting to register datum with type: ' + str(field_type))
 				datum = AbstractDatum(field)
 				if not datum.field_name in self.field_names:
 					self.field_names.append(datum.field_name)
+					self.debug('Added datum to field set with type: ' + str(field_type))
 				else:
 					raise ValueError('Cannot have duplicate field names')
 				if 'string' == field_type:
@@ -50,8 +60,9 @@ class DataGenerator():
 					datum = BooleanDatum(field)
 				else:
 					raise RuntimeError('Field type was not found. Please change the field type or implement a new datum')
-					
+				
 				datum.check() # Check to make sure the field has necessary attributes	
+				logger.info('Datum passed check successfully')
 				self.data_fields.append(datum)
 		
 	def generate(self):
