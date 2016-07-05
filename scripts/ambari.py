@@ -1,6 +1,8 @@
 import json
 from curl_client import CurlClient
+from logs import Logger
 
+logger = Logger('Ambari').getLogger()
 
 class Ambari:
 	
@@ -15,11 +17,9 @@ class Ambari:
 		elif not len(output[1]) == 0:
 			# StdErr output
 			json_str = '{ "message": "" }'
-			res = json.loads(json_str) # Built from json_str no chance for error
+			res = json.loads(json_str) # Built from json_str no chance for error (as far as can tell)
 			res['message'] = output[1]
-			return res
-		
-		
+			return res	
 		else:
 			json_str = '{ "message" : "No output was returned." }'
 		
@@ -28,21 +28,25 @@ class Ambari:
 		try:
 			res = json.loads(json_str)
 		except ValueError as e:
+			logger.error('Could not convert to JSON: ' + res)
 			raise ValueError(e)
 		
 		return res
 	
 	def getClusters(self, query=''):
+		logger.info('Making request to /api/v1/clusters/')
 		output = self.client.make_request('GET', '/api/v1/clusters', query)
 		res = self.load_output(output)
 		return res
 	
 	def getServices(self, cluster_name, query=''):
+		logger.info('Making request to /api/v1/clusters/' + cluster_name + '/services')
 		output = self.client.make_request('GET', '/api/v1/clusters/' + cluster_name + '/services', query)
 		res = self.load_output(output)
 		return res
 	
 	def getClusterInfo(self, cluster_name, query=''):
+		logger.info('Making request to /api/v1/clusters/' + cluster_name)
 		output = self.client.make_request('GET', '/api/v1/clusters/' + cluster_name, query)
 		res = self.load_output(output)
 		return res
