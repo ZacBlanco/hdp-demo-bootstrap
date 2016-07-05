@@ -1,10 +1,12 @@
+[Back to Index](README.md)
+
 # Ambari
 
-`ambari.py` is a module that houses the `Ambari` class. This class can and make remote calls to an instance of the Ambari REST API.
+`ambari.py` is a module that houses the `Ambari` class. This class can make remote calls to an instance of the Ambari REST API.
 
 This module utilizes [`curl_client.py`](curl_client.md) in order to make the RESTful API calls to an Ambari instance.
 
-In its current state there is not much functionality, but more calls are made possible by using the underlying [`curl_client`](curl_client.md) module to make REST calls to the API if the current features are not enough
+In its current state there is not much functionality, but more calls can be made possible by using the underlying [`curl_client`](curl_client.md) module to make REST calls to the API if the current features are not enough
 
 --------
 

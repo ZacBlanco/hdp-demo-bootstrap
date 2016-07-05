@@ -1,3 +1,5 @@
+[Back to Index](README.md)
+
 # Generator
 
 `generator.py` is a module which contains the `DataGenerator()` class. It is used in conjunction with an implementation of an Exporter and a JSON schema in order to generator random datasets.

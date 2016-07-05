@@ -1,3 +1,5 @@
+[Back to Index](README.md)
+
 # Config
 
 `config.py` is a module which contains some methods to make reading configuration files easy.
