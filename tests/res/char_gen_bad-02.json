@@ -1,0 +1,31 @@
+[
+	{
+		"fieldName": "field2",
+		"type": "string",
+		"values": ["a", "b", "c", "d"]
+	},
+	{
+		"fieldName": "field2",
+		"values": ["e", "f", "g", "h"]
+	},
+	{
+		"fieldName": "field3",
+		"type": "string",
+		"values": {
+			"i": 0.5,
+			"j": 0.2,
+			"k": 0.2,
+			"l": 0.1
+		}
+	},
+	{
+		"fieldName": "field4",
+		"type": "string",
+		"values": {
+			"m": 0.2,
+			"n": 0.7,
+			"o": 0.05,
+			"p": 0.05
+		}
+	}
+]

@@ -1,0 +1,18 @@
+[
+	{
+		"fieldName": "field1",
+		"type": "string",
+		"values": ["a", "b", "c", "d", "y"]
+	},
+	{
+		"fieldName": "field2",
+		"type": "map",
+		"mapFromField": "field1",
+		"map": {
+			"a": "vowel",
+			"b": "consonant",
+			"c": "consonant",
+			"d": "consonant"
+		}
+	}
+]

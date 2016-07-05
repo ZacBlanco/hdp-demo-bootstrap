@@ -1,0 +1,16 @@
+[
+	{
+		"fieldName": "field1",
+		"type": "int",
+		"distribution": "gaussian",
+		"mu": 50,
+		"sigma": 10
+	},
+	{
+		"fieldName": "field1",
+		"type": "decimal",
+		"distribution": "uniform",
+		"a": 10,
+		"b": 50
+	}
+]
