@@ -23,6 +23,20 @@ This should be an implementation of the Exporter superclass. This is necessary t
 
 This is the seed for the random number generator. It is entirely optional and if the seed given is found to be a zero-length string then the seed used will be pseudo-randomly generated.
 
+### `generator.generate()`
+
+The `generate()` method takes no arguments and will produce a single line (entry) of data given the schema provided during instantiation.
+
+The data produced will be in the format:
+
+	{
+		"field_name_1": field_value_1,
+		"field_name_2": field_value_2,
+		"field_name_3": field_value_3,
+		....
+	}
+
+
 ## Generator Configuration Reference
 
 The data generator is driven by a JSON configuration. Each field for a generator row is driven by this configuration.
