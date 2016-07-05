@@ -1,5 +1,8 @@
-import json
+import json, logging
 from shell import Shell
+from logs import Logger
+
+logger = Logger('CurlClient').getLogger()
 
 
 class CurlClient:
@@ -21,6 +24,7 @@ class CurlClient:
 		if proto == 'http' or proto == 'https':
 			self.proto = proto
 		else:
+			logger.error('protocol was not one of \'http\' or \'https\'')
 			raise ValueError('Protocol must be http or https')
 	
 	def set_server(self, server):
@@ -32,11 +36,13 @@ class CurlClient:
 		try:
 			int_port = int(port)
 		except ValueError as e:
+			logger.error('Port could not be converted to int')
 			raise ValueError('Server port was not of type: int')
 		
 		if int_port > 0 and int_port <= 65535:
 			self.port = int_port
 		else:
+			logger.error('Port was out of range')
 			raise ValueError('Server port must be between 0 and 65535. Value was ' + str(port))
 	
 	
@@ -55,7 +61,7 @@ class CurlClient:
 		url = ''.join([self.proto, '://', self.server, ':', str(self.port), request])
 		url = url + '?'
 		url = url + query
-		
+		logger.debug('REQUEST URL: ' + url)
 		
 		credentials = ':'.join([self.username, self.password])
 		credentials = '-u ' + credentials
@@ -63,7 +69,10 @@ class CurlClient:
 		method = '-X ' + verb
 		
 		call = ' '.join(['curl -sS', credentials, method, options, url])
+		logger.info('CURL CALL: ' + call)
 		output = self.cmd.run(call)
+		logger.debug('CURL STD OUT: ' + output[0])
+		logger.debug('CURL STD ERR: ' + output[1])
 		return output
 		
 	

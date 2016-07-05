@@ -1,4 +1,7 @@
 import os, subprocess
+from logs import Logger
+
+logger = Logger('Shell').getLogger()
 
 # The shell class defines just a few functions which can make executing commands easier
 # run
@@ -24,6 +27,8 @@ class Shell:
 		
 		path = os.getcwd()
 		if len(self.cwd) > 0:
+			logger.debug('Working Directory: ' + self.cwd)
+			logger.info('Running Command: ' + command)
 			process = subprocess.Popen(command, shell=True, cwd=path, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 		else:
 			process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -36,6 +41,7 @@ class Shell:
 	# Error if the directory doesn't exist
 	def set_cwd(self, new_cwd):
 		if not os.path.exists(new_cwd):
+			logger.error('Directory ' + new_cwd + ' does not exist')
 			raise IOError(' '.join([self.cwd, 'does not exist']))
 		else:
 			self.cwd = new_cwd
