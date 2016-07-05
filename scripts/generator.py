@@ -45,7 +45,7 @@ class DataGenerator():
 				datum = AbstractDatum(field)
 				if not datum.field_name in self.field_names:
 					self.field_names.append(datum.field_name)
-					self.debug('Added datum to field set with type: ' + str(field_type))
+					logger.debug('Added datum to field set with type: ' + str(field_type))
 				else:
 					raise ValueError('Cannot have duplicate field names')
 				if 'string' == field_type:
