@@ -24,7 +24,7 @@ The Ambari client can take anywhere between 0 and 5 different arguments:
 
 The defaults for each of the above are shown in the argument list.
 
-### `Ambari.service_request(cluster_name, service_name, action)`
+### `Ambari.service_action(cluster_name, service_name, action)`
 
 - `action`
   - Must only be one one of: `'START'`, `'STOP'`, or `'RESTART'`
@@ -33,15 +33,9 @@ Makes RESTful API call to `GET /api/v1/clusters/{cluster_name}/{service_name}` i
 
 Returns `True` or `False` based on whether or not the action was successful
 
-This function utilizes `self.service_wait_time` to determine the longest amount of time we
+This function utilizes `self.service_wait_time` to determine the longest amount of time we wait before failing the process
 
-Returns a piece of JSON via `json.loads` from the API.
-
-If an error occurred when making the call to Ambari the error message from the curl client will be returned in the following format:
-
-	{
-		"message": error_message_string
-	}
+This function will return `True` or `False` based on whether or not the service was successful in starting, stopping, or restarting
 
 ### `Ambari.get_service(cluster_name, service_name, query='')`
 
