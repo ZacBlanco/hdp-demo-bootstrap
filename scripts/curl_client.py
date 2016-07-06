@@ -57,7 +57,6 @@ class CurlClient:
 		if not (verb == 'GET' or verb == 'POST' or verb == 'PUT' or verb == 'DELETE'):
 			raise ValueError('HTTP Verb must be one of GET|PUT|POST|DELETE')
 		
-		query = '&'.join(query)
 		url = ''.join([self.proto, '://', self.server, ':', str(self.port), request])
 		url = url + '?'
 		url = url + query
