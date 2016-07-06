@@ -192,32 +192,33 @@ class TestDataGenerator(unittest.TestCase):
 		data = gen.generate()
 		assert data['field1'] == True or data['field1'] == False
 		
-		bool_dat = {}
-		bool_dat['type'] = 'boolean'
-		bool_dat['fieldName'] = 'f1'
-		bool_dat['values'] = []
-		try:
-			datum = BooleanDatum(bool_dat)
-			self.fail('value was not of correct type')
-		except AssertionError as e:
-			pass
-		finally:
-			bool_dat['values'] = {}
-			bool_dat['values']['True'] = 0.1
-			
-		try:
-			datum = BooleanDatum(bool_dat)
-			self.fail('Probabilities were not all present')
-		except AssertionError as e:
-			pass
-		finally:
-			bool_dat['values']['False'] = 0.9
-			
-		try:
-			datum = BooleanDatum(bool_dat)
-			val = datum.generate(random)
-		except AssertionError as e:
-			self.fail('Should not have thrown error here')
+		for i in range(20):
+			bool_dat = {}
+			bool_dat['type'] = 'boolean'
+			bool_dat['fieldName'] = 'f1'
+			bool_dat['values'] = []
+			try:
+				datum = BooleanDatum(bool_dat)
+				self.fail('value was not of correct type')
+			except AssertionError as e:
+				pass
+			finally:
+				bool_dat['values'] = {}
+				bool_dat['values']['True'] = 0.1
+
+			try:
+				datum = BooleanDatum(bool_dat)
+				self.fail('Probabilities were not all present')
+			except AssertionError as e:
+				pass
+			finally:
+				bool_dat['values']['False'] = 0.9
+
+			try:
+				datum = BooleanDatum(bool_dat)
+				val = datum.generate(random)
+			except AssertionError as e:
+				self.fail('Should not have thrown error here')
 			
 		
 			
