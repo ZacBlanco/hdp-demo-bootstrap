@@ -34,8 +34,9 @@ class Ambari:
 	
 	def service_action(self, cluster_name, service_name, action):
 		
-		logger.debug('Service Action: ' + action + '; Service Name: ' + service_name)
+		logger.info('Attempting Service Action: ' + action + '; Service Name: ' + service_name)
 		if not (action == 'START' or action == 'RESTART' or action == 'STOP'):
+			logger.error('Service actions was not one of START, STOP, or RESTART')
 			raise ValueError('Service action must be one of: START, STOP, or RESTART')
 		
 		logger.info(action + 'ing ' + service_name + ' via Ambari REST API')
@@ -48,6 +49,7 @@ class Ambari:
 		
 		service_info = self.get_service(cluster_name, service_name, 'fields=ServiceInfo')[0]
 		before_state = service_info['ServiceInfo']['state']
+		logger.debug('Service state before attempting to change: ' + str(before_state))
 		after_state = ''
 		
 		if action == 'STOP':
@@ -67,13 +69,16 @@ class Ambari:
 		res = self.client.make_request('PUT', '/api/v1/clusters/' + cluster_name + '/services/' + service_name, '-i -d \'' + payload + '\' -H "X-Requested-By:ambari"', 'fields=ServiceInfo')
 		
 		if not ('202 Accepted' in res[0] or '200 OK' in res[0]):
+			logger.error('No 200 Level status when attempting to change service state')
 			return False
 		
 		service_state = ''
 		t = 0
 		while t < self.service_wait_time:
+			logger.debug('Checking for a change in service state')
 			service_state = self.get_service(cluster_name, service_name, 'fields=ServiceInfo')[0]['ServiceInfo']['state']
 			if service_state == after_state:
+				logger.info('Service action completed successfully')
 				return True
 			t += 1
 			time.sleep(1)
