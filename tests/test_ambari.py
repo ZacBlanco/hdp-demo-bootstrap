@@ -86,13 +86,20 @@ Server: Jetty(8.1.17.v20150415)
   }
 }"""
 	
-#def mock_service_action(*args, **kwargs):
-#	if 'RESTART' in args[2]:
-#	elif 'START' in args[1]:
-#		return True
-#	elif 'STOP' in args[0]:
-#		return False
-#	
+bad_res_diff = """HTTP/1.1 400 Bad Request
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+User: admin
+Set-Cookie: AMBARISESSIONID=q9l3n2dt79mpoyn3mhfnzwf;Path=/;HttpOnly
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Content-Type: text/plain
+Content-Length: 107
+Server: Jetty(8.1.17.v20150415)
+
+{
+  "status" : 400,
+  "message" : "CSRF protection is turned on. X-Requested-By HTTP header is required."
+}"""
 
 def mocked_request(*args, **kwargs):
 	
@@ -276,9 +283,17 @@ class TestAmbariClient(unittest.TestCase):
 		
 		val = client.service_action('Sandbox', 'YARN', 'RESTART')
 		assert val == False
+	
+	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
+	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[bad_res_diff, ''])
+	@mock.patch('time.sleep', return_value=1)
+	def test_service_request_bad_req(self, mock1, mock2, mock3, mock4):
+		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		
-#		curl -sS -u admin:admin -X PUT -i -d '{"RequestInfo": {"context": "STOP YARN via REST"}, "Body": {"ServiceInfo": {"state": "STARTED"}}}' -H "X-Requested-By:ambari" http://sandbox.hortonworks.com:8080/api/v1/clusters/Sandbox/services/YARN?fields=ServiceInfo
-		
+		val = client.service_action('Sandbox', 'YARN', 'STOP')
+		assert val == False
+				
 		
 		
 		
