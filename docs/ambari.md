@@ -24,8 +24,38 @@ The Ambari client can take anywhere between 0 and 5 different arguments:
 
 The defaults for each of the above are shown in the argument list.
 
+### `Ambari.service_request(cluster_name, service_name, action)`
 
-### `Ambari.getClusters(query='')`
+- `action`
+  - Must only be one one of: `'START'`, `'STOP'`, or `'RESTART'`
+
+Makes RESTful API call to `GET /api/v1/clusters/{cluster_name}/{service_name}` in order to Stop/Start/Restart a given service.
+
+Returns `True` or `False` based on whether or not the action was successful
+
+This function utilizes `self.service_wait_time` to determine the longest amount of time we
+
+Returns a piece of JSON via `json.loads` from the API.
+
+If an error occurred when making the call to Ambari the error message from the curl client will be returned in the following format:
+
+	{
+		"message": error_message_string
+	}
+
+### `Ambari.get_service(cluster_name, service_name, query='')`
+
+Makes RESTful API call to `GET /api/v1/clusters/{cluster_name}/{service_name}`
+
+Returns a piece of JSON via `json.loads` from the API.
+
+If an error occurred when making the call to Ambari the error message from the curl client will be returned in the following format:
+
+	{
+		"message": error_message_string
+	}
+
+### `Ambari.get_clusters(query='')`
 
 Makes RESTful API call to `GET /api/v1/clusters`
 
@@ -37,7 +67,7 @@ If an error occurred when making the call to Ambari the error message from the c
 		"message": error_message_string
 	}
 
-### `Ambari.getServices(cluster_name, query='')`
+### `Ambari.get_services(cluster_name, query='')`
 
 
 Makes RESTful API call to `GET /api/v1/clusters/{CLUSTER_NAME}/services`
@@ -51,7 +81,7 @@ If an error occurred when making the call to Ambari the error message from the c
 	}
 
 
-### `Ambari.getClusterInfo(cluster_name, query='')`
+### `Ambari.get_cluster_info(cluster_name, query='')`
 
 Makes RESTful API call to `GET /api/v1/clusters/{CLUSTER_NAME}`
 
@@ -83,7 +113,11 @@ Updates the the desired ambari server hostname/IP Address to make REST calls to 
 
 ### `Ambari.set_port(port)`
 
-Updates the desired port on which Ambari is running. **Must be an integer**.
+Updates the desired port on which Ambari is running. **Must be an integer between 0 and 65535**.
+
+### `Ambari.set_service_wait_time(wait_time)`
+
+Updates the total amount of **time in seconds** that we will wait before assuming a service has failed to Stop/Start. **Must be a number greater than 0**.
 
 
 
