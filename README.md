@@ -23,7 +23,17 @@ This framework hopes to provide a rich set of features including the following:
 
 \* = possible feature
 
+## Quick Demo Installation
 
-### Need more Information?
+**Note** Ambari must be installed on your machine for these commands to work.
 
-[Read the docs here!](docs/README.md)
+	export VERSION=2.4
+	rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMO_SERVICE
+	sudo git clone https://github.com/zacblanco/hdp-demo-bootstrap.git /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMO_SERVICE
+	ambari-server restart
+
+## Need more Information?
+
+### [Read the docs here!](docs/README.md)
+ 
+ 
