@@ -29,15 +29,16 @@ def read_config(configFile):
 	return params
 
 def get_conf_dir():
-	dirs = [str(os.getcwd()), str(os.curdir), '../']
+	dirs = [str(os.getcwd()), str(os.curdir), '../', os.path.dirname(os.path.abspath(__file__)) + '/..']
 	
 	for loc in dirs:
 		if not (str(loc).endswith('/')):
 			loc += '/'
-		loc += 'conf/'
+		loc += 'configuration/'
 		if(os.path.exists(loc)):
+			print('LOCATION: ' + loc)
 			return loc
-	
+	print(str(dirs))
 	raise EnvironmentError('Could not find conf directory')
 	
 	

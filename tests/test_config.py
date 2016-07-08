@@ -1,11 +1,10 @@
-import mock, unittest
-from env import scripts
-from scripts import config
+import mock, unittest, env
+from package.util import config
 from ConfigParser import MissingSectionHeaderError
 
 class TestConfig(unittest.TestCase):
 
-	@mock.patch('scripts.config.get_conf_dir', return_value='')
+	@mock.patch('package.util.config.get_conf_dir', return_value='')
 	def test_good_file(self, mock1):
 		params = config.read_config('res/good-test.properties')
 		assert params['SECTION1']['key1'] == 'val1'
@@ -17,7 +16,7 @@ class TestConfig(unittest.TestCase):
 		assert len(params['SECTION1']) > 0
 		assert len(params) == 3
 
-	@mock.patch('scripts.config.get_conf_dir', return_value='')
+	@mock.patch('package.util.config.get_conf_dir', return_value='')
 	def test_missing_header(self, mock1):
 		try:
 			params = config.read_config('res/bad-test.properties')
@@ -25,7 +24,7 @@ class TestConfig(unittest.TestCase):
 		except MissingSectionHeaderError as err:
 			assert 1
 
-	@mock.patch('scripts.config.get_conf_dir', return_value='')
+	@mock.patch('package.util.config.get_conf_dir', return_value='')
 	def test_missing_file(self, mock1):
 		try:
 			params = config.read_config('nofile')
@@ -48,6 +47,6 @@ class TestConfig(unittest.TestCase):
 	def test_good_env(self, mock1, mock2):
 		try:
 			cdir = config.get_conf_dir()
-			assert 'conf/' in cdir
+			assert 'configuration/' in cdir
 		except EnvironmentError as e:
 			assert str(e) == 'Could not find conf directory'

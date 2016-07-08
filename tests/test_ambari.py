@@ -1,7 +1,6 @@
-import unittest, json, mock
-from env import scripts
+import unittest, json, mock, env
 from mock import Mock
-from scripts.ambari import Ambari
+from package.util.ambari import Ambari
 
 
 sample_cluster_res = '{"href":"http://demo-server:8080/api/v1/clusters","items":[{"href":"http://demo-server:8080/api/v1/clusters/demo_cluster","Clusters":{"cluster_name":"demo_cluster","version":"HDP-2.4"}}]}'
@@ -129,7 +128,7 @@ class TestAmbariClient(unittest.TestCase):
 	port = 8080
 	
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_clusters_request(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_clusters();
@@ -138,7 +137,7 @@ class TestAmbariClient(unittest.TestCase):
 		assert data['items'][0]['Clusters']['version'] == 'HDP-2.4'
 		
 
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)	
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)	
 	def test_services_request(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_services('demo_cluster');
@@ -146,35 +145,35 @@ class TestAmbariClient(unittest.TestCase):
 		assert len(data['services']) == 16
 		
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_cluster_info_request(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_cluster_info('demo_cluster');
 		assert 'demo-server:8080' in data['href']
 		assert len(data['services']) == 16
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_missing_cluster(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_cluster_info('');
 		assert data['status'] == 404
 		assert 'resource doesn\'t exist' in data['message']
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_err_str(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_cluster_info('bad/request');
 		assert not len(data['message']) == 0
 		assert data['message'] == err_res
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_empty_str(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_cluster_info('empty/res');
 		assert not len(data['message']) == 0
 		assert data['message'] == 'No output was returned.'
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_bad_json_res(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		try:
@@ -185,7 +184,7 @@ class TestAmbariClient(unittest.TestCase):
 			assert not len(str(e.message)) == 0
 			pass
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
 	def test_err_json_res(self, mock):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		data = client.get_cluster_info('err/json/res');
@@ -203,15 +202,15 @@ class TestAmbariClient(unittest.TestCase):
 		client.set_service_wait_time(25)
 		assert client.service_wait_time == 25
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[yarn_service_res, ''], [missing_service_res, '']])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[yarn_service_res, ''], [missing_service_res, '']])
 	def test_get_service(self, mock1):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		assert json.loads(yarn_service_res) == client.get_service('Sandbox', 'YARN') 
 		assert json.loads(missing_service_res) == client.get_service('Sandbox', 'Ay') 
 	
-	@mock.patch('scripts.shell.Shell.run', return_value=[json.loads(service_info_stopped), ''])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[change_response_diff, ''])
+	@mock.patch('package.util.shell.Shell.run', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[change_response_diff, ''])
 	@mock.patch('time.sleep', return_value=1)
 	def test_service_request_bad_action(self, mock1, mock2, mock3, mock4):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
@@ -225,26 +224,26 @@ class TestAmbariClient(unittest.TestCase):
 		except ValueError as e:
 			assert str(e) == 'Service action must be one of: START, STOP, or RESTART'
 		
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_starting, ''], [service_info_starting, ''], [service_info_started, '']])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[change_response_diff, ''])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[service_info_starting, ''], [service_info_starting, ''], [service_info_started, '']])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[change_response_diff, ''])
 	def test_service_request_stopped(self, mock1, mock2, mock3):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		val = client.service_action('Sandbox', 'YARN', 'STOP')
 		assert val == True
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_starting, ''], [service_info_starting, ''], [service_info_started, '']])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_started), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[service_info_starting, ''], [service_info_starting, ''], [service_info_started, '']])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_started), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
 	def test_service_request_started(self, mock1, mock2, mock3):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
 		
 		val = client.service_action('Sandbox', 'YARN', 'START')
 		assert val == True
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_starting, ''], [service_info_starting, ''], [service_info_started, '']])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_started), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[service_info_starting, ''], [service_info_starting, ''], [service_info_started, '']])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_started), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
 	@mock.patch('time.sleep', return_value=1)
 	def test_service_request_stop(self, mock1, mock2, mock3, mock4):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
@@ -258,9 +257,9 @@ class TestAmbariClient(unittest.TestCase):
 		val = client.service_action('Sandbox', 'YARN', 'STOP')
 		assert val == False
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
 	@mock.patch('time.sleep', return_value=1)
 	def test_service_request_start(self, mock1, mock2, mock3, mock4):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
@@ -274,9 +273,9 @@ class TestAmbariClient(unittest.TestCase):
 		val = client.service_action('Sandbox', 'YARN', 'START')
 		assert val == False
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[change_response_same, ''])
 	@mock.patch('time.sleep', return_value=1)
 	def test_service_request_restart(self, mock1, mock2, mock3, mock4):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)
@@ -284,9 +283,9 @@ class TestAmbariClient(unittest.TestCase):
 		val = client.service_action('Sandbox', 'YARN', 'RESTART')
 		assert val == False
 	
-	@mock.patch('scripts.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
-	@mock.patch('scripts.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
-	@mock.patch('scripts.curl_client.CurlClient.make_request', return_value=[bad_res_diff, ''])
+	@mock.patch('package.util.shell.Shell.run', side_effect=[[service_info_stopped, ''], [service_info_stopped, ''], [service_info_stopped, '']])
+	@mock.patch('package.util.ambari.Ambari.get_service', return_value=[json.loads(service_info_stopped), ''])
+	@mock.patch('package.util.curl_client.CurlClient.make_request', return_value=[bad_res_diff, ''])
 	@mock.patch('time.sleep', return_value=1)
 	def test_service_request_bad_req(self, mock1, mock2, mock3, mock4):
 		client = Ambari(self.un, self.pw, self.proto, self.server, self.port)

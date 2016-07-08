@@ -1,8 +1,8 @@
-import unittest
-from env import scripts
-from scripts.shell import Shell
+import unittest, env
+from package.util.shell import Shell
 
 class TestShell(unittest.TestCase):
+	
 	def test_default_cwd(self):
 		try:
 			cmd = Shell()
@@ -28,13 +28,13 @@ class TestShell(unittest.TestCase):
 			cmd = Shell('/tmp');
 			out = cmd.run('bash --version')
 			out = cmd.run('bash', '--version')
-		except Exception:
-			self.fail('Exception should not have been raised')
+		except Exception as e:
+			self.fail('Exception should not have been raised. ' + str(e))
 			
 	def test_default_cwd(self):
 		try:
 			cmd = Shell('');
 			out = cmd.run('bash --version')
 			out = cmd.run('bash', '--version')
-		except Exception:
+		except Exception as e:
 			self.fail('Exception should not have been raised')
