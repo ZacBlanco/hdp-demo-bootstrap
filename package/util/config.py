@@ -58,14 +58,14 @@ def get_config():
 	
 	conf_dir = get_conf_dir()
 	dir_entries = glob.glob(conf_dir + "*.xml" )
+	print dir_entries
 	for conf_file in dir_entries:
 		if os.path.isfile(conf_file):
 			path, filename = os.path.split(conf_file)
 			name = os.path.splitext(filename)[0]
-			try:
-				params = read_xml_config(filename)
-			except IOError:
-				pass
+			print(filename)
+			print conf_file
+			params = read_xml_config(filename)
 			conf['configurations'][name] = params
 	
 	return conf

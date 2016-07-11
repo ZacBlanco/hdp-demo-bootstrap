@@ -1,4 +1,4 @@
-import mock, unittest, env, os
+import mock, unittest, env, os, glob
 from package.util import config
 from ConfigParser import MissingSectionHeaderError
 
@@ -69,16 +69,16 @@ class TestConfig(unittest.TestCase):
 		except IOError as e:
 			self.fail(e)
 			
-			
-	@mock.patch('package.util.config.get_conf_dir', return_value='')
-	@mock.patch('glob.glob', return_value=['test-config-1.xml', 'nofile', 'nofile2'])
-	def test_xml_tree(self, mock1, mock2):
+	
+	@mock.patch('package.util.config.get_conf_dir', return_value='./res/config/')
+	@mock.patch('glob.glob', return_value=['./res/config/test-conf-1.xml', 'nofile', 'nofile2'])
+	def test_missing_xml_files(self, mock1, mock2):
 		try:
-			conf = config.read_xml_config('res/config/test-conf-1.xml')
+			conf = config.get_config()
 			
 			assert len(conf['configurations'].keys()) == 1
 			for i in range(1, 5):
-				assert (conf['configurations']['test-config-1']['name.prop.' + str(i)] == 'val' + str(i))
+				assert (conf['configurations']['test-conf-1']['name.prop.' + str(i)] == 'val' + str(i))
 		except IOError as e:
 			self.fail(e)
 			
