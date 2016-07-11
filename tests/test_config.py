@@ -1,4 +1,4 @@
-import mock, unittest, env
+import mock, unittest, env, os
 from package.util import config
 from ConfigParser import MissingSectionHeaderError
 
@@ -50,3 +50,61 @@ class TestConfig(unittest.TestCase):
 			assert 'configuration/' in cdir
 		except EnvironmentError as e:
 			assert str(e) == 'Could not find conf directory'
+			
+	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	def test_xml_tree(self, mock1):
+		try:
+			conf = config.read_xml_config('res/config/test-conf-1.xml')
+			print(conf.keys())
+			for i in range(1, 5):
+				assert (conf['name.prop.' + str(i)] == 'val' + str(i))
+		except IOError as e:
+			self.fail(e)
+			
+	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	def test_bad_xml_tree(self, mock1):
+		try:
+			conf = config.read_xml_config('res/config/test-conf-3.xml')
+			for i in range(3, 5):
+				assert (conf['name.prop.' + str(i)] == 'val' + str(i))
+			try:
+				v = conf['name.prop.1']
+				self.fail('Should have thrown KeyError')
+			except KeyError as e:
+				pass
+			try:
+				v = conf['name.prop.2']
+				self.fail('Should have thrown KeyError')
+			except KeyError as e:
+				pass
+			
+		except IOError as e:
+			self.fail(e)
+					
+			
+	@mock.patch('package.util.config.get_conf_dir', return_value=os.path.dirname(os.path.abspath(__file__)) + "/res/config/")
+	def test_xml_tree(self, mock1):
+		try:
+			conf = config.get_config()
+			print(conf.keys())
+			print(conf['configurations'].keys())
+			files = ['test-conf-1.xml', 'test-conf-2.xml']
+			for f in files:
+				for i in range(1, 5):
+					assert (conf['configurations'][f]['name.prop.' + str(i)] == 'val' + str(i))
+		except IOError as e:
+			self.fail(e)
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			

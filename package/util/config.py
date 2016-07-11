@@ -1,4 +1,5 @@
-import os, ConfigParser
+import os, ConfigParser, glob
+import xml.etree.ElementTree as ET
 
 
 # readConfig
@@ -15,7 +16,7 @@ def read_config(configFile):
 	path = get_conf_dir() + configFile
 	
 	if not os.path.isfile(path):
-		raise IOError('could not find file at '+path )
+		raise IOError('could not find file at ' + path )
 	
 	config = ConfigParser.ConfigParser()
 	config.read(path)
@@ -28,6 +29,51 @@ def read_config(configFile):
 	
 	return params
 
+def read_xml_config(configFile):
+	
+	path = get_conf_dir() + configFile
+	
+	if not os.path.isfile(path):
+		raise IOError('could not find file at ' + path )
+	
+	config_root = ET.parse(path).getroot()
+	conf = {}
+	# Get all property elements
+	for prop in config_root.findall('property'):
+		
+		nm = prop.find('name')
+		val = prop.find('value')
+		if not (nm == None or val == None):
+			conf[nm.text] = val.text
+			
+	return conf
+
+# returns a dict with dict['configurations'] containing
+# another dict with a list of file names
+# Under each filename is the parameters
+
+def get_config():
+	conf = {}
+	conf['configurations'] = {}
+	
+	conf_dir = get_conf_dir()
+	dir_entries = glob.glob(conf_dir + "*.xml" )
+	for conf_file in dir_entries:
+		if os.path.isfile(conf_file):
+			head, tail = os.path.split(conf_file)
+			try:
+				params = read_xml_config(tail)
+			except IOError:
+				pass
+			conf['configurations'][tail] = params
+	
+	return conf
+	
+	
+	
+
+
+# Gets full path to configuration directory. Always ends with a forward slash (/)
 def get_conf_dir():
 	dirs = [str(os.getcwd()), str(os.curdir), '../', os.path.dirname(os.path.abspath(__file__)) + '/..']
 	
@@ -36,9 +82,8 @@ def get_conf_dir():
 			loc += '/'
 		loc += 'configuration/'
 		if(os.path.exists(loc)):
-			print('LOCATION: ' + loc)
+#			print('LOCATION: ' + loc)
 			return loc
-	print(str(dirs))
 	raise EnvironmentError('Could not find conf directory')
 	
 	

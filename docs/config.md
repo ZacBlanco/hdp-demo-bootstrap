@@ -40,3 +40,24 @@ Example:
 This method will search for a directory named `conf` in the local directory structure. It will return the path to this directory. 
 
 The method is used when searching for a configuration file in the `read_config` method. However, it may be used outside of the `config` module if other modules utilize the `conf` directory.
+
+
+### `Ambari.get_config()`
+
+This method retrieves and reads a all XML files stored in the `configurations` directory and returns an embedded dictionary object where all of the key-value pairs are stored in the form below:
+
+	conf = config.get_config()
+	conf['configurations']['FILENAME']['PROPERTY_NAME'] = PROPERTY_VALUE
+
+
+i.e. if we had the file `service-config.xml` then we would access it's properties via:
+
+	conf['configurations']['service-config']
+
+
+### `Ambari.read_xml_config(config_file)`
+
+This method retrieves and reads a configuration file `configurations` directory and returns a  dictionary object where all of the key-value pairs are stored
+	
+	conf = config.read_xml_config(FILE_PATH)
+	conf['PROPERTY_NAME'] = PROPERTY_VALUE
