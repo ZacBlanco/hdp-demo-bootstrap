@@ -72,6 +72,8 @@ The directory structure is outlined below.
     - `util` is a custom python package that was designed for this repository. It contains a few modules which are documented above.
 	- `scripts` - This is where you'll implement the custom parameters for the demo Ambari service. It contains files `master.py` and `params.py`.
 	- `configuration` contains all of the files that pertain to the configuration parameters which are utilized by modules in `util`. Those parameters exposed in the files are configurable via the Ambari service
+- `tests`
+  - Contains all of the tests for the custom modules in `package/util`
 
 ### Configuration Files
 
@@ -181,6 +183,8 @@ Then in `master.py` you could execute using `InlineTemplate` (A function from `r
 
 
 ### Util
+
+The `util` package is a custom-built python package which houses a few modules that have been well documented and have many uses when installing an Ambari service. 
 
 You can find documentation on all the `util` modules in the index below
 
