@@ -28,7 +28,15 @@ class TestConfig(unittest.TestCase):
 	def test_missing_file(self, mock1):
 		try:
 			params = config.read_config('nofile')
-			assert 0
+			params = config.read_xml_config('nofile')
+			self.fail('Should have thrown IOError')
+		except IOError as e:
+			if 'could not find file' not in e.message:
+				assert 0
+				
+		try:
+			params = config.read_xml_config('nofile')
+			self.fail('Should have thrown IOError')
 		except IOError as e:
 			if 'could not find file' not in e.message:
 				assert 0
@@ -61,6 +69,20 @@ class TestConfig(unittest.TestCase):
 		except IOError as e:
 			self.fail(e)
 			
+			
+	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	@mock.patch('glob.glob', return_value=['test-config-1.xml', 'nofile', 'nofile2'])
+	def test_xml_tree(self, mock1, mock2):
+		try:
+			conf = config.read_xml_config('res/config/test-conf-1.xml')
+			
+			assert len(conf['configurations'].keys()) == 1
+			for i in range(1, 5):
+				assert (conf['configurations']['test-config-1']['name.prop.' + str(i)] == 'val' + str(i))
+		except IOError as e:
+			self.fail(e)
+			
+		
 	@mock.patch('package.util.config.get_conf_dir', return_value='')
 	def test_bad_xml_tree(self, mock1):
 		try:
@@ -86,9 +108,7 @@ class TestConfig(unittest.TestCase):
 	def test_xml_tree(self, mock1):
 		try:
 			conf = config.get_config()
-			print(conf.keys())
-			print(conf['configurations'].keys())
-			files = ['test-conf-1.xml', 'test-conf-2.xml']
+			files = ['test-conf-1', 'test-conf-2']
 			for f in files:
 				for i in range(1, 5):
 					assert (conf['configurations'][f]['name.prop.' + str(i)] == 'val' + str(i))
