@@ -1,5 +1,5 @@
 import unittest, env
-from package.util.shell import Shell
+from demo_utils.shell import Shell
 
 class TestShell(unittest.TestCase):
 	

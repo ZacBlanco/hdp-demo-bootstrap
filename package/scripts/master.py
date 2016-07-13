@@ -1,5 +1,8 @@
 import sys, util
 from resource_management import *
+from resource_management.core.exceptions import ComponentIsNotRunning
+from util.shell import Shell
+from util import config
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -25,24 +28,24 @@ class Master(Script):
 	
 	def install(self, env):
 		# Fill me in!
-		print 'Install the Sample Srv Master';
+		print 'Install the Demo Service Master';
 	
 	def stop(self, env):
 		# Fill me in!
-		print 'Stop the Sample Srv Master';
+		print 'Stop the Demo Service Master';
 	
 	def start(self, env):
 		# Fill me in!
-		print 'Start the Sample Srv Master';
+		print 'Start the Demo Service Master';
 	
 	def status(self, env):
 		# Fill me in!
 		# check_process_status(pid_file)
-		print 'Status of the Sample Srv Master';
+		print 'Status of the Demo Service Master';
 	
 	def configure(self, env):
 		# Fill me in!
-		print 'Configure the Sample Srv Master';
+		print 'Configure the Demo Service Master';
 
 
 if __name__ == "__main__":

@@ -41,6 +41,7 @@ This method will search for a directory named `conf` in the local directory stru
 
 The method is used when searching for a configuration file in the `read_config` method. However, it may be used outside of the `config` module if other modules utilize the `conf` directory.
 
+**IMPORTANT** This method **will** fail if the python program is executed outside of the local directory structure of this bootstrap project. The program must be executed within the directory structure of the project in order to find the configuration directory
 
 ### `Ambari.get_config()`
 

@@ -1,10 +1,10 @@
 import mock, unittest, env, os, glob
-from package.util import config
+from demo_utils import config
 from ConfigParser import MissingSectionHeaderError
 
 class TestConfig(unittest.TestCase):
 
-	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='')
 	def test_good_file(self, mock1):
 		params = config.read_config('res/good-test.properties')
 		assert params['SECTION1']['key1'] == 'val1'
@@ -16,7 +16,7 @@ class TestConfig(unittest.TestCase):
 		assert len(params['SECTION1']) > 0
 		assert len(params) == 3
 
-	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='')
 	def test_missing_header(self, mock1):
 		try:
 			params = config.read_config('res/bad-test.properties')
@@ -24,7 +24,7 @@ class TestConfig(unittest.TestCase):
 		except MissingSectionHeaderError as err:
 			assert 1
 
-	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='')
 	def test_missing_file(self, mock1):
 		try:
 			params = config.read_config('nofile')
@@ -59,7 +59,7 @@ class TestConfig(unittest.TestCase):
 		except EnvironmentError as e:
 			assert str(e) == 'Could not find conf directory'
 			
-	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='')
 	def test_xml_tree(self, mock1):
 		try:
 			conf = config.read_xml_config('res/config/test-conf-1.xml')
@@ -70,7 +70,7 @@ class TestConfig(unittest.TestCase):
 			self.fail(e)
 			
 	
-	@mock.patch('package.util.config.get_conf_dir', return_value='./res/config/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='./res/config/')
 	@mock.patch('glob.glob', return_value=['./res/config/test-conf-1.xml', 'nofile', 'nofile2'])
 	def test_missing_xml_files(self, mock1, mock2):
 		try:
@@ -83,7 +83,7 @@ class TestConfig(unittest.TestCase):
 			self.fail(e)
 			
 		
-	@mock.patch('package.util.config.get_conf_dir', return_value='')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='')
 	def test_bad_xml_tree(self, mock1):
 		try:
 			conf = config.read_xml_config('res/config/test-conf-3.xml')
@@ -104,7 +104,7 @@ class TestConfig(unittest.TestCase):
 			self.fail(e)
 					
 			
-	@mock.patch('package.util.config.get_conf_dir', return_value=os.path.dirname(os.path.abspath(__file__)) + "/res/config/")
+	@mock.patch('demo_utils.config.get_conf_dir', return_value=os.path.dirname(os.path.abspath(__file__)) + "/res/config/")
 	def test_xml_tree(self, mock1):
 		try:
 			conf = config.get_config()

@@ -1,6 +1,6 @@
 import unittest, mock, env
 from mock import MagicMock, Mock
-from package.util.curl_client import CurlClient
+from demo_utils.curl_client import CurlClient
 
 res1 = ['\'key1\':value1', '']
 res2 = ['\'key2\':value2', '']
@@ -18,7 +18,7 @@ def mocked_request(*args, **kwargs):
 	
 class TestCurlClient(unittest.TestCase):
 	
-	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
+	@mock.patch('demo_utils.shell.Shell.run', side_effect=mocked_request)
 	def test_basic_command(self, mock_get):
 		un = 'admin'
 		pw = 'admin'
@@ -64,7 +64,7 @@ class TestCurlClient(unittest.TestCase):
 			except ValueError:
 				pass
 	
-#	@mock.patch('package.util.shell.Shell.run', side_effect=mocked_request)
+#	@mock.patch('demo_utils.shell.Shell.run', side_effect=mocked_request)
 	def test_http_verbs(self):
 		client = CurlClient()
 		

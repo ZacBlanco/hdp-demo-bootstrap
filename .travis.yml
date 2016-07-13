@@ -16,7 +16,7 @@ install:
  - pip install coveralls
 # command to run tests
 script:
- nosetests --with-coverage -w tests
+ nosetests --with-coverage -w demo_utils/tests/
  
 after_success:
  coveralls

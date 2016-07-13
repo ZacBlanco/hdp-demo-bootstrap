@@ -76,7 +76,7 @@ def get_config():
 
 # Gets full path to configuration directory. Always ends with a forward slash (/)
 def get_conf_dir():
-	dirs = [str(os.getcwd()), str(os.curdir), '../', os.path.dirname(os.path.abspath(__file__)) + '/..']
+	dirs = [str(os.getcwd()), str(os.curdir), '../', os.path.dirname(os.path.abspath(__file__)) + '/../..']
 	
 	for loc in dirs:
 		if not (str(loc).endswith('/')):

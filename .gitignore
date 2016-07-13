@@ -1,2 +1,7 @@
 *.pyc
 *.coverage
+**/**.DS_Store
+demo_utils/build**/*
+*.egg
+demo_utils/**.egg-info/*
+dist**/*
