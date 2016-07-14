@@ -1,4 +1,4 @@
-# Quick-Start Guide
+# User Guide
 
 ### Pre-Requisites
 

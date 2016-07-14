@@ -2,7 +2,8 @@
 # Docs: Index
 
 - [Quick-Start Guide](#quick-start-guide)
-- Modules
+- [User Guide](user-guide.md)
+- `demo_utils` Modules
   - [ambari.py](ambari.md)
   - [config.py](config.md)
   - [curl_client.py](curl_client.md)
