@@ -31,14 +31,14 @@ class TestConfig(unittest.TestCase):
 			params = config.read_xml_config('nofile')
 			self.fail('Should have thrown IOError')
 		except IOError as e:
-			if 'could not find file' not in e.message:
+			if 'Could not find file' not in str(e):
 				assert 0
 				
 		try:
 			params = config.read_xml_config('nofile')
 			self.fail('Should have thrown IOError')
 		except IOError as e:
-			if 'could not find file' not in e.message:
+			if 'Could not find file' not in str(e):
 				assert 0
 
 	@mock.patch('os.path.exists', return_value=False)

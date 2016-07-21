@@ -12,11 +12,9 @@ import xml.etree.ElementTree as ET
 #
 # All params are read as strings
 
-def read_config(configFile):
-	path = get_conf_dir() + configFile
+def read_config(config_file):
 	
-	if not os.path.isfile(path):
-		raise IOError('could not find file at ' + path )
+	path = get_path(config_file)
 	
 	config = ConfigParser.ConfigParser()
 	config.read(path)
@@ -29,13 +27,8 @@ def read_config(configFile):
 	
 	return params
 
-def read_xml_config(configFile):
-	
-	path = get_conf_dir() + configFile
-	
-	if not os.path.isfile(path):
-		raise IOError('could not find file at ' + path )
-	
+def read_xml_config(config_file):
+	path = get_path(config_file)
 	config_root = ET.parse(path).getroot()
 	conf = {}
 	# Get all property elements
@@ -48,6 +41,24 @@ def read_xml_config(configFile):
 			
 	return conf
 
+# Raises an IOError if the file doesn't exist
+# Returns the path to the file if it does
+def get_path(config_file):
+	path = get_conf_dir() + config_file
+	
+	exists = False
+	
+	if os.path.isfile(path):
+		exists = True
+	elif os.path.isfile(config_file):
+		path = config_file
+		exists = True
+		
+	if not exists:
+		raise IOError('Could not find file at ' + config_file + ' or ' + path)
+	
+	return path
+	
 # returns a dict with dict['configurations'] containing
 # another dict with a list of file names
 # Under each filename is the parameters
