@@ -3,9 +3,11 @@
 # Shell
 
 
-This small submodule is built to run `bash` commands via simple python scripts. It designed to be slightly less verbose, but also take away some of the configurability of executing subprocesses via the `subprocess.Popen` function.
+This small submodule is built to run `bash` commands via simple python util. It designed to be slightly less verbose than using the `subprocess.Popen` function. However the drawback is it takes away some of the configurability that `Popen` has.
 
 In doing this we can run commands by simply calling the `run` function with the desired bash command (whatever would have been typed in at the command line).
+
+This performs a similar function as the `Execute()` function from [Ambari's `resource_management` library](https://github.com/apache/ambari/tree/trunk/ambari-common/src/main/python/resource_management). However using this module one allows us to not have a dependency on the Ambari libraries (so that you can run this without using/having Ambari)
 
 ## Usage
 
@@ -20,7 +22,7 @@ In doing this we can run commands by simply calling the `run` function with the 
 
 ### `shell.__init__(wd='')`
 
-This instantiates the shell. If the argument `wd` is set to anything other than an empty string, the shell will start at the specified location.
+This instantiates the shell. If the argument `wd` is set to anything other than an empty string, the shell will start at the specified location. Otherwise it is set to `os.getcwd()`
 
 ### `shell.run(command)`
 

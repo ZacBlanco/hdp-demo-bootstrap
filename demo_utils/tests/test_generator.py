@@ -1,14 +1,13 @@
-import unittest, json, mock, random
-from env import scripts
+import unittest, json, mock, random, env
 from mock import Mock
-from scripts.generator import DataGenerator
-from scripts.generator import AbstractDatum
-from scripts.generator import MapDatum
-from scripts.generator import BooleanDatum
+from demo_utils.generator import DataGenerator
+from demo_utils.generator import AbstractDatum
+from demo_utils.generator import MapDatum
+from demo_utils.generator import BooleanDatum
 
 class TestDataGenerator(unittest.TestCase):
 	
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_string_datum_good(self, mock1):
 		gen = DataGenerator('char_gen_good.json', seed='1234567890')
 		test_num = 500
@@ -35,7 +34,7 @@ class TestDataGenerator(unittest.TestCase):
 		
 		assert total == 4*test_num
 
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_gen_key_check_field(self, mock1):
 		try:
 			gen = DataGenerator('char_gen_bad-01.json', seed='1234567890')
@@ -43,7 +42,7 @@ class TestDataGenerator(unittest.TestCase):
 		except KeyError as e:
 			assert("Could not find 'fieldName' in field of schema:" in str(e))
 			
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_gen_key_check_type(self, mock1):
 		try:
 			gen = DataGenerator('char_gen_bad-02.json', seed='1234567890')
@@ -51,7 +50,7 @@ class TestDataGenerator(unittest.TestCase):
 		except KeyError as e:
 			assert('Could not find \'type\' in field of schema:' in str(e))
 			
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_gen_key_check_root(self, mock1):
 		try:
 			gen = DataGenerator('char_gen_bad-03.json', seed='1234567890')
@@ -60,7 +59,7 @@ class TestDataGenerator(unittest.TestCase):
 			assert('Root of JSON Schema is not a list' in str(e))
 
 		
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_gen_check_field_type(self, mock1):
 		try:
 			gen = DataGenerator('char_gen_bad-04.json', seed='1234567890')
@@ -68,7 +67,7 @@ class TestDataGenerator(unittest.TestCase):
 		except RuntimeError as e:
 			assert('Field type was not found. Please change the field type or implement a new datum' in str(e))
 			
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_gen_check_values(self, mock1):
 		try:
 			gen = DataGenerator('char_gen_bad-05.json', seed='1234567890')
@@ -76,7 +75,7 @@ class TestDataGenerator(unittest.TestCase):
 		except KeyError as e:
 			assert('Missing key: values in field3' in str(e))
 
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_gen_abstract_datum(self, mock1):
 		try:
 			field = {}
@@ -98,7 +97,7 @@ class TestDataGenerator(unittest.TestCase):
 		except NotImplementedError as e:
 			assert('AbstractDatum: This method should have been implemented by a sublcass' in str(e))
 
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_num_datum_good(self, mock1):
 		gen = DataGenerator('num_gen_good.json')
 		test_num = 500
@@ -119,7 +118,7 @@ class TestDataGenerator(unittest.TestCase):
 		assert len(data) == test_num
 		
 		
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_dup_fields(self, mock1):
 		try:
 			gen = DataGenerator('dup_fields.json')
@@ -130,7 +129,7 @@ class TestDataGenerator(unittest.TestCase):
 		except ValueError as e:
 			assert 'Cannot have duplicate field names' in str(e)
 		
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_bad_distribution(self, mock1):
 		try:
 			gen = DataGenerator('bad_dist.json')
@@ -138,7 +137,7 @@ class TestDataGenerator(unittest.TestCase):
 			assert 'Distribution can only be one of: uniform, exponential, gaussian, or gamma' in str(e)
 		
 		
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_map_gen_good(self, mock1):
 		try:
 			gen = DataGenerator('map_gen-01.json')
@@ -158,7 +157,7 @@ class TestDataGenerator(unittest.TestCase):
 			print e
 			pass
 	
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_map_datum_bad(self, mock1):
 		missing_fields= {'fieldName': '1111'}
 		missing_fields['type'] = 'map'
@@ -186,7 +185,7 @@ class TestDataGenerator(unittest.TestCase):
 		except ValueError as e:
 			assert 'Could not get key: ' in str(e)
 			
-	@mock.patch('scripts.config.get_conf_dir', return_value='res/')
+	@mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
 	def test_boolean_dat(self, mock1):
 		gen = DataGenerator('boolean_gen.json')
 		data = gen.generate()

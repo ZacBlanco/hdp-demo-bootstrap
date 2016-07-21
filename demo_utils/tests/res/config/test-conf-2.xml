@@ -1,0 +1,27 @@
+<configuration>
+	<property>
+		<name>name.prop.1</name>
+		<value>val1</value>
+		<description></description>
+	</property>
+	<property>
+		<name>name.prop.2</name>
+		<value>val2</value>
+		<description></description>
+	</property>
+	<property>
+		<name>name.prop.3</name>
+		<value>val3</value>
+		<description></description>
+	</property>
+	<property>
+		<name>name.prop.4</name>
+		<value>val4</value>
+		<description></description>
+	</property>
+	<property>
+		<name>name.prop.5</name>
+		<value>val5</value>
+		<description></description>
+	</property>
+</configuration>

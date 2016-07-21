@@ -14,9 +14,10 @@ notifications:
 install: 
  - pip install -r requirements.txt
  - pip install coveralls
+ - cd demo_utils/
 # command to run tests
 script:
- nosetests --with-coverage -w tests
+ nosetests --with-coverage -w tests/
  
 after_success:
  coveralls
