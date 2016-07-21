@@ -70,10 +70,10 @@ class TestConfig(unittest.TestCase):
 			self.fail(e)
 			
 	@mock.patch('demo_utils.config.get_conf_dir', return_value='./configuration/')
-	def test_xml_tree(self, mock1):
+	def test_get_path(self, mock1):
 		try:
 			conf = config.get_path('res/config/test-conf-1.xml')
-			assert conf == True
+			assert conf == 'res/config/test-conf-1.xml'
 		except IOError as e:
 			self.fail(str(e))
 			
