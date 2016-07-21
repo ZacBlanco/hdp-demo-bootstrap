@@ -180,8 +180,8 @@ class TestAmbariClient(unittest.TestCase):
 			data = client.get_cluster_info('bad/json/res');
 			self.fail('Should have thrown an exception: ValueError')
 		except ValueError as e:
-			assert ('Extra data:' in str(e.message))
-			assert not len(str(e.message)) == 0
+			assert ('Extra data:' in str(e))
+			assert not len(str(e)) == 0
 			pass
 		
 	@mock.patch('demo_utils.shell.Shell.run', side_effect=mocked_request)

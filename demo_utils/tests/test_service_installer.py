@@ -62,7 +62,7 @@ class TestHDPSelectInstall(unittest.TestCase):
 			service_installer.install_hdp_select()
 			self.fail('Should fail with a non-linux operating system')
 		except EnvironmentError as e:
-			assert str(e.message) == 'Must be using one of: CentOS 6.x, CentOS 7.x, Ubuntu 12.x, Ubuntu 14.x'
+			assert str(e) == 'Must be using one of: CentOS 6.x, CentOS 7.x, Ubuntu 12.x, Ubuntu 14.x'
 		
 	
 	@mock.patch('platform.linux_distribution', return_value=non_linux_distro)
@@ -72,7 +72,7 @@ class TestHDPSelectInstall(unittest.TestCase):
 			service_installer.install_hdp_select()
 			self.fail('Should fail with a non-linux operating system')
 		except EnvironmentError as e:
-			assert str(e.message) == 'You must be running a linux distribution to install hdp-select'
+			assert str(e) == 'You must be running a linux distribution to install hdp-select'
 			
 	@mock.patch('platform.linux_distribution', return_value=other_linux_distro)
 	@mock.patch('demo_utils.shell.Shell.run', return_value=['/usr/bin/hdp-select', ''])
@@ -81,7 +81,7 @@ class TestHDPSelectInstall(unittest.TestCase):
 			service_installer.install_hdp_select()
 			self.fail('Should fail with a non-linux operating system')
 		except EnvironmentError as e:
-			assert str(e.message) == 'Must be using one of: CentOS 6.x, CentOS 7.x, Ubuntu 12.x, Ubuntu 14.x'
+			assert str(e) == 'Must be using one of: CentOS 6.x, CentOS 7.x, Ubuntu 12.x, Ubuntu 14.x'
 
 class TestComponentCheck(unittest.TestCase):
 
@@ -109,7 +109,7 @@ class TestZeppelinInstall(unittest.TestCase):
 			service_installer.install_zeppelin()
 			self.fail('Cannot continue installation without Ambari')
 		except EnvironmentError as e:
-			assert str(e.message) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
+			assert str(e) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
 			
 	@mock.patch('demo_utils.service_installer.is_ambari_installed', return_value=True)
 	@mock.patch('demo_utils.service_installer.is_hdp_select_installed', return_value=False)
@@ -119,7 +119,7 @@ class TestZeppelinInstall(unittest.TestCase):
 			service_installer.install_zeppelin()
 			self.fail('Cannot continue installation without hdp-select')
 		except EnvironmentError as e:
-			assert str(e.message) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
+			assert str(e) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
 			
 	@mock.patch('demo_utils.service_installer.is_ambari_installed', return_value=True)
 	@mock.patch('demo_utils.service_installer.is_hdp_select_installed', return_value=True)
@@ -178,7 +178,7 @@ class TestNiFiInstall(unittest.TestCase):
 			service_installer.install_nifi()
 			self.fail('Cannot continue installation without Ambari')
 		except EnvironmentError as e:
-			assert str(e.message) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
+			assert str(e) == 'You must install the demo on the same node as the Ambari server. Install Ambari here or move to another node with Ambari installed before continuing'
 			
 	@mock.patch('demo_utils.service_installer.is_ambari_installed', return_value=True)
 	@mock.patch('demo_utils.service_installer.is_hdp_select_installed', return_value=False)
@@ -188,7 +188,7 @@ class TestNiFiInstall(unittest.TestCase):
 			service_installer.install_nifi()
 			self.fail('Cannot continue installation without hdp-select')
 		except EnvironmentError as e:
-			assert str(e.message) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
+			assert str(e) == 'hdp-select could not be installed. Please install it manually and then re-run the setup.'
 			
 	@mock.patch('demo_utils.service_installer.is_ambari_installed', return_value=True)
 	@mock.patch('demo_utils.service_installer.is_hdp_select_installed', return_value=True)
