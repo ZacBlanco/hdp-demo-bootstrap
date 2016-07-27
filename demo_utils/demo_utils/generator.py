@@ -21,7 +21,7 @@ class DataGenerator():
 	# Returns true/false whether or not the schema is valid
 	# Raises an exception?
 	def check_schema(self, schema):
-		path = config.get_conf_dir() + schema
+		path = config.get_path(schema)
 
 		with open(path) as data_file:
 			conf = json.load(data_file)
