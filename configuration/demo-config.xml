@@ -1,0 +1,39 @@
+<!--
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+-->
+<configuration supports_final="true">
+  <property>
+    <name>demo.server.port</name>
+    <value>8997</value>
+    <description>Port where you can access the demo user interface (will need to forward on VM)</description>
+  </property>
+  <property>
+    <name>demo.ambari.username</name>
+    <value>admin</value>
+    <description>Username for user with admin access to Ambari</description>
+  </property>
+  <property>
+    <name>demo.ambari.password</name>
+    <value>admin</value>
+    <description>Username for user with admin access to Ambari</description>
+  </property>
+  <property>
+    <name>demo.data.configuration</name>
+    <value>
+[
+  {
+    "fieldName": "stringData", 
+    "type": "string", 
+    "values": {
+      "a": 0.1,
+      "b": 0.3,
+      "c": 0.4,
+      "d": 0.2
+    }
+  }
+]
+    </value>
+    <description>JSON data descriptor for defining random data generation</description>
+  </property>
+</configuration>
