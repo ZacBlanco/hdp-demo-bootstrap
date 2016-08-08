@@ -5,3 +5,7 @@ demo_utils/build**/*
 *.egg
 demo_utils/**.egg-info/*
 dist**/*
+
+demo-files/demo.pid
+
+demo-files/nohup.out

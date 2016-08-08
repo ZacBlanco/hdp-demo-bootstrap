@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Hortonworks Demo</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header class="page-header ">
+    <div class="container">
+      <h3>Hortonworks Demo</h3>
+    </div>
+  </header>
+
+  <div id="content-container" class="container">
+    <div>
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+        <li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">Data Generation</a></li>
+        <li role="presentation"><a href="#services" aria-controls="services" role="tab" data-toggle="tab">Zeppelin & NiFi</a></li>
+        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="home">
+          <br>
+          <div class="container">
+            Welcome to the Hortonworks Demo Page!
+          </div>
+
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="data">
+          <br>
+
+          <div class="container">
+            <p>Here you can modify some parameters for data generation as well as start and stop the data generation service</p>
+            <hr>
+            <div class="col-sm-8">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Data Generator Controls</h3>
+                </div>
+                <div class="panel-body">
+
+                  <div class="row">
+                    <div class="col-md-12">
+
+                      <div class="row">
+
+                        <div class="col-sm-6">
+                          <form id="start-data" method="post" action="/data-gen/start">
+                            <button class="btn btn-success" type="submit">Start Data</button>
+                          </form>
+                          <form id="stop-data" method="post" action="/data-gen/stop">
+                            <button class="btn btn-danger" type="submit">Stop Data</button>
+                          </form>
+                        </div>
+                        <div class="col-sm-6">
+                          <form id="data-sample-form" method="get" action="/data-gen/sample">
+                            <button class="btn btn-info" type="submit">Get Sample Data</button>
+                          </form>
+                        </div>
+
+                      </div>
+
+                      <hr>
+                      <div class="row">
+
+                        <div class="col-md-7">
+                          <form id="data-update" method="post" action="/data-gen/update">
+
+                            <div class="form-group">
+
+                              <label>Generator Configuration</label>
+                              <small class="row">
+                              Upload data generator configuration
+                            </small>
+
+                            </div>
+                            <div>
+
+                              <div class="input-group">
+                                <label class="input-group-btn">
+                                  <span class="btn btn-default">
+                                  Browse <input type="file" style="display: none;">
+                                </span>
+                                </label>
+                                <input type="text" class="form-control" readonly>
+                              </div>
+                              <span class="help-block">Try selecting one or more files and watch the feedback</span>
+
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                          </form>
+                        </div>
+                        
+                        <div class="col-md-5">
+                          <br>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="services">
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="settings">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr>
+  <footer>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          Hortonworks Demo User Interface
+        </div>
+        <br>
+        <br>
+        <br>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!--  <script src="/demo-files/static/js/demo.js"></script>-->
+  <script src="/js/demo.js"></script>
+</body>
+
+</html>
