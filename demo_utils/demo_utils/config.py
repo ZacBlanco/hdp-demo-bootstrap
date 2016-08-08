@@ -1,4 +1,4 @@
-import os, ConfigParser, glob
+import os, ConfigParser, glob, sys
 import xml.etree.ElementTree as ET
 
 
@@ -44,20 +44,19 @@ def read_xml_config(config_file):
 # Raises an IOError if the file doesn't exist
 # Returns the path to the file if it does
 def get_path(config_file):
-	path = get_conf_dir() + config_file
+  path = get_conf_dir() + config_file
+  exists = False
 	
-	exists = False
-	
-	if os.path.isfile(path):
-		exists = True
-	elif os.path.isfile(config_file):
-		path = config_file
-		exists = True
-		
-	if not exists:
-		raise IOError('Could not find file at ' + config_file + ' or ' + path)
-	
-	return path
+  if os.path.isfile(path):
+    exists = True
+  elif os.path.isfile(config_file):
+    path = config_file
+    exists = True
+    
+  if not exists:
+    raise IOError('Could not find file at ' + config_file + ' or ' + path)  
+  
+  return path
 	
 # returns a dict with dict['configurations'] containing
 # another dict with a list of file names
@@ -69,13 +68,10 @@ def get_config():
 	
 	conf_dir = get_conf_dir()
 	dir_entries = glob.glob(conf_dir + "*.xml" )
-	print dir_entries
 	for conf_file in dir_entries:
 		if os.path.isfile(conf_file):
 			path, filename = os.path.split(conf_file)
 			name = os.path.splitext(filename)[0]
-			print(filename)
-			print conf_file
 			params = read_xml_config(filename)
 			conf['configurations'][name] = params
 	
@@ -88,13 +84,11 @@ def get_config():
 # Gets full path to configuration directory. Always ends with a forward slash (/)
 def get_conf_dir():
 	dirs = [str(os.getcwd()), str(os.curdir), '../', os.path.dirname(os.path.abspath(__file__)) + '/../..']
-	
 	for loc in dirs:
 		if not (str(loc).endswith('/')):
 			loc += '/'
 		loc += 'configuration/'
 		if(os.path.exists(loc)):
-#			print('LOCATION: ' + loc)
 			return loc
 	raise EnvironmentError('Could not find conf directory')
 	
