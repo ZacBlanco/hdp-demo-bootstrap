@@ -41,7 +41,7 @@ class TestDataGenerator(unittest.TestCase):
       gen = DataGenerator('char_gen_bad-01.json', seed='1234567890')
       self.fail('Should have failed with KeyError on fieldName')
     except KeyError as e:
-      assert("Could not find 'fieldName' in field of schema:" in str(e))
+      assert("Could not find 'fieldName' in field of schema" in str(e))
       
   @mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
   def test_gen_key_check_type(self, mock1):
@@ -49,7 +49,8 @@ class TestDataGenerator(unittest.TestCase):
       gen = DataGenerator('char_gen_bad-02.json', seed='1234567890')
       self.fail('Should have failed with KeyError on type')
     except KeyError as e:
-      assert('Could not find \'type\' in field of schema:' in str(e))
+      print str(e)
+      assert('Could not find \'type\' in field of schema' in str(e))
       
   @mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
   def test_gen_key_check_root(self, mock1):
@@ -66,7 +67,7 @@ class TestDataGenerator(unittest.TestCase):
       gen = DataGenerator('char_gen_bad-04.json', seed='1234567890')
       self.fail('Should have failed with TypeError')
     except RuntimeError as e:
-      assert('Field type was not found. Please change the field type or implement a new datum' in str(e))
+      assert('was not found. Please change the field type or implement a new datum' in str(e))
       
   @mock.patch('demo_utils.config.get_conf_dir', return_value='res/')
   def test_gen_check_values(self, mock1):
