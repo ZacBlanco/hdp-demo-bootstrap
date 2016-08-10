@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>demo_utils.generator module &mdash; HDP demo_utils 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="HDP demo_utils 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="demo_utils package" href="demo_utils.html"/>
+        <link rel="next" title="demo_utils.logs module" href="demo_utils.logs.html"/>
+        <link rel="prev" title="demo_utils.curl_client module" href="demo_utils.curl_client.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HDP demo_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">demo_utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="demo_utils.html">demo_utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="demo_utils.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.ambari.html">demo_utils.ambari module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.config.html">demo_utils.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.curl_client.html">demo_utils.curl_client module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">demo_utils.generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.logs.html">demo_utils.logs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.service_installer.html">demo_utils.service_installer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.shell.html">demo_utils.shell module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="demo_utils.html#module-demo_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">HDP demo_utils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">demo_utils</a> &raquo;</li>
+      
+          <li><a href="demo_utils.html">demo_utils package</a> &raquo;</li>
+      
+    <li>demo_utils.generator module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/demo_utils.generator.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-demo_utils.generator">
+<span id="demo-utils-generator-module"></span><h1>demo_utils.generator module<a class="headerlink" href="#module-demo_utils.generator" title="Permalink to this headline">¶</a></h1>
+<p>The module which houses the data generator and all of the different types of Datum Objects.</p>
+<p>This module is easily extendable by simple implementing the methods in the AbstractDatum class.</p>
+<p>Configurations can be read through JSON strings or JSON files.</p>
+<p>A configuration object itself should be a list of JSON objects. Each JSON object should have at least two fields implemented</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">fieldName</span></code> (str): A simple user-defined name for this field</li>
+<li><code class="docutils literal"><span class="pre">type</span></code> (str): A Datum which has been implemented in the data generator</li>
+</ul>
+</div></blockquote>
+<p>Any other properties of the object are specific to the type of datum (see datum documentation below).</p>
+<p class="rubric">Example</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demo_utils.generator</span>
+<span class="kn">from</span> <span class="nn">generator</span> <span class="kn">import</span> <span class="n">DataGenerator</span>
+
+<span class="n">rand_schema</span> <span class="o">=</span> <span class="s1">&#39;/path/to/schema.json&#39;</span>
+<span class="c1"># or</span>
+<span class="c1"># import json</span>
+<span class="c1"># js_schema = [</span>
+<span class="c1">#               {</span>
+<span class="c1">#                 &quot;fieldName&quot;: &quot;field1&quot;</span>
+<span class="c1">#                 &quot;type&quot;: &quot;string&quot;</span>
+<span class="c1">#                 &quot;values&quot;: [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span>
+<span class="c1">#               }</span>
+<span class="c1">#             ]</span>
+<span class="c1"># rand_schema = json.dumps(js_schema)</span>
+
+
+<span class="n">gen</span> <span class="o">=</span> <span class="n">DataGenerator</span><span class="p">(</span><span class="n">rand_schema</span><span class="p">)</span>
+<span class="c1"># Generate a single &#39;row&#39; of data</span>
+<span class="k">print</span><span class="p">(</span><span class="n">gen</span><span class="o">.</span><span class="n">generate</span><span class="p">())</span>
+</pre></div>
+</td></tr></table></div>
+<dl class="class">
+<dt id="demo_utils.generator.AbstractDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">AbstractDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.AbstractDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>An abstract object which defines some methods for other Datum to implement.</p>
+<p>This class should NOT be instantiated</p>
+<dl class="method">
+<dt id="demo_utils.generator.AbstractDatum.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.AbstractDatum.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should not be used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; This method should not be called by an instance of this class. (In fact there should never be an instance of just this class)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.AbstractDatum.check_for_key">
+<code class="descname">check_for_key</code><span class="sig-paren">(</span><em>key_name</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.AbstractDatum.check_for_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure the key is in the field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key_name</strong> (<em>str</em>) &#8211; The key to check for in the datum object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the key is in the object. Otherwise an error will be raised</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code> &#8211; If they key is not present, this error is raised.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.AbstractDatum.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><em>rand</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.AbstractDatum.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should not be used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code> &#8211; This method should not be called by an instance of this class. (In fact there should never be an instance of just this class)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.BooleanDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">BooleanDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.BooleanDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#demo_utils.generator.AbstractDatum" title="demo_utils.generator.AbstractDatum"><code class="xref py py-class docutils literal"><span class="pre">demo_utils.generator.AbstractDatum</span></code></a></p>
+<dl class="method">
+<dt id="demo_utils.generator.BooleanDatum.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.BooleanDatum.check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.BooleanDatum.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><em>rand</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.BooleanDatum.generate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.DataGenerator">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">DataGenerator</code><span class="sig-paren">(</span><em>schema</em>, <em>seed=''</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.DataGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>The generator object. Pass the configuration here. use the generate() method to get a random object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>schema</strong> (<em>str</em>) &#8211; The schema file or JSON string which defines the data to be generated.</li>
+<li><strong>seed</strong> (<em>str, optional</em>) &#8211; The seed value for the generator</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="demo_utils.generator.DataGenerator.check_schema">
+<code class="descname">check_schema</code><span class="sig-paren">(</span><em>schema</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.DataGenerator.check_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the entire schema for any incorrect or missing parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>schema</strong> (<em>str</em>) &#8211; The file path or JSON string of the schema</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N/A</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code> &#8211; If the root of JSON schema is not a list.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code> &#8211; If &#8216;fieldName&#8217; or &#8216;type&#8217; are not found in a datum</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; If there are duplicate fieldNames</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> &#8211; If a certain &#8216;type&#8217; isn&#8217;t found</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.DataGenerator.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.DataGenerator.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce a single row of data. One random value for each datum.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dictionary object with keys for each fieldName in the schema. Values according to the schema.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(dict)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.DecimalDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">DecimalDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.DecimalDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#demo_utils.generator.NumberDatum" title="demo_utils.generator.NumberDatum"><code class="xref py py-class docutils literal"><span class="pre">demo_utils.generator.NumberDatum</span></code></a></p>
+<p>The DecimalDatum uses the NumberDatum to generate numbers. It does not truncate any decimal places.</p>
+<p>For configuration examples please see the documentation on <code class="docutils literal"><span class="pre">NumberDatum</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.IntDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">IntDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.IntDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#demo_utils.generator.NumberDatum" title="demo_utils.generator.NumberDatum"><code class="xref py py-class docutils literal"><span class="pre">demo_utils.generator.NumberDatum</span></code></a></p>
+<p>The IntDatum uses the NumberDatum to generate numbers. It Rounds to the nearest whole and then convert the number to an int before returning .</p>
+<p>For configuration examples please see the documentation on <code class="docutils literal"><span class="pre">NumberDatum</span></code></p>
+<dl class="method">
+<dt id="demo_utils.generator.IntDatum.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><em>rand</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.IntDatum.generate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.MapDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">MapDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.MapDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#demo_utils.generator.AbstractDatum" title="demo_utils.generator.AbstractDatum"><code class="xref py py-class docutils literal"><span class="pre">demo_utils.generator.AbstractDatum</span></code></a></p>
+<p>Allows you to Map certain values from one field to another.</p>
+<p>Using two special fields: <code class="docutils literal"><span class="pre">map</span></code> and <code class="docutils literal"><span class="pre">mapFromField</span></code> you can use this field to generate a certain piece of data based on another field&#8217;s value. Must be a string.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;mapped_field&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;map&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;mapFromField&quot;</span><span class="p">:</span> <span class="s2">&quot;RandomIntField1&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;4&quot;</span><span class="p">:</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;5&quot;</span><span class="p">:</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;6&quot;</span><span class="p">:</span> <span class="s2">&quot;large&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;7&quot;</span><span class="p">:</span> <span class="s2">&quot;large&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;8&quot;</span><span class="p">:</span> <span class="s2">&quot;large&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;9&quot;</span><span class="p">:</span> <span class="s2">&quot;large&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;10&quot;</span><span class="p">:</span> <span class="s2">&quot;large&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Another Example using gender:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;map&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;mapFromField&quot;</span><span class="p">:</span> <span class="s2">&quot;fName&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;map&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;Jen&quot;</span><span class="p">:</span>    <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Susan&quot;</span><span class="p">:</span>  <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mary&quot;</span><span class="p">:</span>   <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;John&quot;</span><span class="p">:</span>   <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Mike&quot;</span><span class="p">:</span>   <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Joe&quot;</span><span class="p">:</span>    <span class="s2">&quot;M&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="demo_utils.generator.MapDatum.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.MapDatum.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not to be used externally</p>
+<p>Checks to make sure the &#8220;map&#8221; and &#8220;mapFromField&#8221; are present in the datum</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.MapDatum.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.MapDatum.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not to be used externally.</p>
+<p>Generates the data from the map</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.NumberDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">NumberDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.NumberDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#demo_utils.generator.AbstractDatum" title="demo_utils.generator.AbstractDatum"><code class="xref py py-class docutils literal"><span class="pre">demo_utils.generator.AbstractDatum</span></code></a></p>
+<p>Create a random number form a schema object</p>
+<p>This datum shouldn&#8217;t be used. Use the <code class="docutils literal"><span class="pre">IntDatum</span></code> or <code class="docutils literal"><span class="pre">DecimalDatum</span></code> instead.</p>
+<p>Along with &#8216;fieldName&#8217; and &#8216;type&#8217; a number datum requires a &#8216;distribution&#8217; field.</p>
+<p>There are 4 types of distributions currently available (along with the extra argument that can be supplied for each):</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>uniform</strong> &#8211; <p>A distribution which produces numbers between a and b with equal probability.</p>
+<ul>
+<li><code class="docutils literal"><span class="pre">a</span></code>: lower bound. Defaults to 0.</li>
+<li><code class="docutils literal"><span class="pre">b</span></code>: upper bound. Defaults to 1.</li>
+</ul>
+</li>
+<li><strong>exponential</strong> &#8211; <p>A distribution which produces lower values with high probability.</p>
+<ul>
+<li><code class="docutils literal"><span class="pre">lambda</span></code>: Lower values (greater than 0) results in higher numbers. High values of lambda result in lower values. Defaults to 1.</li>
+</ul>
+</li>
+<li><strong>gaussian</strong> &#8211; <p>A distribution which produces numbers in a normal curve. The values produced will fall in between 3 standard deviations 97% of the time.</p>
+<ul>
+<li><code class="docutils literal"><span class="pre">mu</span></code>: The mean of all numbers which will be produced. Defaults to 0.</li>
+<li><code class="docutils literal"><span class="pre">sigma</span></code>: The standard deviation of numbers produced. Defaults to 1.</li>
+</ul>
+</li>
+<li><strong>gamma</strong> &#8211; <p>Results in a gamma distribution</p>
+<ul>
+<li><code class="docutils literal"><span class="pre">alpha</span></code>: defaults to 1</li>
+<li><code class="docutils literal"><span class="pre">beta</span></code>: defaults to 1</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Gaussian Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;number_field&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+  <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">10</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Exponential Example</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;number_field&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;exponential&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;lambda&quot;</span><span class="p">:</span> <span class="mf">0.5</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="demo_utils.generator.NumberDatum.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.NumberDatum.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not to be used externally</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.NumberDatum.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><em>rand</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.NumberDatum.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a rando number based on the distribution parameters given in the schema.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="demo_utils.generator.StringDatum">
+<em class="property">class </em><code class="descclassname">demo_utils.generator.</code><code class="descname">StringDatum</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.StringDatum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#demo_utils.generator.AbstractDatum" title="demo_utils.generator.AbstractDatum"><code class="xref py py-class docutils literal"><span class="pre">demo_utils.generator.AbstractDatum</span></code></a></p>
+<p>A datum that will randomly generate strings</p>
+<p>There are two possible options writing schemas.</p>
+<p>The first is using a list of strings. This causes each element to appear with equal probability.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;test_field&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The second is using an object with different keys, and specifying a probability for each key.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;test_field&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.5</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> (<em>dict</em>) &#8211; The datum object (represented as a dict)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="demo_utils.generator.StringDatum.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.StringDatum.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the fieldName and values are proper.</p>
+<p>Shouldn&#8217;t be called externally</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.generator.StringDatum.generate">
+<code class="descname">generate</code><span class="sig-paren">(</span><em>rand</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.generator.StringDatum.generate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a string from the given list of values. Pick one based on even or given probabilities</p>
+<p>Shouldn&#8217;t be called externally</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="demo_utils.logs.html" class="btn btn-neutral float-right" title="demo_utils.logs module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="demo_utils.curl_client.html" class="btn btn-neutral" title="demo_utils.curl_client module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Zac Blanco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

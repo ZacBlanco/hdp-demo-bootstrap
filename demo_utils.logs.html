@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>demo_utils.logs module &mdash; HDP demo_utils 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="HDP demo_utils 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="demo_utils package" href="demo_utils.html"/>
+        <link rel="next" title="demo_utils.service_installer module" href="demo_utils.service_installer.html"/>
+        <link rel="prev" title="demo_utils.generator module" href="demo_utils.generator.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HDP demo_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">demo_utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="demo_utils.html">demo_utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="demo_utils.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.ambari.html">demo_utils.ambari module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.config.html">demo_utils.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.curl_client.html">demo_utils.curl_client module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.generator.html">demo_utils.generator module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">demo_utils.logs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.service_installer.html">demo_utils.service_installer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.shell.html">demo_utils.shell module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="demo_utils.html#module-demo_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">HDP demo_utils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">demo_utils</a> &raquo;</li>
+      
+          <li><a href="demo_utils.html">demo_utils package</a> &raquo;</li>
+      
+    <li>demo_utils.logs module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/demo_utils.logs.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-demo_utils.logs">
+<span id="demo-utils-logs-module"></span><h1>demo_utils.logs module<a class="headerlink" href="#module-demo_utils.logs" title="Permalink to this headline">¶</a></h1>
+<p>A small submodule which makes logging easy for the whole library</p>
+<p>Using this library you can initiate logging for any module in this package (or any python module in general)</p>
+<p class="rubric">Example</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">demo_utils</span> <span class="kn">import</span> <span class="n">logs</span>
+<span class="kn">from</span> <span class="nn">logs</span> <span class="kn">import</span> <span class="n">Logger</span>
+
+<span class="c1"># Create the logger. Should be at the beginning of the file.</span>
+<span class="c1"># Use throughout the module/file</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s1">&#39;your_logger_name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+
+<span class="c1"># Info</span>
+<span class="n">l</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Info Message&#39;</span><span class="p">)</span>
+<span class="c1"># Warn</span>
+<span class="n">l</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Warning Message&#39;</span><span class="p">)</span>
+<span class="c1"># Error</span>
+<span class="n">l</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Error Message&#39;</span><span class="p">)</span>
+<span class="c1"># Debug</span>
+<span class="n">l</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Debug Message&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>To set the logging level put a file called <code class="docutils literal"><span class="pre">global.conf</span></code> inside of your configuration directory. Use the following format to set the log level. If the file isn&#8217;t found we default to WARN.</p>
+<p>Put the following inside <code class="docutils literal"><span class="pre">global.conf</span></code> to set the logging level</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">LOGGING</span><span class="p">]</span>
+<span class="n">log</span><span class="o">-</span><span class="n">level</span><span class="o">=</span><span class="n">WARN</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="demo_utils.logs.Logger">
+<em class="property">class </em><code class="descclassname">demo_utils.logs.</code><code class="descname">Logger</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.logs.Logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple logger object to set up logging for a module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) &#8211; The name of the module/logger. Used in log output</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="demo_utils.logs.Logger.getLogger">
+<code class="descname">getLogger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.logs.Logger.getLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the logger object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The python logger object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.logs.Logger.getLoggingLevel">
+<code class="descname">getLoggingLevel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.logs.Logger.getLoggingLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to retrieve the logging level from the configuration file <code class="docutils literal"><span class="pre">global.conf</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="demo_utils.logs.Logger.logger">
+<code class="descname">logger</code><em class="property"> = &lt;logging.Logger object&gt;</em><a class="headerlink" href="#demo_utils.logs.Logger.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>The logger object. Uses the built-in python logger.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="demo_utils.service_installer.html" class="btn btn-neutral float-right" title="demo_utils.service_installer module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="demo_utils.generator.html" class="btn btn-neutral" title="demo_utils.generator module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Zac Blanco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>demo_utils.ambari module &mdash; HDP demo_utils 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="HDP demo_utils 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="demo_utils package" href="demo_utils.html"/>
+        <link rel="next" title="demo_utils.config module" href="demo_utils.config.html"/>
+        <link rel="prev" title="demo_utils package" href="demo_utils.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HDP demo_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">demo_utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="demo_utils.html">demo_utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="demo_utils.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">demo_utils.ambari module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.config.html">demo_utils.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.curl_client.html">demo_utils.curl_client module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.generator.html">demo_utils.generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.logs.html">demo_utils.logs module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.service_installer.html">demo_utils.service_installer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.shell.html">demo_utils.shell module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="demo_utils.html#module-demo_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">HDP demo_utils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">demo_utils</a> &raquo;</li>
+      
+          <li><a href="demo_utils.html">demo_utils package</a> &raquo;</li>
+      
+    <li>demo_utils.ambari module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/demo_utils.ambari.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-demo_utils.ambari">
+<span id="demo-utils-ambari-module"></span><h1>demo_utils.ambari module<a class="headerlink" href="#module-demo_utils.ambari" title="Permalink to this headline">¶</a></h1>
+<p>A module which house Ambari - an instantiable Ambari client</p>
+<dl class="class">
+<dt id="demo_utils.ambari.Ambari">
+<em class="property">class </em><code class="descclassname">demo_utils.ambari.</code><code class="descname">Ambari</code><span class="sig-paren">(</span><em>username=''</em>, <em>password=''</em>, <em>proto='http'</em>, <em>server='127.0.0.1'</em>, <em>port=8080</em>, <em>service_wait_time=60</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initalize the Ambari client</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>str, optional</em>) &#8211; username to use for authentication (should have admin access)</li>
+<li><strong>password</strong> (<em>str, optional</em>) &#8211; password to use for authentication (should have admin access)</li>
+<li><strong>proto</strong> (<em>str, optional</em>) &#8211; Must be one of &#8216;http&#8217; or &#8216;https&#8217;. Defines which protocol to use. Defaults to &#8216;http&#8217;</li>
+<li><strong>server</strong> (<em>str, optional</em>) &#8211; The hostname (or IP)  of the Ambari server. Defaults to 127.0.0.1.</li>
+<li><strong>port</strong> (<em>int, optional</em>) &#8211; The port that ambari server is running on. Defaults to 8080</li>
+<li><strong>service_wait_time</strong> (<em>int, optional</em>) &#8211; The time (in seconds) we should before we decide a service has failed changing states.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">N/A</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.get_cluster_info">
+<code class="descname">get_cluster_info</code><span class="sig-paren">(</span><em>cluster_name</em>, <em>query=''</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.get_cluster_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all of the information about a current cluster. Equivalent to GET /api/v1/clusters/{cluster_name}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cluster_name</strong> (<em>string</em>) &#8211; The name of the cluster to query.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.get_clusters">
+<code class="descname">get_clusters</code><span class="sig-paren">(</span><em>query=''</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.get_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of clusters from the given Ambari host/port. Equivalent to GET /api/v1/clusters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>query</strong> (<em>string, optional</em>) &#8211; A formatted query string which is appended to the end of the request URL (advanced). Used for filtering results.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An object which is created after being passed to self.load_output</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.get_service">
+<code class="descname">get_service</code><span class="sig-paren">(</span><em>cluster_name</em>, <em>service_name</em>, <em>query=''</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.get_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all of the information about a single service from the Ambari API. Equivalent to GET /api/v1/clusters/{CLUSTER}/services/{SERVICE}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cluster_name</strong> (<em>str</em>) &#8211; The name of the cluster to query</li>
+<li><strong>service_name</strong> (<em>str</em>) &#8211; The name of the service we want to query.</li>
+<li><strong>query</strong> (<em>str, optional</em>) &#8211; A query to filter results. Will be appended to the end of the string. i.e <code class="docutils literal"><span class="pre">field1=serviceState&amp;field2=AnotherVal</span></code></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An object converted from the JSON response of the Ambari API. Message will denote otherwise if the request was not successful</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.get_services">
+<code class="descname">get_services</code><span class="sig-paren">(</span><em>cluster_name</em>, <em>query=''</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.get_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of services installed on a cluster. Equivalent to GET /api/v1/clusters/{cluster_name}/services</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cluster_name</strong> (<em>string</em>) &#8211; The name of the cluster to query</li>
+<li><strong>query</strong> (<em>string, optional</em>) &#8211; A query to be appended to the url for filtering results</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a dictionary object built from the HTTP response and self.load_output</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="demo_utils.ambari.Ambari.load_output">
+<em class="property">static </em><code class="descname">load_output</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.load_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the output from the curl_client into an object</p>
+<p>The idea behind this function is to try and keep the same behavior on failed requests across the entire client.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> &#8211; (str):  The output from a curl_client action</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary object with a message attribute. If there was no output then the message is a string. Else there will be a nested object under &#8216;message&#8217; which contains the returned JSON object from Ambari.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; This is raised when an object can&#8217;t be converted into JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="demo_utils.ambari.Ambari.password">
+<code class="descname">password</code><em class="property"> = ''</em><a class="headerlink" href="#demo_utils.ambari.Ambari.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>class variable</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="demo_utils.ambari.Ambari.port">
+<code class="descname">port</code><em class="property"> = ''</em><a class="headerlink" href="#demo_utils.ambari.Ambari.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>class variable</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="demo_utils.ambari.Ambari.proto">
+<code class="descname">proto</code><em class="property"> = ''</em><a class="headerlink" href="#demo_utils.ambari.Ambari.proto" title="Permalink to this definition">¶</a></dt>
+<dd><p>class variable</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="demo_utils.ambari.Ambari.server">
+<code class="descname">server</code><em class="property"> = ''</em><a class="headerlink" href="#demo_utils.ambari.Ambari.server" title="Permalink to this definition">¶</a></dt>
+<dd><p>class variable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.service_action">
+<code class="descname">service_action</code><span class="sig-paren">(</span><em>cluster_name</em>, <em>service_name</em>, <em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.service_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes an action on a given service inside of a cluster. Action must be one of START, STOP, or RESTART</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cluster_name</strong> (<em>str</em>) &#8211; the name of the cluster that the service resides in</li>
+<li><strong>service_name</strong> (<em>str</em>) &#8211; the name of the service which we are acting on</li>
+<li><strong>action</strong> (<em>str</em>) &#8211; A string of &#8216;START&#8217;, &#8216;STOP&#8217;, or &#8216;RESTART&#8217;</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True is the action is completed successfully, False if otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">bool</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211; Raised when the action is not one of START/STOP/RESTART</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.set_password">
+<code class="descname">set_password</code><span class="sig-paren">(</span><em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the authentication password</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>password</strong> (<em>str</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.set_port">
+<code class="descname">set_port</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the port to be used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>port</strong> (<em>int</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.set_proto">
+<code class="descname">set_proto</code><span class="sig-paren">(</span><em>proto</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_proto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the http protocol to be used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>proto</strong> (<em>str</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.set_server">
+<code class="descname">set_server</code><span class="sig-paren">(</span><em>server</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the server/hostname which the client connects to</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server</strong> (<em>str</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.set_service_wait_time">
+<code class="descname">set_service_wait_time</code><span class="sig-paren">(</span><em>wait_time</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_service_wait_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the timeout (in seconds) when waiting for a service to change states</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wait_time</strong> (<em>int</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_utils.ambari.Ambari.set_username">
+<code class="descname">set_username</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the authentication username</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user</strong> (<em>str</em>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="demo_utils.ambari.Ambari.username">
+<code class="descname">username</code><em class="property"> = ''</em><a class="headerlink" href="#demo_utils.ambari.Ambari.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>class variable</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="demo_utils.config.html" class="btn btn-neutral float-right" title="demo_utils.config module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="demo_utils.html" class="btn btn-neutral" title="demo_utils package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Zac Blanco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

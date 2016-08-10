@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>demo_utils.service_installer module &mdash; HDP demo_utils 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="HDP demo_utils 0.0.1 documentation" href="index.html"/>
+        <link rel="up" title="demo_utils package" href="demo_utils.html"/>
+        <link rel="next" title="demo_utils.shell module" href="demo_utils.shell.html"/>
+        <link rel="prev" title="demo_utils.logs module" href="demo_utils.logs.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HDP demo_utils
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">demo_utils</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="demo_utils.html">demo_utils package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="demo_utils.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.ambari.html">demo_utils.ambari module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.config.html">demo_utils.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.curl_client.html">demo_utils.curl_client module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.generator.html">demo_utils.generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.logs.html">demo_utils.logs module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">demo_utils.service_installer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="demo_utils.shell.html">demo_utils.shell module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="demo_utils.html#module-demo_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">HDP demo_utils</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">demo_utils</a> &raquo;</li>
+      
+          <li><a href="demo_utils.html">demo_utils package</a> &raquo;</li>
+      
+    <li>demo_utils.service_installer module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/demo_utils.service_installer.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-demo_utils.service_installer">
+<span id="demo-utils-service-installer-module"></span><h1>demo_utils.service_installer module<a class="headerlink" href="#module-demo_utils.service_installer" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="demo_utils.service_installer.add_nifi_templates">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">add_nifi_templates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.add_nifi_templates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add any number of NiFi templates to a running NiFi installation via the REST API</p>
+<p>Looks inside <code class="docutils literal"><span class="pre">configuration/nifi/templates</span></code> for XML templates to add to the installation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if we were successful in uploading every template. False otherwise. An empty directory results in True</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.add_zeppelin_notebooks">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">add_zeppelin_notebooks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.add_zeppelin_notebooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add all Zeppelin notes to the current Zeppelin instalation</p>
+<p>Looks inside <code class="docutils literal"><span class="pre">configuration/zeppelin/notes</span></code> for any <code class="docutils literal"><span class="pre">*.json</span></code> files.</p>
+<p>Each JSON file will be attempted to be added to the current Zeppelin instance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True is every Note was added successfully. True is returned on an empty directory. False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.check_ambari_service_installed">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">check_ambari_service_installed</code><span class="sig-paren">(</span><em>service_name</em>, <em>ambari_config</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.check_ambari_service_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether an Ambari service is installed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>service_name</strong> (<em>string</em>) &#8211; Name of service to look for</li>
+<li><strong>ambari_config</strong> (<em>dict</em>) &#8211; <p>The entire AMBARI section of <code class="docutils literal"><span class="pre">global.conf</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">read_config</span><span class="p">(</span><span class="s1">&#39;global.conf&#39;</span><span class="p">)[</span><span class="s1">&#39;AMBARI&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True service exists, False if the service does not exist</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.install_hdp_select">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">install_hdp_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.install_hdp_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Installs the hdp-select package.</p>
+<p>This is used to help install the Ambari Service for NiFi/Zeppelin. Retrieves the currently installed hadoop version.</p>
+<p>Typically the Sandbox has hdp-select already, but clusters won&#8217;t always have it, which is why we provide this method.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.install_nifi">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">install_nifi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.install_nifi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install NiFi via Ambari. (And Ali&#8217;s NiFi service)</p>
+<p>This requires user interaction. Plans to make installation automatic are in the works...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if installation is successful. Else, the user specifies whether or not they want to continue setting up the demo without Zeppelin. <code class="docutils literal"><span class="pre">True</span></code> if the user specifed Yes (to continue). <code class="docutils literal"><span class="pre">False</span></code> if they specified No (do not continue).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">EnvironmentError</span></code> &#8211; Raised when Ambari is not installed on the current host. Or if <code class="docutils literal"><span class="pre">hdp-select</span></code> cannot be installed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.install_zeppelin">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">install_zeppelin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.install_zeppelin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install Zeppelin via Ambari.</p>
+<p>This requires user interaction. Plans to make installation automatic are in the works...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if installation is successful. Else, the user specifies whether or not they want to continue setting up the demo without Zeppelin. <code class="docutils literal"><span class="pre">True</span></code> if the user specifed Yes (to continue). <code class="docutils literal"><span class="pre">False</span></code> if they specified No (do not continue).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">EnvironmentError</span></code> &#8211; Raised when Ambari is not installed on the current host. Or if <code class="docutils literal"><span class="pre">hdp-select</span></code> cannot be installed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.is_ambari_installed">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">is_ambari_installed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.is_ambari_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether or not <code class="docutils literal"><span class="pre">ambari-server</span></code> is available (In order to start/stop/restart Ambari)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True is <code class="docutils literal"><span class="pre">ambari-server</span></code> is available as a shell command. False otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.is_hdp_select_installed">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">is_hdp_select_installed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.is_hdp_select_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if <code class="docutils literal"><span class="pre">hdp-select</span></code> is installed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if installed (available as shell command), False if not installed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.post_notebook">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">post_notebook</code><span class="sig-paren">(</span><em>notebook_path</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.post_notebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single notebook to a Zeppelin installation via REST API</p>
+<p>Must have a file called <code class="docutils literal"><span class="pre">service-installer.conf</span></code> inside of the configuration directory.</p>
+<p>Inside that configuration file we use protocol://server:port to connect to a Zeppelin instance and use the API</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>notebook_path</strong> (<em>str</em>) &#8211; Full file path to the Zeppelin note</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the upload was successful (received 201 created), or False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_utils.service_installer.post_template">
+<code class="descclassname">demo_utils.service_installer.</code><code class="descname">post_template</code><span class="sig-paren">(</span><em>template_path</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.service_installer.post_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single template to a NiFi instance via REST API</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template_path</strong> (<em>str</em>) &#8211; The full path to the NiFi template</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the upload is successful, False otherwise</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="demo_utils.shell.html" class="btn btn-neutral float-right" title="demo_utils.shell module" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="demo_utils.logs.html" class="btn btn-neutral" title="demo_utils.logs module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Zac Blanco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
