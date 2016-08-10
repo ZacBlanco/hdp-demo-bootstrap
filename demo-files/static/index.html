@@ -9,8 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 </head>
 
@@ -22,22 +23,96 @@
   </header>
 
   <div id="content-container" class="container">
+    <div id="message" style="display:none" class="alert alert-info">Message</div>
     <div>
-
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
         <li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">Data Generation</a></li>
-        <li role="presentation"><a href="#services" aria-controls="services" role="tab" data-toggle="tab">Zeppelin & NiFi</a></li>
-        <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+        <li role="presentation"><a id="map-view-tab" href="#map-view" aria-controls="map-view" role="tab" data-toggle="tab">Map View</a></li>
+        <li role="presentation"><a href="#websockets-console" aria-controls="websockets-console" role="tab" data-toggle="tab">WebSockets Console</a></li>
+        <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
+        
       </ul>
-
       <!-- Tab panes -->
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="home">
           <br>
           <div class="container">
-            Welcome to the Hortonworks Demo Page!
+            <p>Welcome to the Hortonworks Demo Page!</p>
+
+            <p>Use the controls below to make things to the demo</p>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">Zeppelin</div>
+                  </div>
+                  <div class="panel-body">
+                    <a href="http://127.0.0.1:9995" class='btn btn-info' target="_blank">Zeppelin User Interface</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">NiFi</div>
+                  </div>
+                  <div class="panel-body">
+                    <a href="http://127.0.0.1:9090" class='btn btn-info' target="_blank">NiFi Flow</a></div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">Kafka</div>
+                  </div>
+                  <div class="panel-body">
+                    <a href="#" class='btn btn-info' target="_blank">Create Kafka Topic</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">Storm</div>
+                  </div>
+                  <div class="panel-body">
+                    <a href="#" class='btn btn-info' target="_blank">Run Storm on YARN</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">HBase</div>
+                  </div>
+                  <div class="panel-body">
+                    <a href="#" class='btn btn btn-info' target="_blank">Create HBase Table</a>
+                    <a href="#" class='btn btn btn-info' target="_blank">Run HBase on YARN</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <div class="panel-title">Kerberos</div>
+                  </div>
+                  <div class="panel-body">
+                    <a href="http://127.0.0.1:8080/#/main/admin/kerberos" class='btn btn btn-info' target="_blank">Kerberize (Cluster)</a>
+                    <a href="http://127.0.0.1:8080/#/main/admin/kerberos" class='btn btn btn-info' target="_blank">Kerberize (Sandbox)</a>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+
           </div>
 
         </div>
@@ -47,7 +122,7 @@
           <div class="container">
             <p>Here you can modify some parameters for data generation as well as start and stop the data generation service</p>
             <hr>
-            <div class="col-sm-8">
+            <div class="col-md-12">
               <div class="panel panel-primary">
                 <div class="panel-heading">
                   <h3 class="panel-title">Data Generator Controls</h3>
@@ -79,34 +154,18 @@
                       <div class="row">
 
                         <div class="col-md-7">
-                          <form id="data-update" method="post" action="/data-gen/update">
-
-                            <div class="form-group">
-
-                              <label>Generator Configuration</label>
-                              <small class="row">
-                              Upload data generator configuration
-                            </small>
-
-                            </div>
-                            <div>
-
-                              <div class="input-group">
-                                <label class="input-group-btn">
-                                  <span class="btn btn-default">
-                                  Browse <input type="file" style="display: none;">
-                                </span>
-                                </label>
-                                <input type="text" class="form-control" readonly>
-                              </div>
-                              <span class="help-block">Try selecting one or more files and watch the feedback</span>
-
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-
-                          </form>
+                          <div>
+                            <div id="schema-alert" class="alert alert-info"></div>
+                            <textarea id="json-schema" class="well"></textarea>
+                          </div>
                         </div>
-                        
+
+                        <div class="col-md-5">
+                          <label>Sample Data</label>
+                          <pre id="data-sample">Data Sample</pre>
+                          <br>
+                        </div>
+
                         <div class="col-md-5">
                           <br>
                         </div>
@@ -124,9 +183,50 @@
 
 
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="services">
+        <div role="tabpanel" class="tab-pane fade" id="map-view">
+          <br>
+          <div id="leaflet-map"></div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="settings">
+        <div role="tabpanel" class="tab-pane fade" id="websockets-console">
+          <br>
+          <button id="websockets-console-clear" class="btn btn-warning">Clear Console</button>
+          <hr>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="panel-title monospaced">WebSockets Console</div>
+            </div>
+            <div id="websockets-console-data" class="panel-content well monospaced console">
+              Welcome to the WebSockets Console. Here you'll see all of the messages being pushed to the the browser<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+              lol<br>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="other">
+          <br>
+          <div class="alert alert-info">This tab currently reserved for future use.</div>
         </div>
       </div>
 
@@ -148,9 +248,10 @@
     </div>
   </footer>
 
+  <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!--  <script src="/demo-files/static/js/demo.js"></script>-->
+  <script src="/demo-files/static/js/demo.js"></script>
   <script src="/js/demo.js"></script>
 </body>
 

@@ -1,0 +1,25 @@
+textarea {
+  overflow:auto;
+  resize:none;
+  display:block;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  height:375px;
+  width:100%
+}
+
+#leaflet-map {
+  height: 600px;
+  width:100%;
+}
+
+.monospaced {
+  font-family: "Courier New", Courier, monospace;
+}
+
+
+.console {
+  height:400px;
+  overflow: scroll;
+}

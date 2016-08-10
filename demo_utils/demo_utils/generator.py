@@ -13,15 +13,15 @@ logger = Logger('Generator').getLogger()
 class DataGenerator:
 
     def __init__(self, schema, seed=''):
-        self.rand = random.Random()
-        self.data_fields = []
-        self.field_names = []
-        self.schema = schema
-        if not seed == '':
-          self.rand.seed(seed)
-          logger.info('Using seed: ' + seed)
-        self.check_schema(schema)
-        logger.info('Generator using Schema at: ' + str(schema))
+      self.rand = random.Random()
+      self.data_fields = []
+      self.field_names = []
+      self.schema = schema
+      if not seed == '':
+        self.rand.seed(seed)
+        logger.info('Using seed: ' + seed)
+      self.check_schema(schema)
+      logger.info('Generator using Schema at: ' + str(schema))
 
 # Returns true/false whether or not the schema is valid
 # Raises an exception?
@@ -42,16 +42,16 @@ class DataGenerator:
           logger.info('Read as JSON string')
 
       if not type(conf) == list:
-        logger.error('JSON Schema not formatted properly')
+        logger.error('Root of JSON Schema is not a list')
         raise TypeError('Root of JSON Schema is not a list')
 
       for field in conf:
         if not 'fieldName' in field:
-          logger.error('fieldName not found in schema at ' + path)
-          raise KeyError('Could not find \'fieldName\' in field of schema: ' + schema)
+          logger.error('fieldName not found in schema')
+          raise KeyError('Could not find \'fieldName\' in field of schema')
         if not 'type' in field:
-          logger.error('type not found in schema at ' + path)
-          raise KeyError('Could not find \'type\' in field of schema: ' + schema)
+          logger.error('type not found in schema')
+          raise KeyError('Could not find \'type\' in field of schema')
         field_type = field['type']
         logger.debug('Attempting to register datum with type: ' + str(field_type))
         datum = AbstractDatum(field)
@@ -73,7 +73,7 @@ class DataGenerator:
         elif 'boolean' == field_type:
           datum = BooleanDatum(field)
         else:
-          raise RuntimeError('Field type was not found. Please change the field type or implement a new datum')
+          raise RuntimeError('Field type:' + field_type + ' was not found. Please change the field type or implement a new datum')
         # Check to make sure the field has necessary attributes
         datum.check()
         logger.info('Datum passed check successfully')
@@ -175,8 +175,7 @@ class NumberDatum(AbstractDatum):
         d_type = self.field['distribution']
         if not (d_type == 'uniform' or d_type == 'exponential'
                 or d_type == 'gaussian' or d_type == 'gamma'):
-            raise ValueError('Distribution can only be one of: uniform, exponential, gaussian, or gamma'
-                             )
+            raise ValueError('Distribution can only be one of: uniform, exponential, gaussian, or gamma')
         self.a = 0
         self.b = 1
         self.lambd = 1
