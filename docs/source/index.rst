@@ -11,7 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   demo_utils.rst
    modules.rst
 
 
