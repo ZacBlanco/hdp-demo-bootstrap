@@ -6,7 +6,7 @@
   <property>
     <name>demo.server.port</name>
     <value>8997</value>
-    <description>Port where you can access the demo user interface (will need to forward on VM)</description>
+    <description>Port where you can access the demo user interface (will need to forward on Sandbox VM)</description>
   </property>
   <property>
     <name>demo.ambari.username</name>
@@ -19,21 +19,36 @@
     <description>Username for user with admin access to Ambari</description>
   </property>
   <property>
+    <name>demo.ambari.port</name>
+    <value>8080</value>
+    <description>Port which ambari runs on</description>
+  </property>
+  <property>
+    <name>demo.ambari.cluster_name</name>
+    <value>Sandbox</value>
+    <description>name of the cluster to interact with</description>
+  </property>
+  <property>
+    <name>demo.ambari.server</name>
+    <value>127.0.0.1</value>
+    <description>Server that ambari runs on (hostname or IP). Recommended to install demo on Ambari host and leave as '127.0.0.1'</description>
+  </property>
+  <property>
     <name>demo.data.configuration</name>
     <value>
-[
-  {
-    "fieldName": "stringData", 
-    "type": "string", 
-    "values": {
-      "a": 0.1,
-      "b": 0.3,
-      "c": 0.4,
-      "d": 0.2
-    }
-  }
-]
+      [ { "fieldName": "string_data", "type": "string", "values": { "a": 0.1, "b": 0.2 } }, { "fieldName": "int_data", "type": "int", "distribution": "uniform" }, { "fieldName": "float_data", "type": "float", "valuesA": ["a", "b", "c", "d"], "distribution": "gaussian" }, { "fieldName": "boolean_data", "type": "boolean", "values": { "a": 0.1, "b": 0.2 } }, { "fieldName": "map_data", "type": "map", "values": { "a": 'c', "b": 'd' } } ]
     </value>
     <description>JSON data descriptor for defining random data generation</description>
   </property>
+  <property>
+    <name>demo.zeppelin.notebooks_dir</name>
+    <value>/var/zeppelin/notebooks</value>
+    <description>Directory that Zeppelin notebooks reside in</description>
+  </property>
+  <property>
+    <name>demo.zeppelin.notebooks_dir</name>
+    <value>/var/zeppelin/notebooks</value>
+    <description>Directory that Zeppelin notebooks reside in</description>
+  </property>
+
 </configuration>
