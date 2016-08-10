@@ -51,4 +51,16 @@ This framework hopes to provide a rich set of features including the following:
 
 ### [Read the docs here!](docs/README.md)
  
- 
+### Build the Documentation
+
+Want a local copy of the docs? We've got you covered.
+
+Required:
+ - pip
+ - sphinx (`pip install sphinx`)
+ - [sphinx RTD Theme](https://github.com/snide/sphinx_rtd_theme) (`pip install sphinx_rtd_theme`)
+
+``` sh
+cd ./docs
+sphinx-apidoc -f -o ./source/  ../demo\_utils/demo\_utils & make html
+```
