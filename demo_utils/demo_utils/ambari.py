@@ -6,8 +6,23 @@ from logs import Logger
 logger = Logger('Ambari').getLogger()
 
 class Ambari:
+  '''Initalize the Ambari client
+    
+    Args:
+      username (str, optional): username to use for authentication (should have admin access)
+      password (str, optional): password to use for authentication (should have admin access)
+      proto (str, optional): Must be one of 'http' or 'https'. Defines which protocol to use. Defaults to 'http'
+      server (str, optional): The hostname (or IP)  of the Ambari server. Defaults to 127.0.0.1.
+      port (int, optional): The port that ambari server is running on. Defaults to 8080
+      service_wait_time (int, optional): The time (in seconds) we should before we decide a service has failed changing states.
+      
+    Returns:
+      N/A
+      
+    '''
   
   username = password = server = port = proto = ''
+  '''class variable'''
   
   @staticmethod
   def load_output(output):
@@ -22,7 +37,7 @@ class Ambari:
       dict: a dictionary object with a message attribute. If there was no output then the message is a string. Else there will be a nested object under 'message' which contains the returned JSON object from Ambari.
       
     Raises:
-      ValueError: This is raised when a JSON object can't convert output into JSON
+      ValueError: This is raised when an object can't be converted into JSON
       '''
     json_str = ''
     if not len(output[0]) == 0:
@@ -52,10 +67,13 @@ class Ambari:
     Args:
       cluster_name (str): the name of the cluster that the service resides in
       service_name (str): the name of the service which we are acting on
-      action (str): A string of 'START', 'STOP', or 'RESTART
+      action (str): A string of 'START', 'STOP', or 'RESTART'
       
     Returns:
       bool: True is the action is completed successfully, False if otherwise.
+      
+    Raises:
+      ValueError: Raised when the action is not one of START/STOP/RESTART
     '''
     
     logger.info('Attempting Service Action: ' + action + '; Service Name: ' + service_name)
@@ -150,41 +168,110 @@ class Ambari:
     return self.load_output(output)
   
   def get_service(self, cluster_name, service_name, query=''):
+    '''Get all of the information about a single service from the Ambari API. Equivalent to GET /api/v1/clusters/{CLUSTER}/services/{SERVICE}
+    
+    Args:
+      cluster_name (str): The name of the cluster to query
+      service_name (str): The name of the service we want to query.
+      query (str, optional): A query to filter results. Will be appended to the end of the string. i.e ``field1=serviceState&field2=AnotherVal``
+    
+    Returns:
+      dict: An object converted from the JSON response of the Ambari API. Message will denote otherwise if the request was not successful
+    
+    '''
     logger.info('Making request to /api/v1/clusters/' + cluster_name)
     output = self.client.make_request('GET', '/api/v1/clusters/' + cluster_name + '/' + service_name, query)
     return self.load_output(output)
   
   
   def set_username(self, user):
+    '''Set the authentication username
+    
+    Args:
+      user (str)
+      
+    Returns:
+      N/A
+      '''
     self.username = user
     self.client.set_username(self.username)
     
   def set_password(self, password):
+    '''Set the authentication password
+    
+    Args:
+      password (str)
+      
+    Returns:
+      N/A
+      '''
     self.password = password
     self.client.set_password(self.password)
     
   def set_proto(self, proto):
+    '''Set the http protocol to be used
+    
+    Args:
+      proto (str) 
+      
+    Returns:
+      N/A
+      '''
     self.proto = proto
     self.client.set_proto(self.proto)
   
   def set_server(self, server):
+    '''Set the server/hostname which the client connects to
+    
+    Args:
+      server (str) 
+      
+    Returns:
+      N/A
+      '''
     self.server = server
     self.client.set_server(self.server)
   
   def set_port(self, port):
+    '''Set the port to be used
+    
+    Args:
+      port (int) 
+      
+    Returns:
+      N/A
+      '''
     self.port = port
     self.client.set_port(self.port)
     
   def set_service_wait_time(self, wait_time):
+    '''Set the timeout (in seconds) when waiting for a service to change states
+    
+    Args:
+      wait_time (int) 
+      
+    Returns:
+      N/A
+      '''
     if wait_time > 0:
       self.service_wait_time = wait_time
     
   
   def __init__(self, username='', password='', proto='http', server='127.0.0.1', port=8080, service_wait_time=60):
-    '''Initalize the client
+    '''Initalize the Ambari client
     
     Args:
-      username'''
+      username (str, optional): username to use for authentication (should have admin access)
+      password (str, optional): password to use for authentication (should have admin access)
+      proto (str, optional): Must be one of 'http' or 'https'. Defines which protocol to use. Defaults to 'http'
+      server (str, optional): The hostname (or IP)  of the Ambari server. Defaults to 127.0.0.1.
+      port (int, optional): The port that ambari server is running on. Defaults to 8080
+      service_wait_time (int, optional): The time (in seconds) we should before we decide a service has failed changing states.
+      
+    Returns:
+      N/A
+      
+    '''
     self.client = CurlClient()
     if service_wait_time > 0:
       self.set_service_wait_time(service_wait_time)

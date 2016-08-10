@@ -196,7 +196,7 @@ class TestDataGenerator(unittest.TestCase):
     try:
       md = MapDatum(missing_fields)
       data = {}
-      md.generate(random, data)
+      md.generate(data)
     except ValueError as e:
       assert 'Could not get key: ' in str(e)
       
