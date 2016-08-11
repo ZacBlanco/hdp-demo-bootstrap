@@ -1,4 +1,5 @@
 import sys, pwd, grp
+import resource_management
 from resource_management import *
 from resource_management.core.exceptions import ComponentIsNotRunning
 from subprocess import call
@@ -36,6 +37,11 @@ class Master(Script):
 
   def install(self, env):
     import params
+#    params.demo_conf_install_dir
+#    print(Execute('mkdir -p ' + params.demo_conf_install_dir))
+#    Execute('git clone ' + params.demo_conf_pull_url + ' ' + params.demo_conf_install_dir)
+    
+    self.configure(env)
     print 'Install the Demo Service Master';
     self.create_linux_user(params.demo_user, params.demo_group)
     if params.demo_user != 'root':
@@ -54,14 +60,19 @@ class Master(Script):
 		# Fill me in!
     import params
     print 'Stop the Demo Service Master'
-    Execute('kill `cat ' + params.demo_pid_file + '`' )
+    try:
+      Execute('kill `cat ' + params.demo_pid_file + '`' )
+    except resource_management.core.exceptions.Fail as e:
+      pass
 
   def start(self, env):
     print 'Start the Demo Service Master'
     import params
+    self.configure(env)
 		# Fill me in!
     Execute('nohup python ' + params.demo_bin_dir +  '/demo-server.py &')
     Execute('cp ' + params.demo_bin_dir + '/demo.pid ' + params.demo_pid_file)
+      
     
   def status(self, env):
     print 'Status of the Demo Service Master'
@@ -70,9 +81,15 @@ class Master(Script):
     check_process_status(params.demo_pid_file)
     
   def configure(self, env):
-    pass
-		# Fill me in!
-		# print 'Configure the Demo Service Master';
+    print 'Writing out configurations'
+    import params
+    env.set_params(params)
+    
+    # Write out global.conf
+    properties_content=InlineTemplate(params.demo_global_conf_template)
+    File(format("{params.demo_conf_dir}/global.conf"), content=properties_content, owner=params.demo_user, group=params.demo_group)
+  
+  
 
 
 if __name__ == "__main__":

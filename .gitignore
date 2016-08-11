@@ -10,3 +10,5 @@ demo-files/demo.pid
 demo-files/nohup.out
 
 docs/build/**
+_sources**
+doctrees**
