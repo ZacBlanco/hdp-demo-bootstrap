@@ -19,7 +19,41 @@ class Ambari:
     Returns:
       N/A
       
-    '''
+  '''
+  
+  def __init__(self, username='', password='', proto='http', server='127.0.0.1', port=8080, service_wait_time=60, config=''):
+    
+    if config != '':
+      try:
+        username = config['username']
+        password = config['password']
+        proto = config['proto']
+        server = config['server']
+        port = config['port']
+        service_wait_time = config['service_wait_time']
+      except KeyError as e:
+        pass
+      
+      
+    self.client = CurlClient()
+    if service_wait_time > 0:
+      self.set_service_wait_time(service_wait_time)
+    else:
+      self.set_service_wait_time(60)
+    if not username == '':
+      self.set_username(username)
+      
+    if not password == '':
+      self.set_password(password)
+      
+    if not proto == '':
+      self.set_proto(proto)
+    
+    if not server == '':
+      self.set_server(server)
+      
+    if not len(str(port)) == 0:
+      self.set_port(port)
   
   username = password = server = port = proto = ''
   '''class variable'''
@@ -255,39 +289,3 @@ class Ambari:
       '''
     if wait_time > 0:
       self.service_wait_time = wait_time
-    
-  
-  def __init__(self, username='', password='', proto='http', server='127.0.0.1', port=8080, service_wait_time=60):
-    '''Initalize the Ambari client
-    
-    Args:
-      username (str, optional): username to use for authentication (should have admin access)
-      password (str, optional): password to use for authentication (should have admin access)
-      proto (str, optional): Must be one of 'http' or 'https'. Defines which protocol to use. Defaults to 'http'
-      server (str, optional): The hostname (or IP)  of the Ambari server. Defaults to 127.0.0.1.
-      port (int, optional): The port that ambari server is running on. Defaults to 8080
-      service_wait_time (int, optional): The time (in seconds) we should before we decide a service has failed changing states.
-      
-    Returns:
-      N/A
-      
-    '''
-    self.client = CurlClient()
-    if service_wait_time > 0:
-      self.set_service_wait_time(service_wait_time)
-    else:
-      self.set_service_wait_time(60)
-    if not username == '':
-      self.set_username(username)
-      
-    if not password == '':
-      self.set_password(password)
-      
-    if not proto == '':
-      self.set_proto(proto)
-    
-    if not server == '':
-      self.set_server(server)
-      
-    if not len(str(port)) == 0:
-      self.set_port(port)
