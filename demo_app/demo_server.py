@@ -1,3 +1,13 @@
+'''This is the "main" file for the demo application. It houses the server and defines some API routes
+
+This server is mainly built using flask. Config values are drawn from ``global.conf``
+
+To run the server use the following command::
+
+    python demo_server.py
+
+
+'''
 # First thing to do...
 # Import the demo_utils module :)
 import sys, os
@@ -9,12 +19,11 @@ from flask import Flask, request
 from demo_utils import config, generator
 from cluster import ThreadedGenerator
 from demo_utils import logs
-from gevent import monkey
-monkey.patch_all()
 
-log = logs.Logger('DEMO-SERVER.py').getLogger()
+log = logs.Logger('DEMO_SERVER.py').getLogger()
 
 OUTPUTS = ['FILE', 'KAFKA', 'HTTP']
+'''The three different types of outputs from the generator'''
 
 conf = config.read_config('global.conf')
 
@@ -26,14 +35,20 @@ log_level = conf['LOGGING']['log-level']
 
 # The Websockets will always be the demo_server port + 1
 ws_port = app_port + 1
+'''The port for the websocket server'''
 
 ws_app = cluster.WSDemoServer(ws_port)
+'''The websocket server object. Used to broadcast messages'''
 
 dt = None
+'''The object to hold the ThreadedDataGenerator'''
 
 @app.route("/data-gen/start", methods=['POST'])
 def start_data():
   '''Start the data generator
+  
+  Route:
+    ``POST /data-gen/start``
   
   Returns:
     json: A piece of JSON with a key "message" where the user can read the message back from the server'''
@@ -70,6 +85,9 @@ def start_data():
 def stop_data():
   '''Stop the threaded data generator
   
+  Route:
+    ``POST /data-gen/stop``
+  
   Returns:
     json: A JSON message determining whether or not the generator was stopped'''
   
@@ -90,6 +108,9 @@ def stop_data():
 @app.route("/data-gen/update", methods=['POST'])
 def update_data():
   '''Update the data generator schema that will be used for the threaded generator and the temp generator for sample data
+  
+  Route:
+    ``POST /data-gen/update``
   
   Returns:
     json: A JSON object with a 'message' key.
@@ -114,6 +135,12 @@ def update_data():
 def get_sample():
   '''Get a sample piece of data from the data generator.
   
+  Methods:
+    GET
+  
+  Route:
+    ``/data-gen/sample``
+  
   Returns:
     json: The JSON data from the generator.
   '''
@@ -131,7 +158,16 @@ def get_schema():
   '''Get the schema the generator is currently using
   
   Methods:
-    GET'''
+    GET
+    
+  Route:
+    ``GET /data-gen/schema``
+  
+  Returns:
+    json: The JSON object which represent the generator's schema
+  
+  
+  '''
   global schema
   log.debug(json.dumps(schema))
   data = {
@@ -143,6 +179,15 @@ def get_schema():
 
 @app.route("/websockets/data", methods=['POST'])
 def push_websockets():
+  '''Broadcast a message to all Websocket clients
+  
+  Route:
+    ``POST /websockets/data``
+    
+  Returns:
+    N/A
+  
+  '''
   update_schema = request.get_json()
   update_schema = json.dumps(update_schema)
   ws_app.broadcast(update_schema)
@@ -151,7 +196,10 @@ def push_websockets():
 
 @app.route("/")
 def index():
-  '''Return the index to the UI'''
+  '''Return the index to the UI
+  
+  Returns:
+    html: The HTML for the app'''
   return app.send_static_file('index.html')
 
 if __name__ == "__main__":

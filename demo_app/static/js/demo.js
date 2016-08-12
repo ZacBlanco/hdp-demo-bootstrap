@@ -129,9 +129,9 @@ function demoWebsocket() {
 
   self.updateConnectionStatus = function (connected) {
     if (connected == true) {
-      $('#websocket-connection-status').removeClass().addClass('label label-success').html('Connected')
+      $('#websocket-connection-status').removeClass().addClass('label label-success connection-label').html('Connected')
     } else if (connected == false) {
-      $('#websocket-connection-status').removeClass().addClass('label label-danger').html('Disconnected')
+      $('#websocket-connection-status').removeClass().addClass('label label-danger  connection-label').html('Disconnected')
     }
   }
 
@@ -141,7 +141,7 @@ function demoWebsocket() {
   //Set an interval to check whether or not our socket is connected.
   setInterval(function () {
     self.checkConnection(self.connected)
-  }, 2000);
+  }, 5000);
 
 }
 
@@ -236,7 +236,7 @@ function setupUpdateJSONSchema() {
   
   "#json-schema" is the textarea which holds the JSON schema. We extract the value from this element
   
-  For the behavior on the HTTP endpoint see the demo-server.py with the endpoint /data-gen/update
+  For the behavior on the HTTP endpoint see the demo_server.py with the endpoint /data-gen/update
   */
   $('#json-schema').on('input', function () {
     jsonString = $("#json-schema").val()

@@ -18,6 +18,7 @@
 #
 import os, sys
 sys.path.insert(0, os.path.abspath('../../demo_utils'))
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- General configuration ------------------------------------------------
 
