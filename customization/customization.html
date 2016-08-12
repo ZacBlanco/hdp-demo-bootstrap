@@ -1,0 +1,1059 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Ambari Customization &mdash; HDP Demo Bootstrap 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="HDP Demo Bootstrap 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Demo Customization" href="modules.html"/>
+        <link rel="prev" title="Demo Customization" href="modules.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> HDP Demo Bootstrap
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../autodoc/demo_utils/modules.html">demo_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autodoc/demo_app/modules.html">demo_app</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Demo Customization</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ambari Customization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ambari-service-metainfo">Ambari Service Metainfo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ambari-service-lifecycle">Ambari Service Lifecycle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lifecycle-stages">Lifecycle Stages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#writing-out-configurations">Writing Out Configurations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-configuration-variables">Add Configuration Variables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-generator">Data Generator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lat-lon-coordinates-example">Lat/Lon Coordinates Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datum-reference">Datum Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#probabilities-of-values">Probabilities of <code class="docutils literal"><span class="pre">values</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#types-of-distributions">Types of Distributions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#websockets-app">WebSockets App</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#websockets-101">WebSockets 101</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#message-broadcasting">Message Broadcasting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-side">Server-Side</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-side">Client-Side</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-map-view">The Map View</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#change-the-map-default-location">Change the Map Default Location</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#http-endpoints">HTTP Endpoints</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">HDP Demo Bootstrap</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">Demo Customization</a> &raquo;</li>
+      
+    <li>Ambari Customization</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/customization/customization.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ambari-customization">
+<h1>Ambari Customization<a class="headerlink" href="#ambari-customization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ambari-service-metainfo">
+<h2>Ambari Service Metainfo<a class="headerlink" href="#ambari-service-metainfo" title="Permalink to this headline">¶</a></h2>
+<p>To customize the Ambari service (and the way it appears in Ambari) you&#8217;ll need to modify the <code class="docutils literal"><span class="pre">metainfo.xml</span></code></p>
+<p>An example <code class="docutils literal"><span class="pre">metainfo.xml</span></code> is below.</p>
+<div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;metainfo&gt;</span>
+    <span class="nt">&lt;schemaVersion&gt;</span>2.0<span class="nt">&lt;/schemaVersion&gt;</span>
+    <span class="nt">&lt;services&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+            <span class="nt">&lt;name&gt;</span>DEMOSERVICE<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;displayName&gt;</span>HDP Demo<span class="nt">&lt;/displayName&gt;</span>
+            <span class="nt">&lt;comment&gt;</span>An Ambari service to manage the demo<span class="nt">&lt;/comment&gt;</span>
+            <span class="nt">&lt;version&gt;</span>0.0.1<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;components&gt;</span>
+                <span class="nt">&lt;component&gt;</span>
+                    <span class="nt">&lt;name&gt;</span>DEMO_MASTER<span class="nt">&lt;/name&gt;</span>
+                    <span class="nt">&lt;displayName&gt;</span>Demo Master Service<span class="nt">&lt;/displayName&gt;</span>
+                    <span class="nt">&lt;category&gt;</span>MASTER<span class="nt">&lt;/category&gt;</span>
+                    <span class="nt">&lt;cardinality&gt;</span>1<span class="nt">&lt;/cardinality&gt;</span>
+                    <span class="nt">&lt;commandScript&gt;</span>
+                        <span class="nt">&lt;script&gt;</span>scripts/master.py<span class="nt">&lt;/script&gt;</span>
+                        <span class="nt">&lt;scriptType&gt;</span>PYTHON<span class="nt">&lt;/scriptType&gt;</span>
+                        <span class="nt">&lt;timeout&gt;</span>600<span class="nt">&lt;/timeout&gt;</span>
+                    <span class="nt">&lt;/commandScript&gt;</span>
+                <span class="nt">&lt;/component&gt;</span>
+            <span class="nt">&lt;/components&gt;</span>
+            <span class="nt">&lt;osSpecifics&gt;</span>
+                <span class="nt">&lt;osSpecific&gt;</span>
+                    <span class="nt">&lt;osFamily&gt;</span>any<span class="nt">&lt;/osFamily&gt;</span>
+                <span class="nt">&lt;/osSpecific&gt;</span>
+            <span class="nt">&lt;/osSpecifics&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+    <span class="nt">&lt;/services&gt;</span>
+<span class="nt">&lt;/metainfo&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Below are the values which you can/should modify.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">service/name</span></code>: The name that we use throughout the filesystem and in Ambari to refer to the service. Make sure that this is something simple. Avoid spaces.</li>
+<li><code class="docutils literal"><span class="pre">service/displayName</span></code>: The name that is displayed on the sidebar in Ambari and throughout the Ambari UI.</li>
+<li><code class="docutils literal"><span class="pre">service/comment</span></code>: A short description of the service that appears when adding the service to Ambari.</li>
+<li><code class="docutils literal"><span class="pre">component/name</span></code>: The name for the service components that we&#8217;ll run in Ambari. This name is seen throughout the Ambari API.</li>
+<li><code class="docutils literal"><span class="pre">component/displayName</span></code>: The display name for the components found throughout the Ambari UI.</li>
+</ul>
+<p>I do not recommend editing other values. However you can find more information on them in the Ambari documentation.</p>
+</div>
+<div class="section" id="ambari-service-lifecycle">
+<h2>Ambari Service Lifecycle<a class="headerlink" href="#ambari-service-lifecycle" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lifecycle-stages">
+<h3>Lifecycle Stages<a class="headerlink" href="#lifecycle-stages" title="Permalink to this headline">¶</a></h3>
+<p>There are 3 lifecycle stages that the service goes through.</p>
+<ul class="simple">
+<li>Install</li>
+<li>Start</li>
+<li>Stop</li>
+</ul>
+<p>Each of these has a corresponding function inside of <code class="docutils literal"><span class="pre">package/scripts/master.py</span></code></p>
+<p>You shouldn&#8217;t need to modify these functions, but in case you do I would read the comments inside of <code class="docutils literal"><span class="pre">package/scripts/master.py</span></code> and <code class="docutils literal"><span class="pre">package/scripts/params.py</span></code> to see how they work.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">install()</span></code> - Download/install any necessary pre-requisite packages. Create directories/folder/users as necessary.s</li>
+<li><code class="docutils literal"><span class="pre">start()</span></code> - Download/install any necessary pre-requisite packages. Create directories/folder/users as necessary.</li>
+<li><code class="docutils literal"><span class="pre">stop()</span></code> - Stop whatever process the service is running on using whatever you need</li>
+</ul>
+</div>
+<div class="section" id="writing-out-configurations">
+<h3>Writing Out Configurations<a class="headerlink" href="#writing-out-configurations" title="Permalink to this headline">¶</a></h3>
+<p>When starting and installing the service we need to write out the Ambari configuration file to the format that the <code class="docutils literal"><span class="pre">demo_app</span></code> wants to read from. We use a combination of <code class="docutils literal"><span class="pre">params.py</span></code> and <code class="docutils literal"><span class="pre">master.configure()</span></code> in order to write out the configuration.</p>
+<p>The actual writing is done using the <code class="docutils literal"><span class="pre">InlineTemplate</span></code> that Ambari provides from its <code class="docutils literal"><span class="pre">resource_management</span></code> library.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+  <span class="k">print</span> <span class="s1">&#39;Writing out configurations&#39;</span>
+  <span class="kn">import</span> <span class="nn">params</span>
+  <span class="n">env</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+  <span class="c1"># Write out global.conf</span>
+  <span class="n">properties_content</span><span class="o">=</span><span class="n">InlineTemplate</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">demo_global_conf_template</span><span class="p">)</span>
+  <span class="n">File</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;{params.demo_conf_dir}/global.conf&quot;</span><span class="p">),</span> <span class="n">content</span><span class="o">=</span><span class="n">properties_content</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">demo_user</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">demo_group</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Any of the <code class="docutils literal"><span class="pre">params.py</span></code> variable names can be used inside the templates&#8217; braces (<code class="docutils literal"><span class="pre">{{</span>&#160; <span class="pre">}}</span></code>) to show where a variable value should be inserted when writing the template.</p>
+</div>
+<div class="section" id="add-configuration-variables">
+<h3>Add Configuration Variables<a class="headerlink" href="#add-configuration-variables" title="Permalink to this headline">¶</a></h3>
+<p>To add a configuration variable you&#8217;ll need to do 4 things</p>
+<ol class="arabic simple">
+<li>Add your param name to <code class="docutils literal"><span class="pre">global.conf</span></code> (And reference it wherever needed in the project).</li>
+<li>Add the property to the <code class="docutils literal"><span class="pre">demo-config.xml</span></code> file with an appropriate name.</li>
+<li>Add a new variable to <code class="docutils literal"><span class="pre">params.py</span></code> using your Ambari property name you used in (2).</li>
+<li>Add the param to the <code class="docutils literal"><span class="pre">demo.global.conf</span></code> template <em>inside</em> <code class="docutils literal"><span class="pre">demo-config.xml</span></code> using the variable name from (3).</li>
+</ol>
+<p>Example:</p>
+<p>We have a <code class="docutils literal"><span class="pre">global.conf</span></code> file below:</p>
+<div class="highlight-ini"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">[DEMO]</span>
+<span class="na">server_port</span><span class="o">=</span><span class="s">8998</span>
+<span class="na">name</span><span class="o">=</span><span class="s">my_demo</span>
+</pre></div>
+</td></tr></table></div>
+<p>Then in <code class="docutils literal"><span class="pre">demo-config.xml</span></code> we have</p>
+<div class="highlight-xml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;configuration</span> <span class="na">supports_final=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>demo.server.port<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>8998<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>URL for the Demo. Unused by the demo<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>demo.name<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>my_awesome_demo<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Port where you can access the demo user interface (will need to forward on Sandbox VM)<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>demo.global.conf<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>
+[DEMO]
+server_port={{ demo_server_port }}
+name={{ demo_name }}
+    <span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>global.conf template<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>So then Once we have our <code class="docutils literal"><span class="pre">demo-config.xml</span></code> we look in <code class="docutils literal"><span class="pre">params.py</span></code></p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">pwd</span><span class="o">,</span> <span class="nn">grp</span><span class="o">,</span> <span class="nn">signal</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">resource_management</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">resource_management.core</span> <span class="kn">import</span> <span class="n">shell</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">call</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">Script</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+
+<span class="n">demo_server_port</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;configurations&#39;</span><span class="p">][</span><span class="s1">&#39;demo-config&#39;</span><span class="p">][</span><span class="s1">&#39;demo.server.port&#39;</span><span class="p">]</span>
+<span class="n">demo_name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;configurations&#39;</span><span class="p">][</span><span class="s1">&#39;demo-config&#39;</span><span class="p">][</span><span class="s1">&#39;demo.name&#39;</span><span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>Note how in <code class="docutils literal"><span class="pre">demo-config.xml</span></code> the variable names from <code class="docutils literal"><span class="pre">params.py</span></code> are labeled inside of the configuration template.</p>
+<p>Those values will be filled in and then written out upon the <code class="docutils literal"><span class="pre">master.configure()</span></code></p>
+<p>You&#8217;ll also need to <strong>uninstall</strong> and <strong>reinstall</strong> the service to make any updates to the Ambari service configuration. (Or delete the configuration and POST a new one to the API - look in the docs).</p>
+</div>
+</div>
+</div>
+<div class="section" id="data-generator">
+<h1>Data Generator<a class="headerlink" href="#data-generator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Getting data for demos can be a nuisance. The generator tries to make that easier so we don&#8217;t have to worry about finding data.</p>
+<p>I suggest reading up on the documentation for the generator See the <a class="reference external" href="../autodoc/demo_utils/demo_utils.generator.html">demo_utils.generator module</a></p>
+<p>The generator itself uses JSON for configuration. The basic structure is outlined below.</p>
+<ul>
+<li><p class="first">The root &#8216;object&#8217; itself is a list</p>
+</li>
+<li><dl class="first docutils">
+<dt>Each item in the list is called a <strong>datum</strong></dt>
+<dd><ul class="first last simple">
+<li>Each datum has a type name associated with it</li>
+<li>A datum generates a single piece of data. (think column).</li>
+<li>At the implementation level, a  each datum is an implementation of <code class="docutils literal"><span class="pre">demo_utils.generator.AbstractDatum</span></code></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Data is generated with <code class="docutils literal"><span class="pre">generator.generate()</span></code></dt>
+<dd><ul class="first last simple">
+<li>This creates an object with key value pairs mapping the <code class="docutils literal"><span class="pre">fieldName</span></code> to the generated value</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="lat-lon-coordinates-example">
+<h2>Lat/Lon Coordinates Example<a class="headerlink" href="#lat-lon-coordinates-example" title="Permalink to this headline">¶</a></h2>
+<p>Below is a JSON config for generating latitude and longitude coordinates.</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span>    <span class="s2">&quot;lat&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span>         <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="mi">20</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span>    <span class="s2">&quot;lon&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span>         <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="mi">20</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p><code class="docutils literal"><span class="pre">&quot;a&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;b&quot;</span></code> are simply just parameters for the uniform distribution.</p>
+<p>They specify that all numbers between <code class="docutils literal"><span class="pre">10</span></code> and <code class="docutils literal"><span class="pre">20</span></code> should be picked with equal probability. They are the standard parameter values for a uniform distribution.</p>
+<p>Sample Output:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;lat&quot;</span><span class="p">:</span> <span class="mf">15.679044307618824</span><span class="p">,</span>
+  <span class="nt">&quot;lon&quot;</span><span class="p">:</span> <span class="mf">17.982797693128596</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As you can see here the configuration format is easily human-readable and can be extended to a multitude of other things.</p>
+</div>
+<div class="section" id="datum-reference">
+<h2>Datum Reference<a class="headerlink" href="#datum-reference" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="24%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Datum Name</th>
+<th class="head">Type Name</th>
+<th class="head">Parameters</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>StringDatum</td>
+<td><code class="docutils literal"><span class="pre">string</span></code></td>
+<td><code class="docutils literal"><span class="pre">values</span></code></td>
+</tr>
+<tr class="row-odd"><td>IntDatum</td>
+<td><code class="docutils literal"><span class="pre">int</span></code></td>
+<td><code class="docutils literal"><span class="pre">distribution</span></code></td>
+</tr>
+<tr class="row-even"><td>DecimalDatum</td>
+<td><code class="docutils literal"><span class="pre">decimal</span></code></td>
+<td><code class="docutils literal"><span class="pre">distribution</span></code></td>
+</tr>
+<tr class="row-odd"><td>BooleanDatum</td>
+<td><code class="docutils literal"><span class="pre">boolean</span></code></td>
+<td><code class="docutils literal"><span class="pre">values</span></code> (optional)</td>
+</tr>
+<tr class="row-even"><td>MapDatum</td>
+<td><code class="docutils literal"><span class="pre">map</span></code></td>
+<td><code class="docutils literal"><span class="pre">mapFromField</span></code>, <code class="docutils literal"><span class="pre">map</span></code></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="probabilities-of-values">
+<h3>Probabilities of <code class="docutils literal"><span class="pre">values</span></code><a class="headerlink" href="#probabilities-of-values" title="Permalink to this headline">¶</a></h3>
+<p>For the <code class="docutils literal"><span class="pre">StringDatum</span></code> specifically, <code class="docutils literal"><span class="pre">values</span></code> can be two types. A list or object.</p>
+<p>If <code class="docutils literal"><span class="pre">values</span></code> is a list - then each item in the list has equal probability to be chosen.</p>
+<p>If <code class="docutils literal"><span class="pre">values</span></code> is an Object then it should have the following form:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;string_example&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;values&quot;</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;value1&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="nt">&quot;values2&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="nt">&quot;value3&quot;</span><span class="p">:</span> <span class="mf">0.7</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each key holds a number between 0 and 1. This corresponds to the probability that each value has of being picked. i.e. <code class="docutils literal"><span class="pre">&quot;value3&quot;</span></code> will appear in 70% of all random data rows</p>
+<p>Also note <strong>the probabilities must all sum to</strong> <code class="docutils literal"><span class="pre">1.0</span></code></p>
+</div>
+<div class="section" id="types-of-distributions">
+<h3>Types of Distributions<a class="headerlink" href="#types-of-distributions" title="Permalink to this headline">¶</a></h3>
+<p>For <code class="docutils literal"><span class="pre">int</span></code> and <code class="docutils literal"><span class="pre">decimal</span></code> you must specify a distribution. You may also modify the arguments for the distribution. The defaults are noted below.</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>uniform(a, b)</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Defaults</dt>
+<dd><ul class="first last simple">
+<li><cite>a</cite>: 0</li>
+<li><cite>b</cite>: 1</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>exponential(lambda)</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Defaults</dt>
+<dd><ul class="first last simple">
+<li><cite>lambda</cite>: 1</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>gaussian(mu, sigma)</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Defaults</dt>
+<dd><ul class="first last simple">
+<li><cite>mu</cite>: 0</li>
+<li><cite>sigma</cite>: 1</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>gamma(alpha, beta)</strong></dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Defaults</dt>
+<dd><ul class="first last simple">
+<li><cite>alpha</cite>: 1</li>
+<li><cite>beta</cite>: 1</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="stringdatum">
+<h4>StringDatum<a class="headerlink" href="#stringdatum" title="Permalink to this headline">¶</a></h4>
+<p>The difference between the two fields is that the <code class="docutils literal"><span class="pre">lname</span></code> field is randomly generated via the probablities, rather than equally across the set of values.</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;fname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Zac&quot;</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;Sally&quot;</span><span class="p">,</span> <span class="s2">&quot;Mary&quot;</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;lname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Doe&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="nt">&quot;Smith&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+      <span class="nt">&quot;Jones&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+      <span class="nt">&quot;Williams&quot;</span><span class="p">:</span> <span class="mf">0.2</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="decimaldatum">
+<h4>DecimalDatum<a class="headerlink" href="#decimaldatum" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;a_number&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;exponential&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;lambda&quot;</span><span class="p">:</span> <span class="mf">0.21</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="intdatum">
+<h4>IntDatum<a class="headerlink" href="#intdatum" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;another_number&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;exponential&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;lambda&quot;</span><span class="p">:</span> <span class="mf">0.21</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="booleandatum">
+<h4>BooleanDatum<a class="headerlink" href="#booleandatum" title="Permalink to this headline">¶</a></h4>
+<p>The difference between the two fields here is that the values in the 2nd field are generated by probabilities, instead of a 50/50 split. <code class="docutils literal"><span class="pre">True</span></code> appears 7/10 times. False appears only 3/10 (average)</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;5050_bool&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;prob_bool&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;True&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+      <span class="nt">&quot;False&quot;</span><span class="p">:</span> <span class="mf">0.3</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mapdatum">
+<h4>MapDatum<a class="headerlink" href="#mapdatum" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;fname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Zac&quot;</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;Sally&quot;</span><span class="p">,</span> <span class="s2">&quot;Mary&quot;</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;lname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Doe&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="nt">&quot;Smith&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+      <span class="nt">&quot;Jones&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+      <span class="nt">&quot;Williams&quot;</span><span class="p">:</span> <span class="mf">0.2</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;map&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;mapFromField&quot;</span><span class="p">:</span> <span class="s2">&quot;fname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;map&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Zac&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;John&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Sally&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Mary&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Jane&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="websockets-app">
+<h1>WebSockets App<a class="headerlink" href="#websockets-app" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="websockets-101">
+<h2>WebSockets 101<a class="headerlink" href="#websockets-101" title="Permalink to this headline">¶</a></h2>
+<p>Websockets are awesome because they allow long-lived connections from the server to browser clients in order to continuously send data to or receive data from a server. This allows realtime webpage updates!</p>
+<p>Packaged inside our app we have a websocket server. The server implementation is very basic but it allows us to broadcast messages to our clients and get updates from the server in realtime.</p>
+<p>To customize this real-time behavior you need to set up functions on the <strong>client</strong> and the <strong>server</strong></p>
+</div>
+<div class="section" id="message-broadcasting">
+<h2>Message Broadcasting<a class="headerlink" href="#message-broadcasting" title="Permalink to this headline">¶</a></h2>
+<p>If you take a look inside <code class="docutils literal"><span class="pre">demo_app.cluster.WSDemoServer</span></code> you should see a function called <code class="docutils literal"><span class="pre">broacast(data)</span></code></p>
+<p><code class="docutils literal"><span class="pre">data</span></code> should be a string object (see documentation).</p>
+<p>Inside the flask application you can call <code class="docutils literal"><span class="pre">websocket_server.broadcast('Message</span> <span class="pre">to</span> <span class="pre">Client')</span></code> and this will send <code class="docutils literal"><span class="pre">'Message</span> <span class="pre">to</span> <span class="pre">Client</span></code> to all of the websocket clients.</p>
+<p>You could imagine this would be useful for something like updating locations on a map in realtime!</p>
+</div>
+<div class="section" id="server-side">
+<h2>Server-Side<a class="headerlink" href="#server-side" title="Permalink to this headline">¶</a></h2>
+<p>Inside of <code class="docutils literal"><span class="pre">demo_server.py</span></code> you can find an API endpoint <code class="docutils literal"><span class="pre">/websockets/data</span></code>. The code snippet of the function is below.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/websockets/data&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">push_websockets</span><span class="p">():</span>
+  <span class="sd">&#39;&#39;&#39;Broadcast a message to all Websocket clients</span>
+
+<span class="sd">  Route:</span>
+<span class="sd">    ``POST /websockets/data``</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    N/A</span>
+
+<span class="sd">  &#39;&#39;&#39;</span>
+  <span class="n">msg</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+  <span class="n">msg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+  <span class="n">ws_app</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+  <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</td></tr></table></div>
+<p>What this does is open a RESTful HTTP endpoint where we can POST json data. Each time data is POSTed to the endpoint it will echo that data out (in real-time!) to all of the clients who are connected to the websocket server (<code class="docutils literal"><span class="pre">ws_app</span></code>). The clients are then responsible for the handling of such data</p>
+<p>You can define more functions for when you want to broadcast the data. This is currently the only built-in broadcasting</p>
+</div>
+<div class="section" id="client-side">
+<h2>Client-Side<a class="headerlink" href="#client-side" title="Permalink to this headline">¶</a></h2>
+<p>On the client side we need to use javascript in our webpage to handle what happens with our websocket connection.</p>
+<p>Below is the code from <code class="docutils literal"><span class="pre">demo.js</span></code> where we define the behavior for websocket connections</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">demoWebsocket</span><span class="p">()</span> <span class="p">{</span>
+  <span class="cm">/* Use this object to define behavior for websocket connections</span>
+
+<span class="cm">  To access the data in the message use `ev.data`</span>
+
+<span class="cm">  onopen - functionality for when the connection opens</span>
+<span class="cm">  opclose - funtionality for when the connection closes</span>
+<span class="cm">  onmessage - the functionality for when the client receives a message from the server</span>
+<span class="cm">      This is the &quot;meat&quot; of the connection. Most of your logic will probably go here</span>
+<span class="cm">  onerror - What to do in the event of a connetion error</span>
+<span class="cm">  */</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nx">getWsUrl</span><span class="p">();</span>
+
+  <span class="nx">self</span><span class="p">.</span><span class="nx">connect</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+
+    <span class="cm">/*These function must be set for every new websocket object*/</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Websocket: opened new connection&#39;</span><span class="p">)</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">updateConnectionStatus</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">connected</span><span class="p">);</span>
+
+
+      <span class="c1">//Add code below this</span>
+    <span class="p">};</span>
+
+    <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Websocket: closed connection&#39;</span><span class="p">)</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">updateConnectionStatus</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">connected</span><span class="p">);</span>
+
+
+      <span class="c1">//Add code below this</span>
+    <span class="p">};</span>
+
+    <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Websocket: received message&#39;</span><span class="p">)</span>
+
+      <span class="c1">//Do stuff with ev.data</span>
+      <span class="c1">//      console.log(ev.data)</span>
+
+
+      <span class="c1">//      Lat/Lon. Demo for plotting markers</span>
+      <span class="c1">//</span>
+      <span class="c1">//      var data = JSON.parse(ev.data);</span>
+      <span class="c1">//      for(i = 0; i &lt; data.length; i++) {</span>
+      <span class="c1">//        lat = data[i].lat</span>
+      <span class="c1">//        lon = data[i].lon</span>
+      <span class="c1">//        L.marker([lat, lon]).addTo(map);</span>
+      <span class="c1">//      }</span>
+      <span class="c1">//      fmtd = JSON.stringify(JSON.parse(ev.data), null, 2)</span>
+      <span class="c1">//      self.logSocket(&quot;&lt;pre&gt;&quot; + fmtd + &quot;&lt;/pre&gt;&quot;)</span>
+    <span class="p">};</span>
+
+    <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">connected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">logSocket</span><span class="p">(</span><span class="s1">&#39;Error connecting to websocket server&#39;</span><span class="p">)</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">updateConnectionStatus</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">connected</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="nx">self</span><span class="p">.</span><span class="nx">checkConnection</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">self</span><span class="p">.</span><span class="nx">updateConnectionStatus</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">connected</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">connected</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span>
+  <span class="p">}</span>
+
+  <span class="nx">self</span><span class="p">.</span><span class="nx">logSocket</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="nx">message</span> <span class="o">+</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#websocket-console-data&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="nx">self</span><span class="p">.</span><span class="nx">updateConnectionStatus</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">connected</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">connected</span> <span class="o">==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#websocket-connection-status&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">().</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;label label-success connection-label&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;Connected&#39;</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">connected</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#websocket-connection-status&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">().</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;label label-danger  connection-label&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;Disconnected&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">self</span><span class="p">.</span><span class="nx">ws</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+
+
+  <span class="c1">//Set an interval to check whether or not our socket is connected.</span>
+  <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">checkConnection</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">connected</span><span class="p">)</span>
+  <span class="p">},</span> <span class="mi">5000</span><span class="p">);</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The key thing to notice here is the <code class="docutils literal"><span class="pre">ws</span></code> WebSocket object and the four (4) functions</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">onopen</span></code></dt>
+<dd><ul class="first last simple">
+<li>Determine behavior when the connection is first opened</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">onclose</span></code></dt>
+<dd><ul class="first last simple">
+<li>Determine behavior when the connection is closed or disconnected</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">onmessage</span></code></dt>
+<dd><ul class="first last simple">
+<li>Determine behavior when a message arrives from the server</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">onerror</span></code></dt>
+<dd><ul class="first last simple">
+<li>Determine behavior when there is an error connecting or receiving data</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Built in to the <code class="docutils literal"><span class="pre">demoWebsocket()</span></code> object you can call a function <code class="docutils literal"><span class="pre">self.logSocket(message)</span></code>. This will append a message to the websockets console.</p>
+<p>Other than that you can use Jquery and any combination on the Javascript web API to control the webpage. The implementation is currently up to the user.</p>
+</div>
+</div>
+<div class="section" id="the-map-view">
+<h1>The Map View<a class="headerlink" href="#the-map-view" title="Permalink to this headline">¶</a></h1>
+<p>We have a nice Map UI, however there aren&#8217;t any user controlls available other than zooming and scrolling manually.</p>
+<p>However because we use leaflet.js we can add more functionality to this map.</p>
+<p>Couple leaflet with Websockets and you have a realtime geo-dashboard right at your fingertips.</p>
+<p>Below you&#8217;ll find some short guides on performing function with the map. However, I suggest taking a brief look at the <a class="reference external" href="http://leafletjs.com/examples/quick-start.html">leaflet quickstart guide</a></p>
+<div class="section" id="change-the-map-default-location">
+<h2>Change the Map Default Location<a class="headerlink" href="#change-the-map-default-location" title="Permalink to this headline">¶</a></h2>
+<p>In order to change the default location that the map loads on you&#8217;ll need to dive into <code class="docutils literal"><span class="pre">demo_app/static/demo.js</span></code></p>
+<p>Look for the line:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="cm">/* Init Map on the UI */</span>
+<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">initMap</span><span class="p">([</span><span class="mf">37.4133111</span><span class="p">,</span> <span class="o">-</span><span class="mf">121.9805886</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>This line initalizes the map. The arguments here are the coordinate points on the map. Simply replace the coordinates there with your own to change the initial location.</p>
+<p>Other functions with the map (like adding markers or areas) can be performed with the leaflet.js library. I would suggest looking into the leaflet documentation or <a class="reference external" href="http://leafletjs.com/examples/quick-start.html">the quickstart guide</a> on their site</p>
+</div>
+</div>
+<div class="section" id="http-endpoints">
+<h1>HTTP Endpoints<a class="headerlink" href="#http-endpoints" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral" title="Demo Customization" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Zac Blanco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

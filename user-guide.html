@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>User Guide &mdash; HDP Demo Bootstrap 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="HDP Demo Bootstrap 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="Demo Customization" href="customization/modules.html"/>
+        <link rel="prev" title="demo_app.service module" href="autodoc/demo_app/demo_app.service.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> HDP Demo Bootstrap
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="autodoc/demo_utils/modules.html">demo_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autodoc/demo_app/modules.html">demo_app</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#homepage">Homepage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zeppelin">Zeppelin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nifi">NiFi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kafka">Kafka</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#storm">Storm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hbase">HBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kerberos">Kerberos</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-generation">Data Generation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-data-configurations">Creating Data Configurations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#map-view">Map View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#websockets-console">WebSockets Console</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="customization/modules.html">Demo Customization</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">HDP Demo Bootstrap</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>User Guide</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/user-guide.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Most of this project is written with python and is compatible with python version 2.6 and 2.7.</p>
+<ul class="simple">
+<li>The HTTP server utilizes <a class="reference external" href="http://flask.pocoo.org/">flask</a></li>
+<li>The websockets server uses <a class="reference external" href="https://ws4py.readthedocs.io/en/latest/">ws4py</a></li>
+</ul>
+<p>It may run on python 3+ but has not been tested.</p>
+<p>8998 is the default port that the web server will run on when installed
+The websockets port is coded to always be the webserver port + 1</p>
+<p>This means the default websockets port is 8999. The port can be changed in the Ambari interface.</p>
+<p>After installing the demo service you should be able to run the server via Ambari. Once the service is running in Ambari connect to <a class="reference external" href="http://sandbox.hortonworks.com:8998">http://sandbox.hortonworks.com:8998</a></p>
+<a class="reference internal image-reference" href="_images/demo-interface.png"><img alt="Demo Homepage" class="align-center" src="_images/demo-interface.png" style="width: 100%;" /></a>
+<p>You should see a page like the above image.</p>
+<p>There are 4 tabs you should explore.</p>
+<ul class="simple">
+<li>Home</li>
+<li>Data Generation</li>
+<li>Map View</li>
+<li>Websockets Console</li>
+</ul>
+</div>
+<div class="section" id="homepage">
+<h2>Homepage<a class="headerlink" href="#homepage" title="Permalink to this headline">¶</a></h2>
+<p>The homepage contains useful controls and links to other services.</p>
+<div class="section" id="zeppelin">
+<h3>Zeppelin<a class="headerlink" href="#zeppelin" title="Permalink to this headline">¶</a></h3>
+<p>Here you&#8217;ll find a link to the Zeppelin UI.</p>
+</div>
+<div class="section" id="nifi">
+<h3>NiFi<a class="headerlink" href="#nifi" title="Permalink to this headline">¶</a></h3>
+<p>Here you&#8217;ll find a link to the NiFi UI</p>
+</div>
+<div class="section" id="kafka">
+<h3>Kafka<a class="headerlink" href="#kafka" title="Permalink to this headline">¶</a></h3>
+<p>Using the button here you will create a Kafka topic with the name specified in the Ambari configuration.</p>
+</div>
+<div class="section" id="storm">
+<h3>Storm<a class="headerlink" href="#storm" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="hbase">
+<h3>HBase<a class="headerlink" href="#hbase" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="kerberos">
+<h3>Kerberos<a class="headerlink" href="#kerberos" title="Permalink to this headline">¶</a></h3>
+<p>These are not currently functional</p>
+</div>
+</div>
+<div class="section" id="data-generation">
+<h2>Data Generation<a class="headerlink" href="#data-generation" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/demo-data-gen.png"><img alt="Demo Homepage" class="align-center" src="_images/demo-data-gen.png" style="width: 100%;" /></a>
+<p>You can use the data generation view to create configurations for random data and also choose to push that data to one of three locations.</p>
+<p>Notice the three checkboxes. Using them you can decide where to send the data.</p>
+<p>The cluster and topic for Kafka, HTTP url, and File location are all controlled by the Ambari configuration. To change the location you&#8217;ll need to change them in Ambari and restart the service.</p>
+<p>You can control the rate of data sent by modifying the Ambari configuration parameter <code class="docutils literal"><span class="pre">demo.data.bytes_per_second</span></code>.</p>
+<div class="section" id="creating-data-configurations">
+<h3>Creating Data Configurations<a class="headerlink" href="#creating-data-configurations" title="Permalink to this headline">¶</a></h3>
+<p>First off I would suggest looking at the module documentation <a class="reference external" href="../autodoc/demo_utils/demo_utils.generator.html">demo_utils.generator module</a></p>
+<p>For more detailed information on creating data configurations refer to the customization guide</p>
+<p><a class="reference external" href="customization/customization.html#data-generator">Creating custom data configs</a></p>
+<p>You can create these &#8220;schemas&#8221; which define a table-like structure with field names that represent different datatypes.</p>
+<p>I suggest using the UI to test new configurations and reading the module docs for more information.</p>
+<p>Below are just a few examples</p>
+<p>Simple Store:</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="nt">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">20</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;store_number&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="nt">&quot;sigma&quot;</span><span class="p">:</span> <span class="mi">50</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;on_sale&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;True&quot;</span><span class="p">:</span> <span class="mf">0.23</span><span class="p">,</span>
+        <span class="nt">&quot;False&quot;</span><span class="p">:</span> <span class="mf">0.77</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;service_rep&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kate&quot;</span><span class="p">,</span> <span class="s2">&quot;Billy&quot;</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;Michelle&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</td></tr></table></div>
+<p>Person Generator:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;fname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Zac&quot;</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;Sally&quot;</span><span class="p">,</span> <span class="s2">&quot;Mary&quot;</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;lname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Doe&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="nt">&quot;Smith&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+      <span class="nt">&quot;Jones&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+      <span class="nt">&quot;Williams&quot;</span><span class="p">:</span> <span class="mf">0.2</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;distribution&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;a&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+    <span class="nt">&quot;b&quot;</span><span class="p">:</span> <span class="mi">75</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;fieldName&quot;</span><span class="p">:</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;map&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;mapFromField&quot;</span><span class="p">:</span> <span class="s2">&quot;fname&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;map&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Zac&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;John&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Sally&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Mary&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;Jane&quot;</span><span class="p">:</span> <span class="s2">&quot;F&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="map-view">
+<h2>Map View<a class="headerlink" href="#map-view" title="Permalink to this headline">¶</a></h2>
+<p>The map view is powered by <a class="reference external" href="http://leafletjs.com/">leaflet.js</a>.</p>
+<p>Tiles are sourced from <a class="reference external" href="http://www.openstreetmap.org/">OpenStreetMap</a></p>
+<p>While there are no use controls on the map view, most of the map can be controlled via javascript and leaflet.js.</p>
+<p>I suggest reading through the <a class="reference external" href="customization/customization.html#the-map-view">customization guide on implementing new map behavior</a>.</p>
+</div>
+<div class="section" id="websockets-console">
+<h2>WebSockets Console<a class="headerlink" href="#websockets-console" title="Permalink to this headline">¶</a></h2>
+<p>The websockets console doesn&#8217;t provide a whole lot of functionality but it does allow us to log any websocket data into the UI. This is useful if we want to show something that isn&#8217;t geolocation data</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="customization/modules.html" class="btn btn-neutral float-right" title="Demo Customization" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="autodoc/demo_app/demo_app.service.html" class="btn btn-neutral" title="demo_app.service module" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Zac Blanco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
