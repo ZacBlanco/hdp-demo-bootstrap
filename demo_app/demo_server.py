@@ -188,9 +188,9 @@ def push_websockets():
     N/A
   
   '''
-  update_schema = request.get_json()
-  update_schema = json.dumps(update_schema)
-  ws_app.broadcast(update_schema)
+  msg = request.get_json()
+  msg = json.dumps(msg)
+  ws_app.broadcast(msg)
   return ''
 
 
