@@ -47,7 +47,7 @@ help:
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILDDIR)/*
+	rm -rf $(BUILDDIR)/*.html
 	rm -rf $(SOURCEDIR)/autodoc/*
 
 .PHONY: html
