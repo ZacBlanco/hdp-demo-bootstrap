@@ -18,6 +18,7 @@
 #
 import os, sys
 sys.path.insert(0, os.path.abspath('../../demo_utils'))
+sys.path.insert(0, os.path.abspath('../../'))
 
 # -- General configuration ------------------------------------------------
 
@@ -53,7 +54,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'HDP demo_utils'
+project = u'HDP Demo Bootstrap'
 copyright = u'2016, Zac Blanco'
 author = u'Zac Blanco'
 

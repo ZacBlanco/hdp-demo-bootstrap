@@ -5,8 +5,9 @@ textarea {
   font-family: "Courier New", Courier, monospace;
   font-size: 12px;
   font-weight: 600;
-  height:375px;
-  width:100%
+  min-height:375px;
+  height:450px;
+  width:100%;
 }
 
 #leaflet-map {
@@ -21,5 +22,12 @@ textarea {
 
 .console {
   height:400px;
+  overflow-x:scroll;
   overflow: scroll;
+}
+
+.connection-label {
+  font-family:sans-serif;
+  font-weight:100;
+  font-size: 14px;
 }

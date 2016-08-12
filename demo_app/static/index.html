@@ -32,7 +32,7 @@
         <li role="presentation"><a id="map-view-tab" href="#map-view" aria-controls="map-view" role="tab" data-toggle="tab">Map View</a></li>
         <li role="presentation"><a href="#websockets-console" aria-controls="websockets-console" role="tab" data-toggle="tab">WebSockets Console</a></li>
         <li role="presentation"><a href="#other" aria-controls="other" role="tab" data-toggle="tab">Other</a></li>
-        
+
       </ul>
       <!-- Tab panes -->
       <div class="tab-content">
@@ -122,7 +122,7 @@
           <div class="container">
             <p>Here you can modify some parameters for data generation as well as start and stop the data generation service</p>
             <hr>
-            <div class="col-md-12">
+            <div class="col-sm-12">
               <div class="panel panel-primary">
                 <div class="panel-heading">
                   <h3 class="panel-title">Data Generator Controls</h3>
@@ -130,43 +130,56 @@
                 <div class="panel-body">
 
                   <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-sm-12">
 
                       <div class="row">
 
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 col-sm-push-3">
                           <form id="start-data" method="post" action="/data-gen/start">
-                            <button class="btn btn-success" type="submit">Start Data</button>
+                            <button class="col-sm-6 btn-block btn btn-success" type="submit">Start Generator</button>
+                            <div class="col-xs-7 col-xs-push-4">
+                              <label class="checkbox">
+                                <input type="checkbox" name="FILE" autocomplete="off"> Write to File
+                              </label>
+                              <label class="checkbox">
+                                <input type="checkbox" name="KAFKA" autocomplete="off"> Push to Kafka
+                              </label>
+                              <label class="checkbox">
+                                <input type="checkbox" name="HTTP" autocomplete="off"> POST HTTP
+                              </label>
+                            </div>
                           </form>
                           <form id="stop-data" method="post" action="/data-gen/stop">
-                            <button class="btn btn-danger" type="submit">Stop Data</button>
+                            <button class="col-sm-6 btn-block btn btn-danger" type="submit">Stop Generator</button>
                           </form>
                         </div>
-                        <div class="col-sm-6">
-                          <form id="data-sample-form" method="get" action="/data-gen/sample">
-                            <button class="btn btn-info" type="submit">Get Sample Data</button>
-                          </form>
-                        </div>
-
+                        
                       </div>
 
                       <hr>
                       <div class="row">
 
-                        <div class="col-md-7">
+                        <div class="col-sm-7">
                           <div>
                             <div id="schema-alert" class="alert alert-info"></div>
                             <textarea id="json-schema" class="well"></textarea>
                           </div>
                         </div>
 
-                        <div class="col-md-5">
+                        <div class="col-sm-5">
+                          <div class="">
+                            <form id="data-sample-form" method="get" action="/data-gen/sample">
+                              <button class="btn btn-block btn-info" type="submit">Get Sample Data</button>
+                              <br>
+                              
+                            </form>
+                          </div>
                           <label>Sample Data</label>
                           <pre id="data-sample">Data Sample</pre>
                           <br>
                         </div>
 
-                        <div class="col-md-5">
+                        <div class="col-sm-5">
                           <br>
                         </div>
                       </div>
@@ -189,14 +202,21 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="websockets-console">
           <br>
-          <button id="websockets-console-clear" class="btn btn-warning">Clear Console</button>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-4">
+                <button id="websockets-console-clear" class="btn btn-warning btn-block">Clear Console</button>
+              </div>
+            </div>
+          </div>
           <hr>
           <div class="panel panel-default">
             <div class="panel-heading">
-              <div class="panel-title monospaced">WebSockets Console</div>
+              <div class="panel-title monospaced">WebSockets Console: <span id="websocket-connection-status" class="label label-success connection-label">Connected</span></div>
             </div>
-            <div id="websockets-console-data" class="panel-content well monospaced console">
-              Welcome to the WebSockets Console. Here you'll see all of the messages being pushed to the the browser<br>
+            <div id="websocket-console-data" class="panel-content well monospaced console">
+              Welcome to the WebSockets Console.
+              <br>
             </div>
           </div>
         </div>

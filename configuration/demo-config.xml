@@ -4,8 +4,13 @@
 -->
 <configuration supports_final="true">
   <property>
+    <name>demo.conf.pull_url</name>
+    <value>https://github.com/zacblanco/hdp-demo-bootstrap.git</value>
+    <description>URL for the Demo. Unused by the demo</description>
+  </property>
+  <property>
     <name>demo.server.port</name>
-    <value>8997</value>
+    <value>8998</value>
     <description>Port where you can access the demo user interface (will need to forward on Sandbox VM)</description>
   </property>
   <property>
@@ -16,12 +21,17 @@
   <property>
     <name>demo.ambari.password</name>
     <value>admin</value>
-    <description>Username for user with admin access to Ambari</description>
+    <description>Password for user with admin access to Ambari</description>
+  </property>
+  <property>
+    <name>demo.ambari.proto</name>
+    <value>http</value>
+    <description>Protocol that Ambari server runs on</description>
   </property>
   <property>
     <name>demo.ambari.port</name>
     <value>8080</value>
-    <description>Port which ambari runs on</description>
+    <description>Port which Ambari runs on</description>
   </property>
   <property>
     <name>demo.ambari.cluster_name</name>
@@ -36,19 +46,95 @@
   <property>
     <name>demo.data.configuration</name>
     <value>
-      [ { "fieldName": "string_data", "type": "string", "values": { "a": 0.1, "b": 0.2 } }, { "fieldName": "int_data", "type": "int", "distribution": "uniform" }, { "fieldName": "float_data", "type": "float", "valuesA": ["a", "b", "c", "d"], "distribution": "gaussian" }, { "fieldName": "boolean_data", "type": "boolean", "values": { "a": 0.1, "b": 0.2 } }, { "fieldName": "map_data", "type": "map", "values": { "a": 'c', "b": 'd' } } ]
+      [{"fieldName":"string_data","type":"string","values":{"a":0.1,"b":0.2}},{"fieldName":"int_data","type":"int","distribution":"uniform"},{"fieldName":"float_data","type":"decimal","valuesA":["a","b","c","d"],"distribution":"gaussian"},{"fieldName":"boolean_data","type":"boolean","values":{"True":0.1,"False":0.9}},{"fieldName":"map_data","type":"map","mapFromField":"string_data","map":{"a":"c","b":"d"}}]
     </value>
-    <description>JSON data descriptor for defining random data generation</description>
+    <description>JSON data descriptor for defining random data generation. This is the default loaded each time the server is restarted.</description>
   </property>
   <property>
-    <name>demo.zeppelin.notebooks_dir</name>
+    <name>demo.data.bytes_per_second</name>
+    <value>1000000</value>
+    <description>Number of bytes to generate/send per second. Limited by CPU resources if this number is too high. (Defaults 1MB)</description>
+  </property>
+  <property>
+    <name>demo.data.write_file_location</name>
+    <value>/tmp/demo_output.out</value>
+    <description>File that we will continuously append to when pushing data</description>
+  </property>
+  <property>
+    <name>demo.data.kafka_listener</name>
+    <value>sandbox.hortonwork.com:6667</value>
+    <description>Directory that Zeppelin notebooks reside in</description>
+  </property>
+  <property>
+    <name>demo.data.http_endpoint</name>
+    <value>http://sandbox.hortonworks.com:8998/data</value>
+    <description>Endpoint where data will be POSTed to</description>
+  </property>
+  <property>
+    <name>demo.zk_connection</name>
+    <value>localhost:2181</value>
+    <description>URL for zookeeper connection</description>
+  </property>
+  <property>
+    <name>demo.kafka_topics_script</name>
+    <value>/usr/hdp/current/kafka-broker/bin/kafka-topics.sh</value>
+    <description>File path on local machine to kafka broker for creating/listing topics. If kafka broker isn't installed on same machine as this service then this property is rendered useless.</description>
+  </property>
+  <property>
+    <name>demo.kafka.topic_name</name>
+    <value>demo</value>
+    <description>The name of the Kafka topic that data will be pushed to</description>
+  </property>
+  <property>
+    <name>demo.zeppelin.notebooks_directory</name>
     <value>/var/zeppelin/notebooks</value>
     <description>Directory that Zeppelin notebooks reside in</description>
   </property>
   <property>
-    <name>demo.zeppelin.notebooks_dir</name>
-    <value>/var/zeppelin/notebooks</value>
-    <description>Directory that Zeppelin notebooks reside in</description>
+    <name>demo.nifi.install_dir</name>
+    <value>/opt</value>
+    <description>Directory where nifi is installed</description>
+  </property>
+  <property>
+    <name>demo.logging.log_level</name>
+    <value>INFO</value>
+    <description>Log level for demo_utils</description>
+  </property>
+  <property>
+    <name>demo.global.conf</name>
+    <value>
+[DEMO]
+port={{ demo_server_port }}
+data_schema={{ demo_data_configuration }}
+bytes_per_second={{ demo_data_bytes_per_second }}
+data_write_file_location={{ demo_data_write_file_location }}
+data_kafka_listener={{ demo_data_kafka_listener }}
+data_http_endpoint={{ demo_data_http_endpoint }}
+zk_connection={{ demo_zk_connection }}
+kafka_topics_script={{ demo_kafka_topics_script }}
+kafka_topic_name= {{ demo_kafka_topic_name }}
+
+
+
+[AMBARI]
+server={{ demo_ambari_server }}
+port={{ demo_ambari_port }}
+username={{ demo_ambari_username }}
+password={{ demo_ambari_password }}
+cluster_name={{ demo_ambari_cluster_name }}
+proto={{ demo_ambari_proto }}
+
+[ZEPPELIN]
+notebooks_directory={{ demo_zeppelin_notebooks_directory }}
+
+[NIFI]
+INSTALL_DIR={{ demo_nifi_install_dir }}
+
+[LOGGING]
+log-level={{ demo_logging_log_level }}
+
+    </value>
+    <description>global.conf template</description>
   </property>
 
 </configuration>

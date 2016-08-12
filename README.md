@@ -40,11 +40,12 @@ An easy to use framemwork for creating, installing, and running end-to-end demo 
 <!--
   export VERSION=2.4
   sed -i s/parallel_execution=0/parallel_execution=1/g /etc/ambari-agent/conf/ambari-agent.ini
-  export VERSION=2.4
-  rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
-  rm -rf /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE
-  cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
-  cp -r /root/hdp-demo-bootstrap /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE
+export VERSION=2.4
+rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+rm -rf /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE
+cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+mkdir -p /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE/package/scripts
+cp -r /root/hdp-demo-bootstrap/package/scripts/* /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE/package/scripts
   service ambari restart
 -->
 

@@ -33,7 +33,7 @@ Put the following inside ``global.conf`` to set the logging level
   log-level=WARN
 
 '''
-import logging, config, sys
+import logging, config, sys, os
 
 class Logger():
   '''Simple logger object to set up logging for a module
@@ -73,9 +73,33 @@ class Logger():
       object: The python logger object'''
     return self.logger
   
+  def getLogFile(self):
+    '''Attempts to retrieve the log-file parameter from global.conf'''
+    
+    try:
+      conf = config.read_config('global.conf')['LOGGING']
+      log_file = conf['log-file']
+      return log_file
+    except:
+      return ''
+    
+  
   def __init__(self, name):
     self.logger = logging.getLogger(name)
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(self.getLoggingLevel())
     sh.setFormatter(logging.Formatter('[%(levelname)s] | %(name)s | %(message)s'))
     self.logger.addHandler(sh)
+    log_file = self.getLogFile()
+    if len(log_file) > 0:
+      log_dir = os.path.dirname(os.path.realpath(log_file))
+      try:
+        if not os.path.exists(log_dir):
+          os.makedirs(log_dir)
+        
+        fh = logging.FileHandler(log_file)
+        fh.setLevel(self.getLoggingLevel())
+        fh.setFormatter(logging.Formatter('[%(levelname)s] | %(name)s | %(message)s'))
+        self.logger.addHandler(fh)
+      except OSError as e:
+          pass
