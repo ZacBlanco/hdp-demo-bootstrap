@@ -183,35 +183,22 @@ class WSEcho(WebSocket):
   def opened(self):
     self.log = logs.Logger(WSEcho.app_name).getLogger()
     app = self.environ['ws4py.app']
-    app.clients.append(self)
-    
-    self.log.info('SELF:' + str(self))
-    self.log.info('websocket app clients: ' + str(app.clients))
-    self.log.info('websocket app: client connected')
-    pass
+    if not self in app.clients:
+      app.clients.append(self)
+      self.log.info('websocket app: client connected')
   
   def closed(self, code, reason=None):
     self.log = logs.Logger(WSEcho.app_name).getLogger()
     app = self.environ.pop('ws4py.app')
     
     if self in app.clients:
-      self.log.info('websocket app clients: ' + str(app))
+      self.log.info('websocket app: client disconnected')
       app.clients.remove(self)
-      
-    
-    self.log.info('websocket app: connection closed')
-    self.log.debug(str(reason))
-    pass
   
   def received_message(self, message):
     self.log = logs.Logger(WSEcho.app_name).getLogger()
-    self.log.info('websocket app: received message')
-    self.log.debug(str(message))
+    self.log.info('websocket app: Message: ' + str(message))
     
-  def broadcast(self, message):
-    self.log = logs.Logger(WSEcho.app_name).getLogger()
-    for client in self.ws.handler.server.clients.values():
-      pass
 
 
 class WSDemoApp(object):
