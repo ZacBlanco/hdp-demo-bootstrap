@@ -44,8 +44,8 @@ demo_data_write_file_location = config['configurations']['demo-config']['demo.da
 demo_data_kafka_listener = config['configurations']['demo-config']['demo.data.kafka_listener']
 demo_data_http_endpoint = config['configurations']['demo-config']['demo.data.http_endpoint']
 demo_zk_connection = config['configurations']['demo-config']['demo.zk_connection']
-demo_kafka_topics_script = config['configurations']['demo-config']['demo.kafka.topics_script']
-demo_kafka_topic_name = config['configurations']['demo-config']['demo.kafka.topic_name']
+demo_kafka_topics_script = config['configurations']['demo-config']['demo.kafka_topics_script']
+demo_kafka_topic_name = config['configurations']['demo-config']['demo.kafka_topic_name']
 
 
 

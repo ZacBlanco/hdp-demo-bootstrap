@@ -81,7 +81,7 @@
     <description>File path on local machine to kafka broker for creating/listing topics. If kafka broker isn't installed on same machine as this service then this property is rendered useless.</description>
   </property>
   <property>
-    <name>demo.kafka.topic_name</name>
+    <name>demo.kafka_topic_name</name>
     <value>demo</value>
     <description>The name of the Kafka topic that data will be pushed to</description>
   </property>
