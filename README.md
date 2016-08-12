@@ -64,5 +64,5 @@ Required:
 
 ``` sh
 cd ./docs
-sphinx-apidoc -f -o ./source/  ../demo_utils/demo_utils & make html
+make clean; sphinx-apidoc -e -f -o ./source/autodoc/demo_utils ../demo_utils/demo_utils; sphinx-apidoc -e -f -o ./source/autodoc/demo_app ../demo_app; make html
 ```
