@@ -1,1 +1,5 @@
 flask
+kafka-python
+requests
+ws4py
+gevent

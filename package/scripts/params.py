@@ -44,7 +44,8 @@ demo_data_write_file_location = config['configurations']['demo-config']['demo.da
 demo_data_kafka_listener = config['configurations']['demo-config']['demo.data.kafka_listener']
 demo_data_http_endpoint = config['configurations']['demo-config']['demo.data.http_endpoint']
 demo_zk_connection = config['configurations']['demo-config']['demo.zk_connection']
-demo_kafka_topics_script = config['configurations']['demo-config']['demo.kafka_topics_script']
+demo_kafka_topics_script = config['configurations']['demo-config']['demo.kafka.topics_script']
+demo_kafka_topic_name = config['configurations']['demo-config']['demo.kafka.topic_name']
 
 
 
@@ -63,11 +64,8 @@ demo_zeppelin_notebooks_directory = config['configurations']['demo-config']['dem
 # NiFi Section
 demo_nifi_install_dir = config['configurations']['demo-config']['demo.nifi.install_dir']
 
-
-
 # Logging
 demo_logging_log_level = config['configurations']['demo-config']['demo.logging.log_level']
-
 
 # Configuration Template
 demo_global_conf_template = config['configurations']['demo-config']['demo.global.conf']
