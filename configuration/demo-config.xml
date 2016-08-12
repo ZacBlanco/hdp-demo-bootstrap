@@ -6,11 +6,11 @@
   <property>
     <name>demo.conf.pull_url</name>
     <value>https://github.com/zacblanco/hdp-demo-bootstrap.git</value>
-    <description>URL for the Demo. Currently unused</description>
+    <description>URL for the Demo. Unused by the demo</description>
   </property>
   <property>
     <name>demo.server.port</name>
-    <value>8997</value>
+    <value>8998</value>
     <description>Port where you can access the demo user interface (will need to forward on Sandbox VM)</description>
   </property>
   <property>
@@ -48,7 +48,7 @@
     <value>
       [{"fieldName":"string_data","type":"string","values":{"a":0.1,"b":0.2}},{"fieldName":"int_data","type":"int","distribution":"uniform"},{"fieldName":"float_data","type":"decimal","valuesA":["a","b","c","d"],"distribution":"gaussian"},{"fieldName":"boolean_data","type":"boolean","values":{"True":0.1,"False":0.9}},{"fieldName":"map_data","type":"map","mapFromField":"string_data","map":{"a":"c","b":"d"}}]
     </value>
-    <description>JSON data descriptor for defining random data generation</description>
+    <description>JSON data descriptor for defining random data generation. This is the default loaded each time the server is restarted.</description>
   </property>
   <property>
     <name>demo.data.bytes_per_second</name>
