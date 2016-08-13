@@ -101,6 +101,11 @@
     <description>Log level for demo_utils</description>
   </property>
   <property>
+    <name>demo.logging.log_file</name>
+    <value>/var/log/demo/demo.log</value>
+    <description>Log file for the server</description>
+  </property>
+  <property>
     <name>demo.global.conf</name>
     <value>
 [DEMO]
@@ -132,6 +137,7 @@ INSTALL_DIR={{ demo_nifi_install_dir }}
 
 [LOGGING]
 log-level={{ demo_logging_log_level }}
+log-file={{ demo_log_file }}
 
     </value>
     <description>global.conf template</description>
