@@ -32,7 +32,7 @@ if demo_conf_install_dir == 'missing_dir':
 if not demo_conf_install_dir.endswith('/'):
   demo_conf_install_dir = demo_conf_install_dir + '/'
 
-demo_bin_dir = demo_conf_install_dir + 'demo-files'
+demo_bin_dir = demo_conf_install_dir + 'demo_app'
 demo_conf_dir = demo_conf_install_dir + 'configuration'
 
 # Demo Section

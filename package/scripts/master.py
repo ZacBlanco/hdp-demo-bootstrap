@@ -41,9 +41,9 @@ class Master(Script):
 #    print(Execute('mkdir -p ' + params.demo_conf_install_dir))
 #    Execute('git clone ' + params.demo_conf_pull_url + ' ' + params.demo_conf_install_dir)
     
+    self.create_linux_user(params.demo_user, params.demo_group)
     self.configure(env)
     print 'Install the Demo Service Master';
-    self.create_linux_user(params.demo_user, params.demo_group)
     if params.demo_user != 'root':
       Execute('cp /etc/sudoers /etc/sudoers.bak')        
       Execute('echo "' + params.demo_user + '    ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers')
@@ -69,8 +69,7 @@ class Master(Script):
     print 'Start the Demo Service Master'
     import params
     self.configure(env)
-		# Fill me in!
-    Execute('nohup python ' + params.demo_bin_dir +  '/demo-server.py &')
+    Execute('nohup python ' + params.demo_bin_dir +  '/demo_server.py &')
     Execute('cp ' + params.demo_bin_dir + '/demo.pid ' + params.demo_pid_file)
       
     
