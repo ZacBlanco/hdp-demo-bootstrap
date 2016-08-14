@@ -1,72 +1,39 @@
+# Documentation
 
-# Docs: Index
+The documentation for this project is currently hosted through GitHub pages. The site can be found at [http://blanco.io/hdp-demo-bootstrap](http://blanco.io/hdp-demo-bootstrap/).
 
-- [Quick-Start Guide](#quick-start-guide)
-- [User Guide](user-guide.md)
-- `demo_utils` Modules
-  - [ambari.py](ambari.md)
-  - [config.py](config.md)
-  - [curl_client.py](curl_client.md)
-  - [generator.py](generator.md)
-  - [service_installer.py](service_installer.md)
-  - [shell.py](shell.md)
+Docs for the site are built manually on the `gh-pages` branch. In order to update the docs you need to rebuild and commit the new set of docs to that branch.
 
-<a name="quick-start-guide"></a>
+The Makefile is set up to push the docs to the root directory of the repository so the build commands for your local version of the docs and the hosted version are still the same.
 
-# Quick-Start Guide
+## Building the Documentation
+
+The documentation for this project is built using sphinx, sphinx-autodoc, and sphinx-apidoc. This allows us to generate documentation for python files directly from the docstrings within python files.
 
 ### Pre-Requisites
 
-- Python 2.6 or 2.7 (3+ may work but isn't tested)
-- `pip`, the python package manager installed
+- python
+- pip (The python package manager, like npm for node.js)
+- sphinx (`pip install sphinx`)
 
+To build the documentation (into HTML files), run the following command:
 
-In order to get up and running with this framework there are a few important points to remember
+    cd docs/
+    make clean
+    sphinx-apidoc -e -f -o ./source/autodoc/demo_utils ../demo_utils/demo_utils
+    sphinx-apidoc -e -f -o ./source/autodoc/demo_app ../demo_app
+    make html
+    
+Or if you like one-liners (make sure you're in the docs directory):
 
-- Everything for the demo should be run on the Ambari host machine.
-  - This means you should leave plenty of room on your Ambari host for any components or other services that are going to be installed.
-- This framework is not a standalone demo.
-  - The purpose of this bootstrap is to house a useful set of tools for devs and demo-makers.
-  - The tools are designed so that users can worry less about the plumbing of the demo on the machine and more about the _actual_ demo.
-- The demo is implemented as an Ambari Service
-  - This means everything we do in creating a demo will be accessible via Ambari
-  
-The easiest way to get started creating a demo is to head to the `package/scripts` folder and open up `master.py`
+    make clean; sphinx-apidoc -e -f -o ./source/autodoc/demo_utils ../demo_utils/demo_utils; sphinx-apidoc -e -f -o ./source/autodoc/demo_app ../demo_app; make html
 
-You should find 4 functions
+**Important Note**
 
-The functions are:
+As of writing this (08/13/2016) the sphinx module throws an error when trying to generate documentation for `demo_server.py`. This is a bug in sphinx when generating docs for flask modules.
 
-- install()
-- start()
-- stop()
-- status()
-- configure()
+A fix is committed but has not yet been released in sphinx. The current workaround is to install the latest stable dev version of sphinx using the following command:
 
-The main purpose is to set up, start, stop, and restart any demo services. They can be implemented using the Ambari `resource_management` libraries or the custom `util` libraries.
-
-A few notes on these functions
-
-- `configure()` is used to take the Ambari configuration values and write the parameters values out to any component configuration files
-  - At the end `install()` you should run `self.configure()`
-  - At the beginning of `start()` you should run `self.configure()`
-- `status()` - you can use the funtion `check_process_status(pid_file)` to report on the status of your service's process.
-  - This will allow Ambari to show the service as running correctly.
-  
-Once these functions have all been implemented you can simply install the demo service on the Ambari machine by using the `demo.py` file. This will restart Ambari and install your service automatically.
-
-```sh
-python demo.py install
-```
-
-Another option to install manually is to move the demo repository to the ambari services directory and then restart ambari server. From there you can install it through the Ambari UI:
-
-	cp -r ~/my-demo-location /var/lib/ambari-server/resources/stacks/HDP/2.4/services/DEMOSERVICE
-	ambari-server restart
-
-
-If you need to do anything **before or after installing** the demo, you can implement the `pre_install` and `post_install` methods inside of `demo.py`.  
-  - This is useful in cases where you might need to add tasks to the Ambari task queue such as the starting and stopping of services.
-  
+    pip install git+https://github.com/sphinx-doc/sphinx@stable
 
 
