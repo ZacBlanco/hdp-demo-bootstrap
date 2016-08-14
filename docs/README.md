@@ -15,6 +15,7 @@ The documentation for this project is built using sphinx, sphinx-autodoc, and sp
 - python
 - pip (The python package manager, like npm for node.js)
 - sphinx (`pip install sphinx`)
+- [sphinx RTD Theme](https://github.com/snide/sphinx_rtd_theme) (`pip install sphinx_rtd_theme`)
 
 To build the documentation (into HTML files), run the following command:
 
