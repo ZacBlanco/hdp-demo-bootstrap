@@ -62,7 +62,7 @@
   </property>
   <property>
     <name>demo.data.kafka_listener</name>
-    <value>sandbox.hortonwork.com:6667</value>
+    <value>sandbox.hortonworks.com:6667</value>
     <description>Directory that Zeppelin notebooks reside in</description>
   </property>
   <property>
