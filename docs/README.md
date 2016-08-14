@@ -8,7 +8,7 @@ The Makefile is set up to push the docs to the root directory of the repository 
 
 ## Building the Documentation
 
-The documentation for this project is built using sphinx, sphinx-autodoc, and sphinx-apidoc. This allows us to generate documentation for python files directly from the docstrings within python files.
+The documentation for this project is built using sphinx, sphinx-autodoc, and sphinx-apidoc. This allows us to generate documentation directly from the docstrings within our python files.
 
 ### Pre-Requisites
 
