@@ -15,7 +15,7 @@ demo_group = 'demo'
 demo_pid_dir = '/var/run/demo'
 demo_pid_file = '/var/run/demo/demo.pid'
 demo_log_dir = '/var/log/demo'
-demo_log_file = '/var/log/demo.log'
+demo_log_file = '/var/log/demo/demo.log'
 
 demo_conf_pull_url = config['configurations']['demo-config']['demo.conf.pull_url']
 
