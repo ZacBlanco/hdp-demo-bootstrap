@@ -102,4 +102,5 @@ class Logger():
         fh.setFormatter(logging.Formatter('[%(levelname)s] | %(name)s | %(message)s'))
         self.logger.addHandler(fh)
       except OSError as e:
-          pass
+        self.logger.warn('OSError - Could not create log file.')
+        pass

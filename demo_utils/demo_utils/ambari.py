@@ -15,6 +15,7 @@ class Ambari:
       server (str, optional): The hostname (or IP)  of the Ambari server. Defaults to 127.0.0.1.
       port (int, optional): The port that ambari server is running on. Defaults to 8080
       service_wait_time (int, optional): The time (in seconds) we should before we decide a service has failed changing states.
+      config (dict, optional): This is a dictionary object which should contain the any of the keys 'username', 'password', 'proto', 'server', 'port', or 'service_wait_time'. Given the config here you can set any of the client's parameters through this object. However, when using this, the config object will override any of the specific arguments passed.
       
     Returns:
       N/A
@@ -24,17 +25,28 @@ class Ambari:
   def __init__(self, username='', password='', proto='http', server='127.0.0.1', port=8080, service_wait_time=60, config=''):
     
     if config != '':
-      try:
-        username = config['username']
-        password = config['password']
-        proto = config['proto']
-        server = config['server']
-        port = config['port']
-        service_wait_time = config['service_wait_time']
-      except KeyError as e:
-        pass
-      
-      
+      if isinstance(config, dict):
+        if 'username' in config:
+          username = config['username']
+          
+        if 'password' in config:
+          password = config['password']
+          
+        if 'proto' in config:
+          proto = config['proto']
+          
+        if 'server' in config:
+          server = config['server']
+          
+        if 'port' in config:
+          port = config['port']
+          
+        if 'service_wait_time' in config:
+          service_wait_time = config['service_wait_time']
+      else:
+        logger.warn('Could not instantiate Ambari client through config object. Config is type: ' + str(type(config)))
+    
+    
     self.client = CurlClient()
     if service_wait_time > 0:
       self.set_service_wait_time(service_wait_time)
@@ -54,6 +66,8 @@ class Ambari:
       
     if not len(str(port)) == 0:
       self.set_port(port)
+      
+    logger.info('Created Ambari client: ' + ':'.join([username, password]) + ' ' + ''.join([proto, '://', server, ':', str(port)]))
   
   username = password = server = port = proto = ''
   '''class variable'''
@@ -78,9 +92,7 @@ class Ambari:
       json_str = output[0]
     elif not len(output[1]) == 0:
       # StdErr output
-      json_str = '{ "message": "" }'
-      res = json.loads(json_str) # Built from json_str no chance for error (as far as can tell)
-      res['message'] = output[1]
+      res = {'message': output[1]}
       return res
     else:
       json_str = '{ "message" : "No output was returned." }'
@@ -123,41 +135,48 @@ class Ambari:
     request_payload['Body'] = {}
     request_payload['Body']['ServiceInfo'] = {}
     
-    service_info = self.get_service(cluster_name, service_name, 'fields=ServiceInfo')[0]
-    before_state = service_info['ServiceInfo']['state']
-    logger.debug('Service state before attempting to change: ' + str(before_state))
-    after_state = ''
     
-    if action == 'STOP':
-      after_state = 'INSTALLED'
-      
-    elif action == 'START':
-      after_state = 'STARTED'
-      
-    elif action == 'RESTART':
-      r1 = self.service_action(service_name, cluster_name, 'STOP')
-      r2 = self.service_action(service_name, cluster_name, 'START')
-      return r1 and r2
-    
-    request_payload['Body']['ServiceInfo']['state'] = after_state
-    
-    payload = json.dumps(request_payload)
-    res = self.client.make_request('PUT', '/api/v1/clusters/' + cluster_name + '/services/' + service_name, '-i -d \'' + payload + '\' -H "X-Requested-By:ambari"', 'fields=ServiceInfo')
-    
-    if not ('202 Accepted' in res[0] or '200 OK' in res[0]):
-      logger.error('No 200 Level status when attempting to change service state')
-      return False
-    
-    service_state = ''
-    t = 0
-    while t < self.service_wait_time:
-      logger.debug('Checking for a change in service state')
-      service_state = self.get_service(cluster_name, service_name, 'fields=ServiceInfo')[0]['ServiceInfo']['state']
-      if service_state == after_state:
-        logger.info('Service action completed successfully')
-        return True
-      t += 1
-      time.sleep(1)
+    try:
+      service_info = self.get_service(cluster_name, service_name, query='fields=ServiceInfo')
+      before_state = service_info['ServiceInfo']['state']
+      logger.debug('Service state before attempting to change: ' + str(before_state))
+      after_state = ''
+
+      if action == 'STOP':
+        after_state = 'INSTALLED'
+
+      elif action == 'START':
+        after_state = 'STARTED'
+
+      elif action == 'RESTART':
+        r1 = self.service_action(service_name, cluster_name, 'STOP')
+        r2 = self.service_action(service_name, cluster_name, 'START')
+        return r1 and r2
+
+      request_payload['Body']['ServiceInfo']['state'] = after_state
+
+      payload = json.dumps(request_payload)
+      res = self.client.make_request('PUT', '/api/v1/clusters/' + cluster_name + '/services/' + service_name, '-i -d \'' + payload + '\' -H "X-Requested-By:ambari"', 'fields=ServiceInfo')
+
+      if not ('202 Accepted' in res[0] or '200 OK' in res[0]):
+        logger.error('No 200 Level status when attempting to change service state')
+        return False
+
+      service_state = ''
+      t = 0
+      while t < self.service_wait_time:
+        logger.debug('Checking for a change in service state')
+        service_state = self.get_service(cluster_name, service_name, query='fields=ServiceInfo')
+        service_state = service_state['ServiceInfo']['state']
+        
+        if service_state == after_state:
+          logger.info('Service action completed successfully')
+          return True
+        t += 1
+        time.sleep(1)
+    except KeyError as e:
+      logger.warn('Unable to find fields in Ambari API response')
+      logger.debug(str(e))
       
     return False
   
@@ -214,7 +233,7 @@ class Ambari:
     
     '''
     logger.info('Making request to /api/v1/clusters/' + cluster_name)
-    output = self.client.make_request('GET', '/api/v1/clusters/' + cluster_name + '/' + service_name, query)
+    output = self.client.make_request('GET', '/api/v1/clusters/' + cluster_name + '/services/' + service_name, query=query)
     return self.load_output(output)
   
   
