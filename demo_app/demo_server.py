@@ -169,7 +169,6 @@ def get_schema():
   
   '''
   global schema
-  log.debug(json.dumps(schema))
   data = {
     'schema': schema,
     'message': 'successful retrieved schema'
