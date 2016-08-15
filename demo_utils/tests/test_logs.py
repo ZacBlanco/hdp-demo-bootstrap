@@ -55,7 +55,7 @@ class TestLogs(unittest.TestCase):
     assert handler.level == 30
     
     
-  @mock.patch('demo_utils.config.read_config', return_value={'LOGGING': {'bad-level': 'MISSING', 'log-file': 'tmp-log.log'}})
+  @mock.patch('demo_utils.config.read_config', return_value={'LOGGING': {'bad-level': 'MISSING', 'log-file': './cover/tmp-log.log'}})
   def test_log_file(self, mock1):
     logger = Logger('test_file').getLogger()
     assert len(logger.handlers) == 2, 'Should have two log handlers'

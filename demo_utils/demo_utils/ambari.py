@@ -351,7 +351,7 @@ class Ambari:
     self.client.set_port(self.port)
     
   def set_service_wait_time(self, wait_time):
-    '''Set the timeout (in seconds) when waiting for a service to change states
+    '''Set the timeout (in seconds) when waiting for a service to change states. i.e to Start/Stop/Restart a service.
     
     Args:
       wait_time (int) 

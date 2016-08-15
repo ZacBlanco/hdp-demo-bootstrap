@@ -298,7 +298,8 @@ class TestAmbariClient(unittest.TestCase):
       'password': 'test_password',
       'proto': 'https',
       'server': 'sandbox_server',
-      'port': 12309
+      'port': 12309,
+      'service_wait_time': 45
     }
     
     amc = Ambari(config=conf)
@@ -308,17 +309,18 @@ class TestAmbariClient(unittest.TestCase):
     assert amc.proto == conf['proto'], 'protocols must match'
     assert amc.server == conf['server'], 'servers must match'
     assert amc.port == conf['port'], 'ports must match'
+    assert amc.service_wait_time == conf['service_wait_time'], 'wait_times must match'
     
     amc = Ambari(config='Config String should throw log warning')
   
   @mock.patch('demo_utils.shell.Shell.run', return_value=['', 'curl (6) could not connect to host'])
   def test_bad_config_ambari_service(self, mock1):
     conf = {
-      'username': 'test_username',
-      'password': 'test_password',
-      'proto': 'https',
-      'server': 'sandbox_server',
-      'port': 12309
+      'b': 'test_username',
+      'a': 'test_password',
+      'c': 'https',
+      'd': 'sandbox_server',
+      'e': 12309
     }
     
     amc = Ambari(config=conf)
