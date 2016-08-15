@@ -1,4 +1,37 @@
-'''A module which house Ambari - an instantiable Ambari client'''
+'''A module which houses Ambari - an instantiable Ambari client
+
+Each call to the Ambari client uses the curl_client module. The output from the curl client is send through the static ``load_output`` method to keep the return format similar for requests which fail.
+
+See the ``load_ouput`` method for some more information
+
+Response with Error
+
+.. code-block:: json
+  :linenos:
+  
+  {
+    "message": "curl (6) Could not connect to host"
+  }
+
+
+Response without error (from something like ``get_service``)
+
+.. code-block:: json
+  :linenos:
+  
+  {
+    "href" : "http://sandbox.hortonworks.com:8080/api/v1/clusters/Sandbox/services/YARN?fields=ServiceInfo",
+    "ServiceInfo" : {
+      "cluster_name" : "Sandbox",
+      "maintenance_state" : "OFF",
+      "service_name" : "YARN",
+      "state" : "INSTALLED"
+    }
+  }
+
+
+
+'''
 import json, time
 from curl_client import CurlClient
 from logs import Logger
@@ -78,11 +111,31 @@ class Ambari:
     
     The idea behind this function is to try and keep the same behavior on failed requests across the entire client.
     
+    .. code-block: json
+      :linenos:
+
+      // Response with error
+      {
+        "message": "curl (6) Could not connect to host"
+      }
+
+      // Response without error
+      {
+        "href" : "http://sandbox.hortonworks.com:8080/api/v1/clusters/Sandbox/services/YARN?fields=ServiceInfo",
+        "ServiceInfo" : {
+          "cluster_name" : "Sandbox",
+          "maintenance_state" : "OFF",
+          "service_name" : "YARN",
+          "state" : "INSTALLED"
+        }
+      }
+    
     Args:
       output: (str):  The output from a curl_client action
     
     Returns:
-      dict: a dictionary object with a message attribute. If there was no output then the message is a string. Else there will be a nested object under 'message' which contains the returned JSON object from Ambari.
+      dict: a dictionary object created from the JSON response of the Ambari request. If the request was unsuccessful a message attribute will be present containing the error from the curl request.
+      
       
     Raises:
       ValueError: This is raised when an object can't be converted into JSON
