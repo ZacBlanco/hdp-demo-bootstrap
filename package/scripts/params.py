@@ -63,8 +63,8 @@ demo_nifi_install_dir = config['configurations']['demo-config']['demo.nifi.insta
 
 # Logging
 demo_logging_log_level = config['configurations']['demo-config']['demo.logging.log_level']
-demo_logging_log_file = config['configurations']['demo-config']['demo.logging.log_file']
-demo_logging_dir = os.path.dirname(os.path.realpath(demo_logging_log_file))
+demo_logging_log_file =  config['configurations']['demo-config']['demo.logging.log_file']
 
 # Configuration Template
 demo_global_conf_template = config['configurations']['demo-config']['demo.global.conf']
+
