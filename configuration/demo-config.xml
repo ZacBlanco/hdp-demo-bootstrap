@@ -10,7 +10,7 @@
   </property>
   <property>
     <name>demo.server.port</name>
-    <value>8998</value>
+    <value>7887</value>
     <description>Port where you can access the demo user interface (will need to forward on Sandbox VM)</description>
   </property>
   <property>
@@ -67,7 +67,7 @@
   </property>
   <property>
     <name>demo.data.http_endpoint</name>
-    <value>http://sandbox.hortonworks.com:8998/data</value>
+    <value>http://sandbox.hortonworks.com:7887/data</value>
     <description>Endpoint where data will be POSTed to</description>
   </property>
   <property>
@@ -138,7 +138,6 @@ INSTALL_DIR={{ demo_nifi_install_dir }}
 [LOGGING]
 log-level={{ demo_logging_log_level }}
 log-file={{ demo_logging_log_file }}
-
     </value>
     <description>global.conf template</description>
   </property>

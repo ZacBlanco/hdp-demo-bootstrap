@@ -117,7 +117,7 @@ We have a ``global.conf`` file below:
   :linenos:
   
   [DEMO]
-  server_port=8998
+  server_port=7887
   name=my_demo
   
   
@@ -129,7 +129,7 @@ Then in ``demo-config.xml`` we have
   <configuration supports_final="true">
     <property>
       <name>demo.server.port</name>
-      <value>8998</value>
+      <value>7887</value>
       <description>URL for the Demo. Unused by the demo</description>
     </property>
     <property>

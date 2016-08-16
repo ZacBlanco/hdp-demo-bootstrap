@@ -15,7 +15,7 @@ It may run on python 3+ but has not been tested.
 8998 is the default port that the web server will run on when installed
 The websockets port is coded to always be the webserver port + 1
 
-This means the default websockets port is 8999. The port can be changed in the Ambari interface.
+This means the default websockets port is 7888. The port can be changed in the Ambari interface.
 
 
 After installing the demo service you should be able to run the server via Ambari. Once the service is running in Ambari connect to http://sandbox.hortonworks.com:8998
