@@ -12,21 +12,21 @@ config = Script.get_config()
 
 demo_user = 'demo'
 demo_group = 'demo'
+
 demo_pid_dir = '/var/run/demo'
 demo_pid_file = '/var/run/demo/demo.pid'
-demo_log_dir = '/var/log/demo'
-demo_log_file = '/var/log/demo/demo.log'
 
 demo_conf_pull_url = config['configurations']['demo-config']['demo.conf.pull_url']
 
-# Installation Directory
-demo_conf_install_dir = 'missing_dir'
+# Set up the installation directory
+demo_conf_install_dir = None
 
+# Gets the full filepath of the demo servie directory (This is one reason why we should be on the Ambari host!)
 demo_conf_install_dir = shell._call('find /var/lib/ambari-server/ -name DEMOSERVICE')[1]
 
 print(demo_conf_install_dir)
 
-if demo_conf_install_dir == 'missing_dir':
+if demo_conf_install_dir is None:
   raise ValueError('Could not find the DEMOSERVICE directory.')
 
 if not demo_conf_install_dir.endswith('/'):
@@ -47,8 +47,6 @@ demo_zk_connection = config['configurations']['demo-config']['demo.zk_connection
 demo_kafka_topics_script = config['configurations']['demo-config']['demo.kafka_topics_script']
 demo_kafka_topic_name = config['configurations']['demo-config']['demo.kafka_topic_name']
 
-
-
 # Ambari Section
 demo_ambari_username = config['configurations']['demo-config']['demo.ambari.username']
 demo_ambari_password = config['configurations']['demo-config']['demo.ambari.password']
@@ -56,7 +54,6 @@ demo_ambari_server = config['configurations']['demo-config']['demo.ambari.server
 demo_ambari_port = config['configurations']['demo-config']['demo.ambari.port']
 demo_ambari_cluster_name = config['configurations']['demo-config']['demo.ambari.cluster_name']
 demo_ambari_proto = config['configurations']['demo-config']['demo.ambari.proto']
-
 
 # Zeppelin Section
 demo_zeppelin_notebooks_directory = config['configurations']['demo-config']['demo.zeppelin.notebooks_directory']
@@ -67,6 +64,7 @@ demo_nifi_install_dir = config['configurations']['demo-config']['demo.nifi.insta
 # Logging
 demo_logging_log_level = config['configurations']['demo-config']['demo.logging.log_level']
 demo_logging_log_file = config['configurations']['demo-config']['demo.logging.log_file']
+demo_logging_dir = os.path.dirname(os.path.realpath(demo_logging_log_file))
 
 # Configuration Template
 demo_global_conf_template = config['configurations']['demo-config']['demo.global.conf']

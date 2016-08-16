@@ -37,9 +37,6 @@ class Master(Script):
 
   def install(self, env):
     import params
-#    params.demo_conf_install_dir
-#    print(Execute('mkdir -p ' + params.demo_conf_install_dir))
-#    Execute('git clone ' + params.demo_conf_pull_url + ' ' + params.demo_conf_install_dir)
     
     self.create_linux_user(params.demo_user, params.demo_group)
     self.configure(env)
@@ -48,20 +45,23 @@ class Master(Script):
       Execute('cp /etc/sudoers /etc/sudoers.bak')        
       Execute('echo "' + params.demo_user + '    ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers')
       
-    Execute('mkdir -p '+ params.demo_pid_dir + ' ' + params.demo_log_dir)
+    Execute('mkdir -p '+ params.demo_pid_dir + ' ' + params.demo_logging_dir)
     Execute('chown -R ' + params.demo_user + ':' + params.demo_group + ' ' + params.demo_pid_dir)
-    Execute('chown -R ' + params.demo_user + ':' + params.demo_group + ' ' + params.demo_log_dir)
+    Execute('chown -R ' + params.demo_user + ':' + params.demo_group + ' ' + params.demo_logging_dir)
     
     # Ensure pip is instaled
     Execute('sudo yum install python-pip')
     Execute('pip install -r ' + '/'.join([params.demo_bin_dir, 'requirements.txt']))
+    Execute('python ' + params.demo_bin_dir +  '/service.py INSTALL')
 
   def stop(self, env):
-		# Fill me in!
+    # Fill me in!
     import params
     print 'Stop the Demo Service Master'
     try:
       Execute('kill `cat ' + params.demo_pid_file + '`' )
+      Execute('python ' + params.demo_bin_dir +  '/service.py STOP')
+      Execute('service iptables start')
     except resource_management.core.exceptions.Fail as e:
       pass
 
@@ -69,14 +69,16 @@ class Master(Script):
     print 'Start the Demo Service Master'
     import params
     self.configure(env)
+    Execute('service iptables stop')
     Execute('nohup python ' + params.demo_bin_dir +  '/demo_server.py &')
     Execute('cp ' + params.demo_bin_dir + '/demo.pid ' + params.demo_pid_file)
+    Execute('python ' + params.demo_bin_dir +  '/service.py START')
       
     
   def status(self, env):
     print 'Status of the Demo Service Master'
     import params
-		# Fill me in!
+    # Fill me in!
     check_process_status(params.demo_pid_file)
     
   def configure(self, env):
@@ -92,5 +94,5 @@ class Master(Script):
 
 
 if __name__ == "__main__":
-	Master().execute()
-	
+  Master().execute()
+  

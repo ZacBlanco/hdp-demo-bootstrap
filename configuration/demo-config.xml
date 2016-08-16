@@ -137,7 +137,7 @@ INSTALL_DIR={{ demo_nifi_install_dir }}
 
 [LOGGING]
 log-level={{ demo_logging_log_level }}
-log-file={{ demo_log_file }}
+log-file={{ demo_logging_log_file }}
 
     </value>
     <description>global.conf template</description>
