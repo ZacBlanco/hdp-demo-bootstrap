@@ -5,11 +5,11 @@
         <service>
             <name>DEMOSERVICE</name>
             <displayName>HDP Demo</displayName>
-            <comment>An Ambari service to manage the demo</comment>
+            <comment>An Ambari service for the demo</comment>
             <version>0.0.1</version>
             <components>
                 <component>
-                    <name>DEMO MASTER</name>
+                    <name>DEMO_MASTER</name>
                     <displayName>Demo Master Service</displayName>
                     <category>MASTER</category>
                     <cardinality>1</cardinality>
