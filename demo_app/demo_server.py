@@ -19,6 +19,7 @@ from flask import Flask, request
 from demo_utils import config, generator
 from cluster import ThreadedGenerator
 from demo_utils import logs
+from ws4py import configure_logger
 
 log = logs.Logger('DEMO_SERVER.py').getLogger()
 
@@ -37,7 +38,7 @@ log_level = conf['LOGGING']['log-level']
 ws_port = app_port + 1
 '''The port for the websocket server'''
 
-ws_app = cluster.WSDemoServer(ws_port)
+ws_app = cluster.WSDemoServer('0.0.0.0', ws_port)
 '''The websocket server object. Used to broadcast messages'''
 
 dt = None
@@ -169,7 +170,6 @@ def get_schema():
   
   '''
   global schema
-  log.debug(json.dumps(schema))
   data = {
     'schema': schema,
     'message': 'successful retrieved schema'
@@ -206,19 +206,11 @@ if __name__ == "__main__":
   # Set up the Root Logger
   rootLogger = logging.getLogger()
   rootLogger.setLevel(logging.DEBUG)
+  log.info('Starting the demo application')
+  configure_logger(True, './ws4py.log', logging.DEBUG);
   
-  # Set up the PID file.
-  try:
-    os.remove(filedir + '/demo.pid')
-  except OSError:
-    pass
-  pid = os.getpid()
-  with open(filedir + '/demo.pid', 'w') as tf:
-    tf.write(str(pid))
-
   # Start the Websocket Server
   ws_app.start()
-  
   
 #  Run!
 #  app.debug=1

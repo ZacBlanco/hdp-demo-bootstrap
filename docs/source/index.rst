@@ -62,12 +62,12 @@ This should remove any previous version of the DEMOSERVICE from Ambari and regis
 +----------+-------------------------------------------------------------------------+
 
 +----------+---------------------------------------------------------------------------------------+
-| **Note** | If you're working on a VM (i.e HDP Sandbox) you'll need to forward port 8998 and 8999 |
+| **Note** | If you're working on a VM (i.e HDP Sandbox) you'll need to forward port 7887 and 7888 |
 +----------+---------------------------------------------------------------------------------------+
 
 After running these commands you should be able to install the Demo via Ambari's 'Add Service' interface.
 
-After adding the service and starting it, you should be able to access the UI at http://sandbox.hortonworks.com:8998
+After adding the service and starting it, you should be able to access the UI at http://sandbox.hortonworks.com:7887
 
 Troubleshooting
 ---------------

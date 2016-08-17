@@ -12,10 +12,46 @@ Most of this project is written with python and is compatible with python versio
 
 It may run on python 3+ but has not been tested.
 
-8998 is the default port that the web server will run on when installed
+Building a new Demo
+===================
+
+When building a new demo you should do at least 2 things:
+
+1. Define the data that you want to use
+2. Figure out which HDP components are going to be used.
+
+
+Data
+----
+
+After doing the above you can then move on to writing out the data generator configuration for the data schema that you've selected.
+
+Scroll down to the **Data Generation** section for more information.
+
+Components
+----------
+
+After defining the components that you wish to use I would advise looking inside the ``demo_app/service.py``.
+
+``service.py`` provides three (3) methods.
+
+- ``on_service_install``
+- ``on_service_start``
+- ``on_service_stop``
+
+Each method will run after it's respective Ambari lifecycle stage. Use these methods to setup/start other services that might be necessary for the demo or kick off any other processes.
+
+Use those methods to set up/configure/start any other components required by the demo.
+
+
+Default Configuration Information
+=================================
+
+
+7887 is the default port that the web server will run on when installed
 The websockets port is coded to always be the webserver port + 1
 
-This means the default websockets port is 8999. The port can be changed in the Ambari interface.
+This means the default websockets port is 7888. The port can be changed in the Ambari interface.
 
 
 After installing the demo service you should be able to run the server via Ambari. Once the service is running in Ambari connect to http://sandbox.hortonworks.com:8998
