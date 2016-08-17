@@ -294,7 +294,7 @@ class WSEcho(WebSocket):
       app.clients.append(self)
       self.log.info('websocket app: client connected')
     
-    self.log.debug('Clients: ' + str(app.clients))
+    self.log.debug('opened - Clients: ' + str(app.clients))
   
   def closed(self, code, reason=None):
     '''Defines behavior for when a client disconnects from the websocket server
@@ -308,7 +308,7 @@ class WSEcho(WebSocket):
       self.log.info('websocket app: client disconnected')
       app.clients.remove(self)
     
-    self.log.debug('Clients: ' + str(app.clients))
+    self.log.debug('closed - Clients: ' + str(app.clients))
   
   def received_message(self, message):
     '''Defines behavior for when a client sends a message to the server
@@ -350,7 +350,9 @@ class WSDemoApp(object):
     '''
     if environ['PATH_INFO'] == '/':
       environ['ws4py.app'] = self
-      return self.ws(environ, start_response)
+      self.ws(environ, start_response)
+    else:
+      self.log.info('Client requested non-root path. Not handling request.')
     
   def broadcast(self, message):
     '''Broadcast a message to all server clients.
@@ -366,7 +368,7 @@ class WSDemoApp(object):
       try:
         client.send(message)
       except:
-        self.log('Error sending message to client: ' + client)
+        self.log.info('Error sending message to client: ' + client)
         pass
     
     
@@ -379,13 +381,14 @@ class WSDemoServer(threading.Thread):
     
   '''
   
-  def __init__(self, port):
+  def __init__(self, host, port):
     threading.Thread.__init__(self)
     self.log = logs.Logger('WebSocketsServer').getLogger()
     self.port = int(port)
+    self.host = host
     self.daemon = True
     self.flag = True
-    self.server = WSGIServer(('', self.port), WSDemoApp())
+    self.server = WSGIServer((self.host, self.port), WSDemoApp())
     pass
   
   def run(self):
