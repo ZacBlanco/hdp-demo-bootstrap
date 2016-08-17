@@ -53,7 +53,7 @@ class Master(Script):
     Execute('chown -R ' + params.demo_user + ':' + params.demo_group + ' ' + demo_logging_dir)
     
     # Ensure pip is instaled
-    Execute('sudo yum install python-pip')
+    Execute('sudo yum -y install python-pip')
     Execute('pip install -r ' + '/'.join([params.demo_bin_dir, 'requirements.txt']))
     Execute('python ' + params.demo_bin_dir +  '/service.py INSTALL')
 
