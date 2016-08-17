@@ -155,7 +155,37 @@
             
   <div class="section" id="module-demo_utils.ambari">
 <span id="demo-utils-ambari-module"></span><h1>demo_utils.ambari module<a class="headerlink" href="#module-demo_utils.ambari" title="Permalink to this headline">¶</a></h1>
-<p>A module which house Ambari - an instantiable Ambari client</p>
+<p>A module which houses Ambari - an instantiable Ambari client</p>
+<p>Each call to the Ambari client uses the curl_client module. The output from the curl client is send through the static <code class="docutils literal"><span class="pre">load_output</span></code> method to keep the return format similar for requests which fail.</p>
+<p>See the <code class="docutils literal"><span class="pre">load_ouput</span></code> method for some more information</p>
+<p>Response with Error</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;curl (6) Could not connect to host&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Response without error (from something like <code class="docutils literal"><span class="pre">get_service</span></code>)</p>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;href&quot;</span> <span class="p">:</span> <span class="s2">&quot;http://sandbox.hortonworks.com:8080/api/v1/clusters/Sandbox/services/YARN?fields=ServiceInfo&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;ServiceInfo&quot;</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;cluster_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Sandbox&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;maintenance_state&quot;</span> <span class="p">:</span> <span class="s2">&quot;OFF&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;service_name&quot;</span> <span class="p">:</span> <span class="s2">&quot;YARN&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;state&quot;</span> <span class="p">:</span> <span class="s2">&quot;INSTALLED&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
 <dl class="class">
 <dt id="demo_utils.ambari.Ambari">
 <em class="property">class </em><code class="descclassname">demo_utils.ambari.</code><code class="descname">Ambari</code><span class="sig-paren">(</span><em>username=''</em>, <em>password=''</em>, <em>proto='http'</em>, <em>server='127.0.0.1'</em>, <em>port=8080</em>, <em>service_wait_time=60</em>, <em>config=''</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari" title="Permalink to this definition">¶</a></dt>
@@ -171,6 +201,7 @@
 <li><strong>server</strong> (<em>str, optional</em>) &#8211; The hostname (or IP)  of the Ambari server. Defaults to 127.0.0.1.</li>
 <li><strong>port</strong> (<em>int, optional</em>) &#8211; The port that ambari server is running on. Defaults to 8080</li>
 <li><strong>service_wait_time</strong> (<em>int, optional</em>) &#8211; The time (in seconds) we should before we decide a service has failed changing states.</li>
+<li><strong>config</strong> (<em>dict, optional</em>) &#8211; This is a dictionary object which should contain the any of the keys &#8216;username&#8217;, &#8216;password&#8217;, &#8216;proto&#8217;, &#8216;server&#8217;, &#8216;port&#8217;, or &#8216;service_wait_time&#8217;. Given the config here you can set any of the client&#8217;s parameters through this object. However, when using this, the config object will override any of the specific arguments passed.</li>
 </ul>
 </td>
 </tr>
@@ -271,7 +302,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> &#8211; (str):  The output from a curl_client action</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary object with a message attribute. If there was no output then the message is a string. Else there will be a nested object under &#8216;message&#8217; which contains the returned JSON object from Ambari.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary object created from the JSON response of the Ambari request. If the request was unsuccessful a message attribute will be present containing the error from the curl request.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
@@ -400,7 +431,7 @@
 <dl class="method">
 <dt id="demo_utils.ambari.Ambari.set_service_wait_time">
 <code class="descname">set_service_wait_time</code><span class="sig-paren">(</span><em>wait_time</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.set_service_wait_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the timeout (in seconds) when waiting for a service to change states</p>
+<dd><p>Set the timeout (in seconds) when waiting for a service to change states. i.e to Start/Stop/Restart a service.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

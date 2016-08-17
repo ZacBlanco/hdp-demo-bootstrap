@@ -88,6 +88,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-a-new-demo">Building a new Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#default-configuration-information">Default Configuration Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#homepage">Homepage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#zeppelin">Zeppelin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#nifi">NiFi</a></li>
@@ -160,9 +166,37 @@
 <li>The websockets server uses <a class="reference external" href="https://ws4py.readthedocs.io/en/latest/">ws4py</a></li>
 </ul>
 <p>It may run on python 3+ but has not been tested.</p>
-<p>8998 is the default port that the web server will run on when installed
+</div>
+<div class="section" id="building-a-new-demo">
+<h2>Building a new Demo<a class="headerlink" href="#building-a-new-demo" title="Permalink to this headline">¶</a></h2>
+<p>When building a new demo you should do at least 2 things:</p>
+<ol class="arabic simple">
+<li>Define the data that you want to use</li>
+<li>Figure out which HDP components are going to be used.</li>
+</ol>
+<div class="section" id="data">
+<h3>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+<p>After doing the above you can then move on to writing out the data generator configuration for the data schema that you&#8217;ve selected.</p>
+<p>Scroll down to the <strong>Data Generation</strong> section for more information.</p>
+</div>
+<div class="section" id="components">
+<h3>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h3>
+<p>After defining the components that you wish to use I would advise looking inside the <code class="docutils literal"><span class="pre">demo_app/service.py</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">service.py</span></code> provides three (3) methods.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">on_service_install</span></code></li>
+<li><code class="docutils literal"><span class="pre">on_service_start</span></code></li>
+<li><code class="docutils literal"><span class="pre">on_service_stop</span></code></li>
+</ul>
+<p>Each method will run after it&#8217;s respective Ambari lifecycle stage. Use these methods to setup/start other services that might be necessary for the demo or kick off any other processes.</p>
+<p>Use those methods to set up/configure/start any other components required by the demo.</p>
+</div>
+</div>
+<div class="section" id="default-configuration-information">
+<h2>Default Configuration Information<a class="headerlink" href="#default-configuration-information" title="Permalink to this headline">¶</a></h2>
+<p>7887 is the default port that the web server will run on when installed
 The websockets port is coded to always be the webserver port + 1</p>
-<p>This means the default websockets port is 8999. The port can be changed in the Ambari interface.</p>
+<p>This means the default websockets port is 7888. The port can be changed in the Ambari interface.</p>
 <p>After installing the demo service you should be able to run the server via Ambari. Once the service is running in Ambari connect to <a class="reference external" href="http://sandbox.hortonworks.com:8998">http://sandbox.hortonworks.com:8998</a></p>
 <a class="reference internal image-reference" href="_images/demo-interface.png"><img alt="Demo Homepage" class="align-center" src="_images/demo-interface.png" style="width: 100%;" /></a>
 <p>You should see a page like the above image.</p>

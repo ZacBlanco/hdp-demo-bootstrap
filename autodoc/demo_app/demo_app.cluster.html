@@ -151,6 +151,7 @@
             
   <div class="section" id="module-demo_app.cluster">
 <span id="demo-app-cluster-module"></span><h1>demo_app.cluster module<a class="headerlink" href="#module-demo_app.cluster" title="Permalink to this headline">¶</a></h1>
+<p>This file houses utility functions for interacting with the cluster and portions of the web application. Namely the Websockets server and Echo app implementation reside here.</p>
 <dl class="class">
 <dt id="demo_app.cluster.ThreadedGenerator">
 <em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">ThreadedGenerator</code><span class="sig-paren">(</span><em>schema</em>, <em>bps</em>, <em>outputs</em>, <em>http_data_pool_size=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator" title="Permalink to this definition">¶</a></dt>
@@ -180,27 +181,83 @@
 <dl class="method">
 <dt id="demo_app.cluster.ThreadedGenerator.export_file">
 <code class="descname">export_file</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.export_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Write out data from the generator to a file <strong>in CSV format</strong></p>
+<p>The file to write to is found in <code class="docutils literal"><span class="pre">global.conf</span></code>. Header lines are not written to the file. All data is appended to a single file. There is no rotation.</p>
+<p>When a new data generator starts the file is essentially &#8216;wiped out&#8217; so make sure to copy the data elsewhere before stopping/restarting the generator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict/object</em>) &#8211; The data from the generator here writes out the data as a CSV for easier ingestion into other places like Hive or Spark.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.ThreadedGenerator.export_http">
 <code class="descname">export_http</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.export_http" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Export data and POST to an Http endpoint.</p>
+<p>Data is &#8216;pooled&#8217; before being sent in order to save resources and overhead on requests. The default pool value is 1000 records. This means for every 1000 pieces of data, one request will be made. The data is stored as JSON in the body of the request.</p>
+<p>The caveat here is that if you stop the data generator the remaining data in the pool will not be sent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict/object</em>) &#8211; A piece of data to POST. If the data is still below the pool size we add the data in to the data &#8216;pool&#8217; and wait for more data to come in. When the threshold is reached a request with all of the data is sent.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.ThreadedGenerator.export_kafka">
 <code class="descname">export_kafka</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.export_kafka" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Export a message to Kafka</p>
+<p>This function utlizes the kafka-python library It also reads in the broker URL and topic name from <code class="docutils literal"><span class="pre">global.conf</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict/object</em>) &#8211; An object to encode from the generator to send to Kafka.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.ThreadedGenerator.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Run method for the thread implementation. Runs until the thread is killed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.ThreadedGenerator.stop">
 <code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.stop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Stops the generator by setting the flag to <code class="docutils literal"><span class="pre">False</span></code>. This causes the <code class="docutils literal"><span class="pre">run</span></code> method to exit and the thread to finish.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -208,31 +265,87 @@
 <dt id="demo_app.cluster.WSDemoApp">
 <em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">WSDemoApp</code><a class="headerlink" href="#demo_app.cluster.WSDemoApp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This is the Websocket Demo Application.</p>
+<p>Here we define the initialization of the server. We also determine how to handle a request to the websocket server. In this case we don&#8217;t have different routes on the websocket server other than the root path <code class="docutils literal"><span class="pre">/</span></code>.</p>
+<p>Here we also define other functions such as <code class="docutils literal"><span class="pre">broadcast</span></code> for when we want to send clients information</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="demo_app.cluster.WSDemoApp.broadcast">
 <code class="descname">broadcast</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSDemoApp.broadcast" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Broadcast a message to all server clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>str</em>) &#8211; The string to broadcast to every client</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="demo_app.cluster.WSDemoServer">
-<em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">WSDemoServer</code><span class="sig-paren">(</span><em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSDemoServer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">WSDemoServer</code><span class="sig-paren">(</span><em>host</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSDemoServer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></p>
+<p>A threaded wrapper around the websockets server so that we can run the Flask and Websockets in parallel together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>port</strong> (<em>int</em>) &#8211; The port number for the Websockets server to run on.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="demo_app.cluster.WSDemoServer.broadcast">
 <code class="descname">broadcast</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSDemoServer.broadcast" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A wrapper on the server&#8217;s broadcast method so that it can be easily accessed from the flask application</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>str</em>) &#8211; A string message to send to the client.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.WSDemoServer.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSDemoServer.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Runs the threaded server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.WSDemoServer.stop">
 <code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSDemoServer.stop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Stops the websockets server</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -240,6 +353,14 @@
 <dt id="demo_app.cluster.WSEcho">
 <em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">WSEcho</code><span class="sig-paren">(</span><em>sock</em>, <em>protocols=None</em>, <em>extensions=None</em>, <em>environ=None</em>, <em>heartbeat_freq=None</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSEcho" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">ws4py.websocket.WebSocket</span></code></p>
+<p>The WebSocket handler for the WebSocket application</p>
+<p>This class defines three methods required for the websocket server.</p>
+<p>The three methods are</p>
+<ul class="simple">
+<li>opened</li>
+<li>closed</li>
+<li>received_message</li>
+</ul>
 <dl class="attribute">
 <dt id="demo_app.cluster.WSEcho.app_name">
 <code class="descname">app_name</code><em class="property"> = 'WebsocketApplication'</em><a class="headerlink" href="#demo_app.cluster.WSEcho.app_name" title="Permalink to this definition">¶</a></dt>
@@ -248,34 +369,83 @@
 <dl class="method">
 <dt id="demo_app.cluster.WSEcho.closed">
 <code class="descname">closed</code><span class="sig-paren">(</span><em>code</em>, <em>reason=None</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSEcho.closed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines behavior for when a client disconnects from the websocket server</p>
+<p>In this case when a client disconnects we check and remove them from the client list.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.WSEcho.opened">
 <code class="descname">opened</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSEcho.opened" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines behavior for when a new client connects to the server</p>
+<p>In this case we add the client to our list of clients so we know who we can send messages too.</p>
+<p>The clients are accessed through <code class="docutils literal"><span class="pre">environ</span></code>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="demo_app.cluster.WSEcho.received_message">
 <code class="descname">received_message</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.WSEcho.received_message" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Defines behavior for when a client sends a message to the server</p>
+<p>In this case we don&#8217;t expect the clients to send us data so we just log the message.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="demo_app.cluster.create_demo_kafka_topic">
 <code class="descclassname">demo_app.cluster.</code><code class="descname">create_demo_kafka_topic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.create_demo_kafka_topic" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Creates a kafka topic for the demo if it doesn&#8217;t already exist.</p>
+<p>The caveat here in using this is that Kafka must be installed on the same machine as the demo, and thus the same machine as Ambari as well. The function will try to start the Kafka service through Ambari and then once the service is started is will use the location of the Kafka topics script to create the topic</p>
+<p>The name for the topic is specified in <code class="docutils literal"><span class="pre">global.conf</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the creation is successful. False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="demo_app.cluster.get_kafka_topics">
 <code class="descclassname">demo_app.cluster.</code><code class="descname">get_kafka_topics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.get_kafka_topics" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>List the kafka topics on the current installation.</p>
+<p>Requires that Kafka is installed on the same machine and Ambari is up and running. Will start the service and use the Kafka scripts to list out all of the topics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">[0] will contain the list of all the topics in a string, typically separated by newlines. [1] will contain any errors when retrieving the topics.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="demo_app.cluster.kerberize">
 <code class="descclassname">demo_app.cluster.</code><code class="descname">kerberize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.kerberize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Kerberize the cluster using a script. Untested. Can take 10-15 minutes.</p>
+<p>This utilizes a script found at <a class="reference external" href="https://github.com/crazyadmins/useful-scripts/tree/master/ambari">https://github.com/crazyadmins/useful-scripts/tree/master/ambari</a></p>
+<p>If you&#8217;re running this script on a cluster you should look in <code class="docutils literal"><span class="pre">configuration/kerberos/ambari.props</span></code> to make sure the proper values are present in the file or else the script will fail.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>N/A</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 

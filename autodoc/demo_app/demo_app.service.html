@@ -154,17 +154,26 @@
 <dl class="function">
 <dt id="demo_app.service.on_service_install">
 <code class="descclassname">demo_app.service.</code><code class="descname">on_service_install</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.service.on_service_install" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This method will run only once - when the service is installed through Ambari.</p>
+<p>Fill in this method with any necessary one-time commands to set up the environment before starting the demo.</p>
+<p>Note this method will only be run <strong>after</strong> the demo has run its setup commands. This method will always be the last thing to be run before starting the service.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="demo_app.service.on_service_start">
 <code class="descclassname">demo_app.service.</code><code class="descname">on_service_start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.service.on_service_start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This method will run every time the service start</p>
+<p>Fill in this method with any necessary commands to set up and start other services for the demo</p>
+<p>Note that this method will always be the very last thing to be executed upon starting the demo service</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="demo_app.service.on_service_stop">
 <code class="descclassname">demo_app.service.</code><code class="descname">on_service_stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.service.on_service_stop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This method will run every time the service stops</p>
+<p>Fill in this method with any necessary commands to clean up or stop other services from the demo</p>
+<p>Note that this method will always be the very last thing to be executed upon stopping the demo service.</p>
+</dd></dl>
 
 </div>
 
