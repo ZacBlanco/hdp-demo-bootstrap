@@ -15,3 +15,5 @@ _sources**
 doctrees**
 
 *.inv
+
+.buildinfo
