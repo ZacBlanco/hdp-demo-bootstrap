@@ -20,7 +20,7 @@ from demo_utils import config, generator
 from cluster import ThreadedGenerator
 from demo_utils import logs
 from ws4py import configure_logger
-
+from flask_cors import CORS
 log = logs.Logger('DEMO_SERVER.py').getLogger()
 
 OUTPUTS = ['FILE', 'KAFKA', 'HTTP', 'HDFS']
@@ -29,6 +29,7 @@ OUTPUTS = ['FILE', 'KAFKA', 'HTTP', 'HDFS']
 conf = config.read_config('global.conf')
 
 app = Flask(__name__, static_url_path='')
+CORS(app)
 app_port = int(conf['DEMO']['server_port'])
 schema = conf['DEMO']['data_schema']
 throughput = conf['DEMO']['bytes_per_second']

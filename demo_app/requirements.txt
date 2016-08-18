@@ -3,3 +3,4 @@ kafka-python
 requests
 ws4py
 gevent
+flask-cors
