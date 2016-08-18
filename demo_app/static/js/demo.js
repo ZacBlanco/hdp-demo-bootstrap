@@ -8,6 +8,7 @@ setAjaxForm('#stop-data', function (data) {
 });
 setAjaxForm('#data-sample-form', function (data) {
   $('#data-sample').html(JSON.stringify(data, null, 2))
+  getSampleQueries();
 });
 setAjaxForm('#data-update', function (data) {
   flashMessage(data.message)
@@ -248,7 +249,8 @@ function setupUpdateJSONSchema() {
         url: "/data-gen/update",
         data: jsonString,
         success: function (data) {
-          $('#data-sample-form').submit();
+          if (data.message == 'Schema updated successfully')
+            $('#data-sample-form').submit();
           setHtml('#schema-alert', data.message)
         },
 
@@ -262,6 +264,33 @@ function setupUpdateJSONSchema() {
   });
 }
 
+function getSampleQueries() {
+  /* Function that retrieves the generator schema and sets it to the #json-schema value
+  
+  Also gets a sample of data from the schema.
+  */
+  $.ajax({
+    type: "GET",
+    url: "/data-gen/queries",
+    success: function (data) {
+      html = ''
+      for (key in data) {
+        for (query in data[key]) {
+          label = '<label>' + key + ': ' + query + '</label>';
+          queryPre = '<pre class="language-sql">' + data[key][query] + '</pre>';
+          html += label + queryPre;
+        }
+      }
+      
+      setHtml('#sample-query-container', html);
+      
+      $('pre.language-sql').each(function (i, e) {
+        hljs.highlightBlock(e);
+      });
+
+    }
+  });
+}
 
 function getDataSchema() {
   /* Function that retrieves the generator schema and sets it to the #json-schema value

@@ -23,7 +23,7 @@ from ws4py import configure_logger
 
 log = logs.Logger('DEMO_SERVER.py').getLogger()
 
-OUTPUTS = ['FILE', 'KAFKA', 'HTTP']
+OUTPUTS = ['FILE', 'KAFKA', 'HTTP', 'HDFS']
 '''The three different types of outputs from the generator'''
 
 conf = config.read_config('global.conf')
@@ -77,7 +77,7 @@ def start_data():
       log.info('Error when starting threaded data generator. ')
       log.error(str(e))
       dt = None
-      data = {"message": str(e)}
+      data = {"message": 'Error When starting threaded data generator. '+ str(e)}
       
       log.info('Returning JSON: ' + json.dumps(data))
   return flask.jsonify(**data)
@@ -104,6 +104,12 @@ def stop_data():
     data['message'] = 'Data generator was not running'
     log.info('Data generator was not running')
   return flask.jsonify(**data)
+
+@app.route('/data-gen/queries', methods=['GET'])
+def get_test_queries():
+  dat = cluster.generate_queries(schema)
+  return flask.jsonify(**dat)
+  
 
 
 @app.route("/data-gen/update", methods=['POST'])

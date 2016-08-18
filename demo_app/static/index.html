@@ -12,7 +12,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/default.min.css">
   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
 </head>
 
 <body>
@@ -120,8 +122,6 @@
           <br>
 
           <div class="container">
-            <p>Here you can modify some parameters for data generation as well as start and stop the data generation service</p>
-            <hr>
             <div class="col-sm-12">
               <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -134,12 +134,15 @@
 
                       <div class="row">
 
-                        <div class="col-sm-6 col-sm-push-3">
+                        <div class="col-sm-5">
                           <form id="start-data" method="post" action="/data-gen/start">
                             <button class="col-sm-6 btn-block btn btn-success" type="submit">Start Generator</button>
                             <div class="col-xs-7 col-xs-push-4">
                               <label class="checkbox">
                                 <input type="checkbox" name="FILE" autocomplete="off"> Write to File
+                              </label>
+                              <label class="checkbox">
+                                <input type="checkbox" name="HDFS" autocomplete="off"> Write to HDFS
                               </label>
                               <label class="checkbox">
                                 <input type="checkbox" name="KAFKA" autocomplete="off"> Push to Kafka
@@ -153,9 +156,16 @@
                             <button class="col-sm-6 btn-block btn btn-danger" type="submit">Stop Generator</button>
                           </form>
                         </div>
-                        
+                        <div class="col-sm-5 col-sm-push-2">
+                          <form id="data-sample-form" method="get" action="/data-gen/sample">
+                            <button class="btn btn-block btn-info" type="submit">Get Sample Data</button>
+                          </form>
+                          <p></p>
+                          <label>Sample Data</label>
+                          <pre id="data-sample" class="language-json">Data Sample</pre>
+                        </div>
                       </div>
-
+                      <br>
                       <hr>
                       <div class="row">
 
@@ -167,16 +177,9 @@
                         </div>
 
                         <div class="col-sm-5">
-                          <div class="">
-                            <form id="data-sample-form" method="get" action="/data-gen/sample">
-                              <button class="btn btn-block btn-info" type="submit">Get Sample Data</button>
-                              <br>
-                              
-                            </form>
+                          <label style="font-size:20px">Queries</label>
+                          <div id="sample-query-container">
                           </div>
-                          <label>Sample Data</label>
-                          <pre id="data-sample">Data Sample</pre>
-                          <br>
                         </div>
 
                         <div class="col-sm-5">
@@ -243,6 +246,7 @@
       </div>
     </div>
   </footer>
+
 
   <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>

@@ -21,6 +21,24 @@ from ws4py.server.geventserver import WSGIServer, WebSocketWSGIHandler, WSGIServ
 from ws4py.server.wsgiutils import WebSocketWSGIApplication
 
 
+HIVE_TYPE_MAP = {
+  "int": "INT",
+  "decimal": "DOUBLE",
+  "string": "STRING",
+  "boolean": "BOOLEAN",
+  "map": "STRING" # This will change in the future - possibly add mapType?
+}
+'''Maps types from datum types to Hive types'''
+
+
+SPARK_TYPE_MAP = {
+  "int": "Int",
+  "decimal": "Double",
+  "string": "String",
+  "boolean": "Boolean",
+  "map": "String" # This will change in the future - possibly add mapType?
+}
+'''Maps types from datum types to Scala types'''
 
 logger = logs.Logger('CLUSTER.py').getLogger()
 
@@ -108,6 +126,106 @@ def get_kafka_topics():
     
   return ['', 'Unable to get topics. Could not start Kafka Broker']
 
+def generate_queries(schema, table_name='demo_table'):
+  '''Generate test queries based on a configuration for the data generator
+  
+  Currently supported components:
+  
+  - Spark
+  - Hive
+  
+  Sample JSON Return:
+  
+  ..code-block:: json
+  
+    {
+      'HIVE': [
+        {
+          'name': '{CODE}',
+          'name2: '{CODE2}',
+          'name3': '{CODE3}',
+          'name4: '{CODE4}',
+        }
+      ],
+      'SPARK': [
+        {
+          'name': '{CODE}'
+        }
+      ]
+    }
+  
+  Args:
+    schema (str): The schema for the generator as a JSON string
+    
+  Returns:
+    dict: An object that holds keys for different objects, where each key points to a list of strings (queries) for various components.
+  '''
+  logger.info('Building queries')
+  fields = json.loads(schema)
+  conf = config.read_config('global.conf')['DEMO']
+  hdfs_file_path = conf['data_write_hdfs_file_location']
+  
+  hdfs_data_dir = os.path.dirname(hdfs_file_path)
+  
+  table_name = 'demo_table'
+  queries = {}
+  # Build a hive query to insert into a table
+  hive_queries = {
+    'Basic Table': 'CREATE TABLE IF NOT EXISTS ' + table_name,
+    'External Table': 'CREATE EXTERNAL TABLE IF NOT EXISTS ' + table_name,
+    'Drop Table': 'DROP TABLE ' + table_name,
+    'HDFS CSV': 'CREATE EXTERNAL TABLE IF NOT EXISTS ' + table_name,
+  }
+  basic_create = 'CREATE TABLE IF NOT EXISTS ' + table_name
+  external_create = 'CREATE EXTERNAL TABLE IF NOT EXISTS ' + table_name
+  drop_table = 'DROP TABLE ' + table_name
+  
+  cols = map(lambda d: [str(d['fieldName']), str(HIVE_TYPE_MAP[d['type']])], fields)
+  ftypes = sorted(map(lambda c: ' '.join(c), cols))
+  field_set = ' (' + ', '.join(ftypes) + ')'
+  
+  hive_queries['Basic Table'] += field_set
+  hive_queries['External Table'] += field_set + ' LOCATION \'' + hdfs_data_dir + '\''
+  hive_queries['HDFS CSV'] += field_set + '\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY \', \'\nSTORED AS TEXTFILE\nLOCATION \'' + hdfs_data_dir + '\''
+  queries['HIVE'] = hive_queries
+  
+  spark_queries = {
+    'RDD and Temporary DataFrame': "",
+    'SparkSQL - Select all': ''
+  }
+  # Build class
+  rdd_temp = ''
+  class_name = "Data"
+  cols = map(lambda d: [str(d['fieldName']), str(SPARK_TYPE_MAP[d['type']])], fields)
+  ftypes = sorted(map(lambda c: ': '.join(c), cols))
+  field_set = '(' + ', '.join(ftypes) + ');'
+  rdd_temp += "case class " + class_name + field_set + '\n'
+  rdd_temp += 'val csv = sc.textFile("hdfs:' + hdfs_file_path + '");\n'
+  rdd_temp += 'val data = csv.map(line => line.split(",").map(e => e.trim));\n'
+  lambda_arg = 'a'
+  class_args = []
+  sort_cols = sorted(cols)
+  for i in range(len(cols)):
+    # Build the class constructor for the map function
+    s = lambda_arg + '(' + str(i) + ').to' + str(sort_cols[i][1])
+    class_args.append(s)
+  
+  lambda_func = lambda_arg + ' => ' + class_name + '(' + ', '.join(class_args) + ')'
+  rdd_temp += 'val df = data.map(' + lambda_func + ').toDF();\n'
+  rdd_temp += 'df.registerTempTable("' + table_name + '");'
+#  print rdd_temp
+  spark_queries['RDD and Temporary DataFrame'] = rdd_temp
+  spark_queries['SparkSQL - Select all'] = 'Select * from ' + table_name
+  
+  
+  
+  
+  
+  
+  queries['SPARK'] = spark_queries
+  return queries
+  
+
 
 class ThreadedGenerator(threading.Thread):
   '''A generator which runs on a separate thread when generating data.
@@ -122,16 +240,18 @@ class ThreadedGenerator(threading.Thread):
       - ``'KAFKA'``
       - ``'FILE'``
       - ``'HTTP'``
+      - ``'HDFS'``
       
       This determines the locations where data is sent after it is generated. If the string is present then the data will be sent to the specified location. Values other than these are ignored.
   '''
-  def __init__(self, schema, bps, outputs, http_data_pool_size=1000):
+  def __init__(self, schema, bps, outputs, data_pool_size=100):
     threading.Thread.__init__(self)
     self.outputs = outputs
     self.daemon = True
     self.flag = True
-    self.http_data_pool_size = http_data_pool_size
+    self.data_pool_size = data_pool_size
     self.http_data_pool = []
+    self.hdfs_data_pool = []
     if bps > 0:
       self.bps = bps
     else:
@@ -172,6 +292,12 @@ class ThreadedGenerator(threading.Thread):
         pass
     else:
       self.exports['FILE'] = False
+      
+    if 'HDFS' in outputs:
+      self.export_hdfs_file = conf['data_write_hdfs_file_location']
+      self.exports['HDFS'] = True
+    else:
+      self.exports['HDFS'] = False
     
     if 'HTTP' in outputs:
       self.export_http_url = conf['data_http_endpoint']
@@ -210,6 +336,38 @@ class ThreadedGenerator(threading.Thread):
       line = ', '.join(map(lambda v: str(data[v]), data.keys())) + '\n'
       ex_data.write(line)
     
+  def export_hdfs(self, data):
+    '''Write out data from the generator to a file **in CSV format in HDFS**
+    
+    The file to write to is found in ``global.conf``. Header lines are not written to the file. All data is appended to a single file.
+    
+    When a new data generator starts the file is essentially 'wiped out' so make sure to copy the data elsewhere before stopping/restarting the generator.
+    
+    Args:
+      data (dict/object): The data from the generator here writes out the data as a CSV for easier ingestion into other places like Hive or Spark.
+    
+    Returns:
+      N/A
+    
+    '''
+    
+    self.hdfs_data_pool.append(data)
+    if len(self.hdfs_data_pool) > self.data_pool_size:
+      header = ', '.join(map(lambda v: v, sorted(self.hdfs_data_pool[0].keys())))
+      lines = '\n'.join(map(lambda v: ', '.join(map( lambda k: str(v[k]), sorted(v.keys()))), self.hdfs_data_pool))
+      lines = lines.replace('\"', '"') # Unescape to make sure all quotes are unescaped first
+      lines = lines.replace('"', '\"') # Escape so bash command doesn't fail if we have quotes included.
+      self.hdfs_data_pool = []
+      hdfs_file = self.export_hdfs_file
+      bash = Shell();
+      hdfs_cmd = 'hdfs dfs -appendToFile - ' + hdfs_file
+      echo_cmd = 'echo "%s"' % (lines)
+      cmd = ' | '.join([echo_cmd, hdfs_cmd])
+      output = bash.run(cmd)
+      logger.debug('HDFS Append Output: ' + str(output))
+      
+    
+    
   def export_http(self, data):
     '''Export data and POST to an Http endpoint.
     
@@ -223,15 +381,13 @@ class ThreadedGenerator(threading.Thread):
     Returns:
       N/A
     '''
-    if len(self.http_data_pool) >= self.http_data_pool_size:
+    if len(self.http_data_pool) >= self.data_pool_size:
       logger.info('POSTing Data Pool')
       logger.info('Data Pool Size: ' + str(len(self.http_data_pool)))
       requests.post(self.export_http_url, json=self.http_data_pool)
       self.http_data_pool = []
-    else:
-#      logger.debug('Appending data to data_pool')
-      self.http_data_pool.append(data)
-  
+      
+      
   def run(self):
     '''Run method for the thread implementation. Runs until the thread is killed.
     
@@ -254,6 +410,8 @@ class ThreadedGenerator(threading.Thread):
           self.export_kafka(data)
         if self.exports['HTTP']:
           self.export_http(data)
+        if self.exports['HDFS']:
+          self.export_hdfs(data)
       # sleep until the next second once we've generated enough data
       while (time.time() - start <= 1):
         time.sleep(0.1)

@@ -52,13 +52,18 @@
   </property>
   <property>
     <name>demo.data.bytes_per_second</name>
-    <value>1000000</value>
-    <description>Number of bytes to generate/send per second. Limited by CPU resources if this number is too high. (Defaults 1MB)</description>
+    <value>1000</value>
+    <description>Number of bytes to generate/send per second. Limited by CPU resources if this number is too high. (Defaults 1KB)</description>
   </property>
   <property>
     <name>demo.data.write_file_location</name>
-    <value>/tmp/demo_output.out</value>
+    <value>/tmp/demo_output.csv</value>
     <description>File that we will continuously append to when pushing data</description>
+  </property>
+  <property>
+    <name>demo.data.write_hdfs_file_location</name>
+    <value>/tmp/demo_data/demo_output.csv</value>
+    <description>HDFS file that we will continuously append to when pushing data</description>
   </property>
   <property>
     <name>demo.data.kafka_listener</name>
@@ -113,6 +118,7 @@ server_port={{ demo_server_port }}
 data_schema={{ demo_data_configuration }}
 bytes_per_second={{ demo_data_bytes_per_second }}
 data_write_file_location={{ demo_data_write_file_location }}
+data_write_hdfs_file_location={{ demo_data_write_hdfs_file_location }}
 data_kafka_listener={{ demo_data_kafka_listener }}
 data_http_endpoint={{ demo_data_http_endpoint }}
 zk_connection={{ demo_zk_connection }}
