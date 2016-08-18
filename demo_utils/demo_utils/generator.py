@@ -67,7 +67,8 @@ class DataGenerator:
       self.rand.seed(seed)
       logger.info('Using seed: ' + seed)
     self.check_schema(schema)
-    logger.info('Generator using Schema at: ' + str(schema))
+    if self.using_file:
+      logger.info('Generator using Schema at: ' + str(schema))
 
 # Returns true/false whether or not the schema is valid
 # Raises an exception?
@@ -93,8 +94,10 @@ class DataGenerator:
       path = config.get_path(schema)
       with open(path) as df:
         conf = json.load(df)
-        logger.info('Successfully read config from file')
+#        logger.info('Successfully read config from file')
+      self.using_file = True
     except IOError:
+      self.using_file = False
       logger.info('Could not read schema as file. Attempting to read as JSON string')
       pass
 
@@ -114,7 +117,6 @@ class DataGenerator:
         logger.error('type not found in schema')
         raise KeyError('Could not find \'type\' in field of schema')
       field_type = field['type']
-      logger.debug('Attempting to register datum with type: ' + str(field_type))
       datum = AbstractDatum(field)
       if not datum.field_name in self.field_names:
         self.field_names.append(datum.field_name)
@@ -137,7 +139,6 @@ class DataGenerator:
         raise RuntimeError('Field type:' + field_type + ' was not found. Please change the field type or implement a new datum')
       # Check to make sure the field has necessary attributes
       datum.check()
-      logger.info('Datum passed check successfully')
       self.data_fields.append(datum)
 
   def generate(self):
