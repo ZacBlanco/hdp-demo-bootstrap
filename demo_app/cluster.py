@@ -186,7 +186,7 @@ def generate_queries(schema, table_name='demo_table'):
   
   hive_queries['Basic Table'] += field_set
   hive_queries['External Table'] += field_set + ' LOCATION \'' + hdfs_data_dir + '\''
-  hive_queries['HDFS CSV'] += field_set + '\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY \', \'\nSTORED AS TEXTFILE\nLOCATION \'' + hdfs_data_dir + '\''
+  hive_queries['HDFS CSV'] += field_set + '\nROW FORMAT\nDELIMITED FIELDS TERMINATED BY \', \'\nSTORED AS TEXTFILE\nLOCATION \'' + hdfs_data_dir + '\''
   queries['HIVE'] = hive_queries
   
   spark_queries = {
@@ -213,16 +213,13 @@ def generate_queries(schema, table_name='demo_table'):
   lambda_func = lambda_arg + ' => ' + class_name + '(' + ', '.join(class_args) + ')'
   rdd_temp += 'val df = data.map(' + lambda_func + ').toDF();\n'
   rdd_temp += 'df.registerTempTable("' + table_name + '");'
-#  print rdd_temp
+  
   spark_queries['RDD and Temporary DataFrame'] = rdd_temp
-  spark_queries['SparkSQL - Select all'] = 'Select * from ' + table_name
-  
-  
-  
-  
-  
+  spark_queries['SparkSQL - Select all'] = 'SELECT * FROM ' + table_name
   
   queries['SPARK'] = spark_queries
+  
+  
   return queries
   
 
