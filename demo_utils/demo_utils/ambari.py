@@ -160,13 +160,14 @@ class Ambari:
     
     return res
   
-  def service_action(self, cluster_name, service_name, action):
+  def service_action(self, cluster_name, service_name, action, queue=False):
     '''Executes an action on a given service inside of a cluster. Action must be one of START, STOP, or RESTART
     
     Args:
       cluster_name (str): the name of the cluster that the service resides in
       service_name (str): the name of the service which we are acting on
       action (str): A string of 'START', 'STOP', or 'RESTART'
+      queue (bool): False when we want the function to wait to continue until the service starts. True when we simply just want to add the function to the Ambari task queue. Defaults to False. **Note**: Does not guarantee the service will complete successfully.
       
     Returns:
       bool: True is the action is completed successfully, False if otherwise.
@@ -202,8 +203,8 @@ class Ambari:
         after_state = 'STARTED'
 
       elif action == 'RESTART':
-        r1 = self.service_action(service_name, cluster_name, 'STOP')
-        r2 = self.service_action(service_name, cluster_name, 'START')
+        r1 = self.service_action(service_name, cluster_name, 'STOP', queue)
+        r2 = self.service_action(service_name, cluster_name, 'START', queue)
         return r1 and r2
 
       request_payload['Body']['ServiceInfo']['state'] = after_state
@@ -214,7 +215,10 @@ class Ambari:
       if not ('202 Accepted' in res[0] or '200 OK' in res[0]):
         logger.error('No 200 Level status when attempting to change service state')
         return False
-
+      
+      if queue:
+        return True
+      
       service_state = ''
       t = 0
       while t < self.service_wait_time:
