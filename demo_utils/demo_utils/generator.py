@@ -495,7 +495,7 @@ class MapDatum(AbstractDatum):
       raise ValueError('Could not get key: ' + self.map_from + ' in data')
     key = data[self.map_from]  # Get data from the map_from field
     try:
-      return self.maps[key]  # Get the mapped value from the given key
+      return self.maps[str(key)]  # Get the mapped value from the given key
     except KeyError, e:
       return ''
 
