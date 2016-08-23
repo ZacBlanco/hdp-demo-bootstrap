@@ -302,7 +302,7 @@ def install_zeppelin():
 def install_nifi():
   '''Install NiFi via Ambari. (And Ali's NiFi service)
   
-  This requires user interaction. Plans to make installation automatic are in the works...
+  Automatically installs NiFi with NO user interaction. Simply just run the method while on the same Ambari machine and NiFi will be installed. You'll need to start it manually though.
   
   Returns:
     bool: True if installation is successful. Else, the user specifies whether or not they want to continue setting up the demo without Zeppelin. ``True`` if the user specifed Yes (to continue). ``False`` if they specified No (do not continue).
@@ -320,11 +320,11 @@ def install_nifi():
     if not installed:
       logger.error('hdp-select must be installed to install NiFi')
       raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
-
+  
   conf = config.read_config('global.conf')
   cmds = json.loads(conf['NIFI']['install-commands'])
-  
   sh = Shell()
+  
   logger.info('Getting HDP Version')
   version = sh.run(cmds[0])
   logger.info('HDP Version: ' + version[0])
@@ -334,8 +334,38 @@ def install_nifi():
   logger.info('NiFi Copy Command: ' + fixed_remove)
   remove = sh.run(fixed_remove)
   copy = sh.run(fixed_copy)
-  logger.info('Attempting to restart Ambari...')
-  restart = sh.run(cmds[3])
+  
+  
+  amc = conf['AMBARI']
+  cc = CurlClient(amc['username'], amc['password'], amc['proto'], amc['server'], amc['port'])
+  opts = '-H \'X-Requested-By: ambari\''
+  path = '/api/v1/clusters/' + amc['cluster_name'] + '/services/NIFI'
+  print cc.make_request('POST', path, options=opts)
+  path += '/components/NIFI_MASTER'
+  print cc.make_request('POST', path, options=opts)
+  
+  cfg = {
+    'cmd': 'bash /var/lib/ambari-server/resources/scripts/configs.sh set', 
+    'server': amc['server'],
+    'cluster': amc['cluster_name'],
+    'name': 'nifi-ambari-config',
+    'config_file': config.get_path('nifi/config/nifi-ambari-config.json')
+  }
+  create_cmd = lambda x: ' '.join([cfg['cmd'], cfg['server'], cfg['cluster'], x, config.get_path('nifi/config/' + x + '.json')])
+  
+  logger.debug(sh.run(create_cmd('nifi-ambari-config')))
+  logger.debug(sh.run(create_cmd('nifi-bootstrap-env')))
+  logger.debug(sh.run(create_cmd('nifi-flow-env')))
+  logger.debug(sh.run(create_cmd('nifi-logback-env')))
+  logger.debug(sh.run(create_cmd('nifi-properties-env')))
+  
+  path = '/api/v1/clusters/' + amc['cluster_name'] + '/hosts/' + amc['server'] + '/host_components/NIFI_MASTER'
+  logger.debug(path)
+  cc.make_request('POST', path, options=opts)
+  
+  path = '/api/v1/clusters/' + amc['cluster_name'] + '/services/NIFI'
+  opts = '-H \'X-Requested-By: ambari\' -d \'{"RequestInfo": {"context" :"Install Nifi"}, "Body": {"ServiceInfo": {"maintenance_state" : "OFF", "state": "INSTALLED"}}}\''
+  cc.make_request('PUT', path, options=opts)
 
   print("Please open the Ambari Interface and manually deploy the NiFi Service.")
   raw_input("Press enter twice to continue...")
@@ -349,7 +379,7 @@ def install_nifi():
   logger.info('NiFi installed successfully')
   cont = ''
   if not installed:
-    print('Unable to contact Ambari Server. Unsure whether or not Zeppelin was installed')
+    print('Unable to contact Ambari Server. Unsure whether or not NiFi was installed')
     while not (cont == 'y' or cont == 'n'):
       cont = raw_input('Continue attempt to set up NiFi for demo?(y/n)')
       if not (cont == 'y' or cont == 'n'):
@@ -390,7 +420,7 @@ def check_ambari_service_installed(service_name, ambari_config):
       return True
     else:
       attempts += 1
-      raw_input('Could not connect.' + str(10-attempts) + ' remaining. Press any key to continue')
+      raw_input('Could not connect. ' + str(10-attempts) + ' remaining. Press any key to continue')
   
   logger.info(service_name + ' was not installed successfully')
   return False
