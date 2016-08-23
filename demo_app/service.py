@@ -5,7 +5,15 @@ filedir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(filedir + '/../demo_utils')
 
 # Use demo_utils if necessary
-import demo_utils
+import demo_utils, logging
+from demo_utils import config, ambari
+from demo_utils.ambari import Ambari
+from demo_utils import service_installer
+from demo_utils import logs
+
+rootLogger = logging.getLogger()
+rootLogger.setLevel(logging.DEBUG)
+log = logs.Logger('SERVICE.py').getLogger()
 
 def on_service_start():
   '''This method will run every time the service start
@@ -15,6 +23,26 @@ def on_service_start():
   Note that this method will always be the very last thing to be executed upon starting the demo service
   '''
   print 'Running on_service_start'
+  cfg = config.read_config('global.conf')
+  
+  # Ambari Client
+  amc = Ambari(config=cfg['AMBARI'])
+  
+  #Queue  Services
+  amc.service_action('Sandbox', 'KAFKA', 'START', queue=True)
+  amc.service_action('Sandbox', 'ZEPPELIN', 'START', queue=True)
+  try:
+    # Not guaranteed to be installed
+    amc.service_action('Sandbox', 'NIFI', 'START', queue=True)
+  except:
+    log.warn('Failed to start NiFi')
+  
+  service_installer.add_zeppelin_notebooks()
+  # Add anything else below that might be necessary for when the demo starts
+  
+  
+  
+  
   pass
 
 def on_service_stop():
@@ -36,6 +64,9 @@ def on_service_install():
   '''
   print 'Running on_service_install'
   
+  service_installer.add_zeppelin_notebooks()
+  service_installer.add_nifi_templates()
+  
   
   
   pass
@@ -52,9 +83,6 @@ if __name__ == "__main__":
       on_service_stop()
   else:
     print 'Could not run service commands. Arguments not specified correctly'
-  
-  
-  
   
   
   
