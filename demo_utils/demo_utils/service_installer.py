@@ -37,7 +37,7 @@ def install_hdp_select():
     else:
       fullname = fullname + dist_info[1][0] + dist_info[1][1]
   
-  conf = config.read_config('service-installer.conf')
+  conf = config.read_config('global.conf')
   urls = conf['HDP-SELECT']
   url = ''
   if fullname == 'centos6':  
@@ -98,7 +98,7 @@ def is_ambari_installed():
     return False
   else:
     return True
-
+  
 # Uses the conf/zeppelin/notes directory to upload pre-made notebooks
 def add_zeppelin_notebooks():
   '''Add all Zeppelin notes to the current Zeppelin instalation
@@ -115,38 +115,71 @@ def add_zeppelin_notebooks():
   logger.info('Adding zeppelin notebooks to installation')
   all_success = True
   note_dir = config.get_conf_dir() + 'zeppelin/notes'
+  
+  # First need to authenticate to Zeppelin and retrieve JSESSIONID
+  conf = config.read_config('global.conf')['ZEPPELIN']
+  session = get_zeppelin_session(conf['username'], conf['password'])
+  
   for item in os.listdir(note_dir):
     logger.debug('Found item in zeppelin/notes: ' + item)
     item_path = note_dir + '/' + item
     if os.path.isfile(item_path) and str(item).endswith('.json'):
       logger.info('POSTing ' + item + ' to Zeppelin')
-      result = post_notebook(item_path)
+      result = post_notebook(item_path, session)
       if not result:
         logger.error('Not all notebooks were added to Zeppelin successfully')
         all_success = False
   return all_success
-      
 
-def post_notebook(notebook_path):
+def get_zeppelin_session(username, password):
+  '''Gets the JSESSIONID cookie by POSTing to /api/login
+  
+  This is required to retrieve the JSESSIONID on Zeppelin instances that have logins and user permissions. Used when POSTing notebooks as well.
+  
+  Returned in the form of ``'JSESSIONID=**``
+  
+  Args:
+    username (str): The username to login with
+    password (str): The password to login with
+    
+  Returns:
+    str: ``''`` If the request was unsuccessful, or the cookie wasn't present. Otherwise returns the cookie as a string.
+  '''
+  conf = config.read_config('global.conf')['ZEPPELIN']
+  client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
+  path = '/api/login'
+  opts = '-i -d \'userName=' + username + '&password=' + password + '\''
+  res = client.make_request('POST', path, options=opts)
+  lines = res[0].split('\n')
+  for line in lines:
+    if 'Set-Cookie:'.lower() in line.lower() and 'JSESSIONID' in line.upper():
+      cookie = line.split('Set-Cookie: ')[1]
+      print 'COOKIE: ' + cookie
+      return cookie.strip()
+  return ''
+
+def post_notebook(notebook_path, session_cookie=''):
   '''Add a single notebook to a Zeppelin installation via REST API
   
-  Must have a file called ``service-installer.conf`` inside of the configuration directory.
+  Must have a file called ``global.conf`` inside of the configuration directory.
   
   Inside that configuration file we use protocol://server:port to connect to a Zeppelin instance and use the API
   
   Args:
     notebook_path (str): Full file path to the Zeppelin note
+    session_cookie (str, optional): The cookie used after authentication in order to make authorized API calls. Required on the 2.5 TP Sandbox
     
   Returns:
     bool: True if the upload was successful (received 201 created), or False otherwise.
   
   '''
-  conf = config.read_config('service-installer.conf')['ZEPPELIN']
+  conf = config.read_config('global.conf')['ZEPPELIN']
   client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
   path = '/api/notebook'
   
   logger.info('Attempting to POST notebook at ' + client.proto + '://' + client.server + ':' + str(client.port))
-  output = client.make_request('POST', path, options='-i -H "Content-Type: application/json" -d @' + notebook_path )
+  opts = '-i -b \'' + session_cookie + '\' -H "Content-Type: application/json" -d @' + notebook_path
+  output = client.make_request('POST', path, options=opts)
   if '201 created' in output[0].lower():
     logger.info('Note posted successfully')
     return True
@@ -187,7 +220,7 @@ def post_template(template_path):
     bool: True if the upload is successful, False otherwise
   
   '''
-  conf = config.read_config('service-installer.conf')['NIFI']
+  conf = config.read_config('global.conf')['NIFI']
   client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
   path = '/nifi-api/controller/templates'
   logger.info('Attempting to POST notebook at ' + client.proto + '://' + client.server + ':' + str(client.port))
@@ -221,7 +254,7 @@ def install_zeppelin():
       logger.critical('hdp-select must be installed on the system to continue with the installation of Zeppelin')
       raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
   
-  conf = config.read_config('service-installer.conf')
+  conf = config.read_config('global.conf')
   cmds = conf['ZEPPELIN']['install-commands']
   cmds = json.loads(conf['ZEPPELIN']['install-commands'])
   
@@ -288,7 +321,7 @@ def install_nifi():
       logger.error('hdp-select must be installed to install NiFi')
       raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
 
-  conf = config.read_config('service-installer.conf')
+  conf = config.read_config('global.conf')
   cmds = json.loads(conf['NIFI']['install-commands'])
   
   sh = Shell()
