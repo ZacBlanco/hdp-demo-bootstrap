@@ -282,13 +282,19 @@ cp -r /root/hdp-demo-bootstrap/package/scripts/* /var/lib/ambari-agent/cache/sta
 </div>
 <div class="section" id="fresh-service-installation">
 <h3>Fresh Service Installation<a class="headerlink" href="#fresh-service-installation" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div>export VERSION=2.5
-rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
-cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">VERSION</span><span class="o">=</span>2.5
+rm -rf /var/lib/ambari-server/resources/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE
+cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE
 ambari-agent stop
 ambari-server restart
-ambari-agent start</div></blockquote>
+ambari-agent start
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 </div>
