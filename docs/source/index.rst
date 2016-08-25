@@ -111,6 +111,9 @@ Update Ambari Service without Restarting Ambari (Must Already be installed)
 Fresh Service Installation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. code-block:: bash
+  :linenos:
+  
   export VERSION=2.5
   rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
   cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
