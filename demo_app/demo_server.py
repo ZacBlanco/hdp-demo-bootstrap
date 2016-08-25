@@ -20,15 +20,16 @@ from demo_utils import config, generator
 from cluster import ThreadedGenerator
 from demo_utils import logs
 from ws4py import configure_logger
-
+from flask_cors import CORS
 log = logs.Logger('DEMO_SERVER.py').getLogger()
 
-OUTPUTS = ['FILE', 'KAFKA', 'HTTP']
+OUTPUTS = ['FILE', 'KAFKA', 'HTTP', 'HDFS']
 '''The three different types of outputs from the generator'''
 
 conf = config.read_config('global.conf')
 
 app = Flask(__name__, static_url_path='')
+CORS(app)
 app_port = int(conf['DEMO']['server_port'])
 schema = conf['DEMO']['data_schema']
 throughput = conf['DEMO']['bytes_per_second']
@@ -77,7 +78,7 @@ def start_data():
       log.info('Error when starting threaded data generator. ')
       log.error(str(e))
       dt = None
-      data = {"message": str(e)}
+      data = {"message": 'Error When starting threaded data generator. '+ str(e)}
       
       log.info('Returning JSON: ' + json.dumps(data))
   return flask.jsonify(**data)
@@ -104,6 +105,12 @@ def stop_data():
     data['message'] = 'Data generator was not running'
     log.info('Data generator was not running')
   return flask.jsonify(**data)
+
+@app.route('/data-gen/queries', methods=['GET'])
+def get_test_queries():
+  dat = cluster.generate_queries(schema)
+  return flask.jsonify(**dat)
+  
 
 
 @app.route("/data-gen/update", methods=['POST'])

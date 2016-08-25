@@ -43,7 +43,8 @@ To install this project...
 
 - Open up a shell/terminal on your **Ambari server host machine**
     - You can SSH or if running on the Hortonworks Sandbox open up http://sandbox.hortonworks.com:4200
-- Run the following commands
+- Run the following commands (if on the Hortonworks Sandbox/CentOS)
+    - Make sure to change version for HDP 2.4/2.5 etc..
 
 .. code-block:: bash
   :linenos:
@@ -86,10 +87,36 @@ If you're having trouble connecting you should first try these things:
 
 Need any more help? `Open an issue on GitHub <https://github.com/zacblanco/hdp-demo-bootstrap/issues>`_
 
+Useful Commands:
+----------------
+
+Want to add more features to the ambari service but stuck testing?
+
+Use the following sets of commands to speed up the process.
+
+Update Ambari Service without Restarting Ambari (Must Already be installed)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+  :linenos:
+
+  export VERSION=2.5
+  rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+  rm -rf /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE
+  cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+  mkdir -p /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE/package/scripts
+  cp -r /root/hdp-demo-bootstrap/package/scripts/* /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE/package/scripts
 
 
+Fresh Service Installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+  export VERSION=2.5
+  rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+  cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+  ambari-agent stop
+  ambari-server restart
+  ambari-agent start
 
 
 

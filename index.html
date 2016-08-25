@@ -195,7 +195,13 @@
 </dd>
 </dl>
 </li>
-<li><p class="first">Run the following commands</p>
+<li><dl class="first docutils">
+<dt>Run the following commands (if on the Hortonworks Sandbox/CentOS)</dt>
+<dd><ul class="first last simple">
+<li>Make sure to change version for HDP 2.4/2.5 etc..</li>
+</ul>
+</dd>
+</dl>
 </li>
 </ul>
 <div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
@@ -253,6 +259,37 @@ ambari-server restart
 </li>
 </ul>
 <p>Need any more help? <a class="reference external" href="https://github.com/zacblanco/hdp-demo-bootstrap/issues">Open an issue on GitHub</a></p>
+</div>
+<div class="section" id="useful-commands">
+<h2>Useful Commands:<a class="headerlink" href="#useful-commands" title="Permalink to this headline">¶</a></h2>
+<p>Want to add more features to the ambari service but stuck testing?</p>
+<p>Use the following sets of commands to speed up the process.</p>
+<div class="section" id="update-ambari-service-without-restarting-ambari-must-already-be-installed">
+<h3>Update Ambari Service without Restarting Ambari (Must Already be installed)<a class="headerlink" href="#update-ambari-service-without-restarting-ambari-must-already-be-installed" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">VERSION</span><span class="o">=</span>2.5
+rm -rf /var/lib/ambari-server/resources/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE
+rm -rf /var/lib/ambari-agent/cache/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE
+cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE
+mkdir -p /var/lib/ambari-agent/cache/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE/package/scripts
+cp -r /root/hdp-demo-bootstrap/package/scripts/* /var/lib/ambari-agent/cache/stacks/HDP/<span class="nv">$VERSION</span>/services/DEMOSERVICE/package/scripts
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="fresh-service-installation">
+<h3>Fresh Service Installation<a class="headerlink" href="#fresh-service-installation" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>export VERSION=2.5
+rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
+ambari-agent stop
+ambari-server restart
+ambari-agent start</div></blockquote>
+</div>
 </div>
 </div>
 

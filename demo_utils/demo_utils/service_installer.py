@@ -37,7 +37,7 @@ def install_hdp_select():
     else:
       fullname = fullname + dist_info[1][0] + dist_info[1][1]
   
-  conf = config.read_config('service-installer.conf')
+  conf = config.read_config('global.conf')
   urls = conf['HDP-SELECT']
   url = ''
   if fullname == 'centos6':  
@@ -98,7 +98,7 @@ def is_ambari_installed():
     return False
   else:
     return True
-
+  
 # Uses the conf/zeppelin/notes directory to upload pre-made notebooks
 def add_zeppelin_notebooks():
   '''Add all Zeppelin notes to the current Zeppelin instalation
@@ -115,38 +115,71 @@ def add_zeppelin_notebooks():
   logger.info('Adding zeppelin notebooks to installation')
   all_success = True
   note_dir = config.get_conf_dir() + 'zeppelin/notes'
+  
+  # First need to authenticate to Zeppelin and retrieve JSESSIONID
+  conf = config.read_config('global.conf')['ZEPPELIN']
+  session = get_zeppelin_session(conf['username'], conf['password'])
+  
   for item in os.listdir(note_dir):
     logger.debug('Found item in zeppelin/notes: ' + item)
     item_path = note_dir + '/' + item
     if os.path.isfile(item_path) and str(item).endswith('.json'):
       logger.info('POSTing ' + item + ' to Zeppelin')
-      result = post_notebook(item_path)
+      result = post_notebook(item_path, session)
       if not result:
         logger.error('Not all notebooks were added to Zeppelin successfully')
         all_success = False
   return all_success
-      
 
-def post_notebook(notebook_path):
+def get_zeppelin_session(username, password):
+  '''Gets the JSESSIONID cookie by POSTing to /api/login
+  
+  This is required to retrieve the JSESSIONID on Zeppelin instances that have logins and user permissions. Used when POSTing notebooks as well.
+  
+  Returned in the form of ``'JSESSIONID=**``
+  
+  Args:
+    username (str): The username to login with
+    password (str): The password to login with
+    
+  Returns:
+    str: ``''`` If the request was unsuccessful, or the cookie wasn't present. Otherwise returns the cookie as a string.
+  '''
+  conf = config.read_config('global.conf')['ZEPPELIN']
+  client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
+  path = '/api/login'
+  opts = '-i -d \'userName=' + username + '&password=' + password + '\''
+  res = client.make_request('POST', path, options=opts)
+  lines = res[0].split('\n')
+  for line in lines:
+    if 'Set-Cookie:'.lower() in line.lower() and 'JSESSIONID' in line.upper():
+      cookie = line.split('Set-Cookie: ')[1]
+      print 'COOKIE: ' + cookie
+      return cookie.strip()
+  return ''
+
+def post_notebook(notebook_path, session_cookie=''):
   '''Add a single notebook to a Zeppelin installation via REST API
   
-  Must have a file called ``service-installer.conf`` inside of the configuration directory.
+  Must have a file called ``global.conf`` inside of the configuration directory.
   
   Inside that configuration file we use protocol://server:port to connect to a Zeppelin instance and use the API
   
   Args:
     notebook_path (str): Full file path to the Zeppelin note
+    session_cookie (str, optional): The cookie used after authentication in order to make authorized API calls. Required on the 2.5 TP Sandbox
     
   Returns:
     bool: True if the upload was successful (received 201 created), or False otherwise.
   
   '''
-  conf = config.read_config('service-installer.conf')['ZEPPELIN']
+  conf = config.read_config('global.conf')['ZEPPELIN']
   client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
   path = '/api/notebook'
   
   logger.info('Attempting to POST notebook at ' + client.proto + '://' + client.server + ':' + str(client.port))
-  output = client.make_request('POST', path, options='-i -H "Content-Type: application/json" -d @' + notebook_path )
+  opts = '-i -b \'' + session_cookie + '\' -H "Content-Type: application/json" -d @' + notebook_path
+  output = client.make_request('POST', path, options=opts)
   if '201 created' in output[0].lower():
     logger.info('Note posted successfully')
     return True
@@ -187,7 +220,7 @@ def post_template(template_path):
     bool: True if the upload is successful, False otherwise
   
   '''
-  conf = config.read_config('service-installer.conf')['NIFI']
+  conf = config.read_config('global.conf')['NIFI']
   client = CurlClient(proto=conf['protocol'], server=conf['server'], port=int(conf['port']))
   path = '/nifi-api/controller/templates'
   logger.info('Attempting to POST notebook at ' + client.proto + '://' + client.server + ':' + str(client.port))
@@ -221,7 +254,7 @@ def install_zeppelin():
       logger.critical('hdp-select must be installed on the system to continue with the installation of Zeppelin')
       raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
   
-  conf = config.read_config('service-installer.conf')
+  conf = config.read_config('global.conf')
   cmds = conf['ZEPPELIN']['install-commands']
   cmds = json.loads(conf['ZEPPELIN']['install-commands'])
   
@@ -269,7 +302,7 @@ def install_zeppelin():
 def install_nifi():
   '''Install NiFi via Ambari. (And Ali's NiFi service)
   
-  This requires user interaction. Plans to make installation automatic are in the works...
+  Automatically installs NiFi with NO user interaction. Simply just run the method while on the same Ambari machine and NiFi will be installed. You'll need to start it manually though.
   
   Returns:
     bool: True if installation is successful. Else, the user specifies whether or not they want to continue setting up the demo without Zeppelin. ``True`` if the user specifed Yes (to continue). ``False`` if they specified No (do not continue).
@@ -287,11 +320,11 @@ def install_nifi():
     if not installed:
       logger.error('hdp-select must be installed to install NiFi')
       raise EnvironmentError('hdp-select could not be installed. Please install it manually and then re-run the setup.')
-
-  conf = config.read_config('service-installer.conf')
-  cmds = json.loads(conf['NIFI']['install-commands'])
   
+  conf = config.read_config('global.conf')
+  cmds = json.loads(conf['NIFI']['install-commands'])
   sh = Shell()
+  
   logger.info('Getting HDP Version')
   version = sh.run(cmds[0])
   logger.info('HDP Version: ' + version[0])
@@ -301,8 +334,38 @@ def install_nifi():
   logger.info('NiFi Copy Command: ' + fixed_remove)
   remove = sh.run(fixed_remove)
   copy = sh.run(fixed_copy)
-  logger.info('Attempting to restart Ambari...')
-  restart = sh.run(cmds[3])
+  
+  
+  amc = conf['AMBARI']
+  cc = CurlClient(amc['username'], amc['password'], amc['proto'], amc['server'], amc['port'])
+  opts = '-H \'X-Requested-By: ambari\''
+  path = '/api/v1/clusters/' + amc['cluster_name'] + '/services/NIFI'
+  print cc.make_request('POST', path, options=opts)
+  path += '/components/NIFI_MASTER'
+  print cc.make_request('POST', path, options=opts)
+  
+  cfg = {
+    'cmd': 'bash /var/lib/ambari-server/resources/scripts/configs.sh set', 
+    'server': amc['server'],
+    'cluster': amc['cluster_name'],
+    'name': 'nifi-ambari-config',
+    'config_file': config.get_path('nifi/config/nifi-ambari-config.json')
+  }
+  create_cmd = lambda x: ' '.join([cfg['cmd'], cfg['server'], cfg['cluster'], x, config.get_path('nifi/config/' + x + '.json')])
+  
+  logger.debug(sh.run(create_cmd('nifi-ambari-config')))
+  logger.debug(sh.run(create_cmd('nifi-bootstrap-env')))
+  logger.debug(sh.run(create_cmd('nifi-flow-env')))
+  logger.debug(sh.run(create_cmd('nifi-logback-env')))
+  logger.debug(sh.run(create_cmd('nifi-properties-env')))
+  
+  path = '/api/v1/clusters/' + amc['cluster_name'] + '/hosts/' + amc['server'] + '/host_components/NIFI_MASTER'
+  logger.debug(path)
+  cc.make_request('POST', path, options=opts)
+  
+  path = '/api/v1/clusters/' + amc['cluster_name'] + '/services/NIFI'
+  opts = '-H \'X-Requested-By: ambari\' -d \'{"RequestInfo": {"context" :"Install Nifi"}, "Body": {"ServiceInfo": {"maintenance_state" : "OFF", "state": "INSTALLED"}}}\''
+  cc.make_request('PUT', path, options=opts)
 
   print("Please open the Ambari Interface and manually deploy the NiFi Service.")
   raw_input("Press enter twice to continue...")
@@ -316,7 +379,7 @@ def install_nifi():
   logger.info('NiFi installed successfully')
   cont = ''
   if not installed:
-    print('Unable to contact Ambari Server. Unsure whether or not Zeppelin was installed')
+    print('Unable to contact Ambari Server. Unsure whether or not NiFi was installed')
     while not (cont == 'y' or cont == 'n'):
       cont = raw_input('Continue attempt to set up NiFi for demo?(y/n)')
       if not (cont == 'y' or cont == 'n'):
@@ -357,7 +420,7 @@ def check_ambari_service_installed(service_name, ambari_config):
       return True
     else:
       attempts += 1
-      raw_input('Could not connect.' + str(10-attempts) + ' remaining. Press any key to continue')
+      raw_input('Could not connect. ' + str(10-attempts) + ' remaining. Press any key to continue')
   
   logger.info(service_name + ' was not installed successfully')
   return False

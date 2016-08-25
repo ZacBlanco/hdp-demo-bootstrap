@@ -13,11 +13,16 @@ notifications:
 # command to install dependencies
 install: 
  - pip install -r requirements.txt
+ - pip install -r demo_app/requirements.txt
  - pip install coveralls
- - cd demo_utils/
+ 
 # command to run tests
 script:
- nosetests --with-coverage -w tests/
+ - cd demo_app/
+ - nosetests -w tests/
+ - cd ../demo_utils
+ - nosetests --with-coverage -w tests/
+ - 
  
 after_success:
  coveralls

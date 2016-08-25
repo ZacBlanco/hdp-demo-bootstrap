@@ -10,26 +10,11 @@
 
 An easy to use framemwork for creating, installing, and running end-to-end demo applications on the Hortonworks Data Platform.
 
-<!--
-- Ability to deploy an app to the [Hortonworks Sandbox](http://hortonworks.com/products/sandbox/) or on a multi-node cluster
-- Single command Install and Remove via an Ambari Service.
-- A simple webapp to display realtime data (via an Ambari view)
-- Auto-install HDF
-- A built-in webapp skeleton.
-- A data generation simulator
-- Deployment of pre-made Zeppelin notebooks
-- Automatically import NiFi templates
-- Simple Kerberos setup for Sandbox environment*
-- Deploy apps on YARN with Slider*
-
-\* = possible feature
--->
-
 ## Quick Demo Installation
 
 **Note** Ambari must be installed on your machine for these commands to work.
 
-    export VERSION=2.4
+    export VERSION=2.5
     rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
     sudo git clone https://github.com/zacblanco/hdp-demo-bootstrap.git /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
     cd /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
@@ -37,18 +22,6 @@ An easy to use framemwork for creating, installing, and running end-to-end demo 
     ambari-server restart
   
 Then head into the Ambari UI and add the HDP Demo Service
-  
-<!--
-  export VERSION=2.4
-  sed -i s/parallel_execution=0/parallel_execution=1/g /etc/ambari-agent/conf/ambari-agent.ini
-export VERSION=2.4
-rm -rf /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
-rm -rf /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE
-cp -r /root/hdp-demo-bootstrap /var/lib/ambari-server/resources/stacks/HDP/$VERSION/services/DEMOSERVICE
-mkdir -p /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE/package/scripts
-cp -r /root/hdp-demo-bootstrap/package/scripts/* /var/lib/ambari-agent/cache/stacks/HDP/$VERSION/services/DEMOSERVICE/package/scripts
-  service ambari restart
--->
 
 ## Need more Information?
 

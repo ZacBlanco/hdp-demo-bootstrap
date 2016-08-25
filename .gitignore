@@ -13,7 +13,6 @@ demo-files/nohup.out
 docs/build/**
 _sources**
 doctrees**
-
 *.inv
-
 .buildinfo
+demo_app/ws4py.log

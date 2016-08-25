@@ -338,7 +338,7 @@
 
 <dl class="method">
 <dt id="demo_utils.ambari.Ambari.service_action">
-<code class="descname">service_action</code><span class="sig-paren">(</span><em>cluster_name</em>, <em>service_name</em>, <em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.service_action" title="Permalink to this definition">¶</a></dt>
+<code class="descname">service_action</code><span class="sig-paren">(</span><em>cluster_name</em>, <em>service_name</em>, <em>action</em>, <em>queue=False</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_utils.ambari.Ambari.service_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes an action on a given service inside of a cluster. Action must be one of START, STOP, or RESTART</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -348,6 +348,7 @@
 <li><strong>cluster_name</strong> (<em>str</em>) &#8211; the name of the cluster that the service resides in</li>
 <li><strong>service_name</strong> (<em>str</em>) &#8211; the name of the service which we are acting on</li>
 <li><strong>action</strong> (<em>str</em>) &#8211; A string of &#8216;START&#8217;, &#8216;STOP&#8217;, or &#8216;RESTART&#8217;</li>
+<li><strong>queue</strong> (<em>bool</em>) &#8211; False when we want the function to wait to continue until the service starts. True when we simply just want to add the function to the Ambari task queue. Defaults to False. <strong>Note</strong>: Does not guarantee the service will complete successfully.</li>
 </ul>
 </td>
 </tr>

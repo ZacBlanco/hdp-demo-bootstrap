@@ -152,9 +152,21 @@
   <div class="section" id="module-demo_app.cluster">
 <span id="demo-app-cluster-module"></span><h1>demo_app.cluster module<a class="headerlink" href="#module-demo_app.cluster" title="Permalink to this headline">¶</a></h1>
 <p>This file houses utility functions for interacting with the cluster and portions of the web application. Namely the Websockets server and Echo app implementation reside here.</p>
+<dl class="data">
+<dt id="demo_app.cluster.HIVE_TYPE_MAP">
+<code class="descclassname">demo_app.cluster.</code><code class="descname">HIVE_TYPE_MAP</code><em class="property"> = {'int': 'INT', 'map': 'STRING', 'decimal': 'DOUBLE', 'boolean': 'BOOLEAN', 'string': 'STRING'}</em><a class="headerlink" href="#demo_app.cluster.HIVE_TYPE_MAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps types from datum types to Hive types</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="demo_app.cluster.SPARK_TYPE_MAP">
+<code class="descclassname">demo_app.cluster.</code><code class="descname">SPARK_TYPE_MAP</code><em class="property"> = {'int': 'Int', 'map': 'String', 'decimal': 'Double', 'boolean': 'Boolean', 'string': 'String'}</em><a class="headerlink" href="#demo_app.cluster.SPARK_TYPE_MAP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps types from datum types to Scala types</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="demo_app.cluster.ThreadedGenerator">
-<em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">ThreadedGenerator</code><span class="sig-paren">(</span><em>schema</em>, <em>bps</em>, <em>outputs</em>, <em>http_data_pool_size=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">demo_app.cluster.</code><code class="descname">ThreadedGenerator</code><span class="sig-paren">(</span><em>schema</em>, <em>bps</em>, <em>outputs</em>, <em>data_pool_size=100</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></p>
 <p>A generator which runs on a separate thread when generating data.</p>
 <p>This thread will generate data indefinitely unless the program is killed or <code class="docutils literal"><span class="pre">self.stop()</span></code> is called.</p>
@@ -170,6 +182,7 @@
 <li><code class="docutils literal"><span class="pre">'KAFKA'</span></code></li>
 <li><code class="docutils literal"><span class="pre">'FILE'</span></code></li>
 <li><code class="docutils literal"><span class="pre">'HTTP'</span></code></li>
+<li><code class="docutils literal"><span class="pre">'HDFS'</span></code></li>
 </ul>
 <p>This determines the locations where data is sent after it is generated. If the string is present then the data will be sent to the specified location. Values other than these are ignored.</p>
 </li>
@@ -183,6 +196,24 @@
 <code class="descname">export_file</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.export_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write out data from the generator to a file <strong>in CSV format</strong></p>
 <p>The file to write to is found in <code class="docutils literal"><span class="pre">global.conf</span></code>. Header lines are not written to the file. All data is appended to a single file. There is no rotation.</p>
+<p>When a new data generator starts the file is essentially &#8216;wiped out&#8217; so make sure to copy the data elsewhere before stopping/restarting the generator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict/object</em>) &#8211; The data from the generator here writes out the data as a CSV for easier ingestion into other places like Hive or Spark.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">N/A</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="demo_app.cluster.ThreadedGenerator.export_hdfs">
+<code class="descname">export_hdfs</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.ThreadedGenerator.export_hdfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out data from the generator to a file <strong>in CSV format in HDFS</strong></p>
+<p>The file to write to is found in <code class="docutils literal"><span class="pre">global.conf</span></code>. Header lines are not written to the file. All data is appended to a single file.</p>
 <p>When a new data generator starts the file is essentially &#8216;wiped out&#8217; so make sure to copy the data elsewhere before stopping/restarting the generator.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -405,6 +436,29 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the creation is successful. False otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="demo_app.cluster.generate_queries">
+<code class="descclassname">demo_app.cluster.</code><code class="descname">generate_queries</code><span class="sig-paren">(</span><em>schema</em>, <em>table_name='demo_table'</em><span class="sig-paren">)</span><a class="headerlink" href="#demo_app.cluster.generate_queries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate test queries based on a configuration for the data generator</p>
+<p>Currently supported components</p>
+<ul class="simple">
+<li>Spark</li>
+<li>Hive</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>schema</strong> (<em>str</em>) &#8211; The schema for the generator as a JSON string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An object that holds keys for different objects, where each key points to a list of strings (queries) for various components.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
 </tbody>
 </table>
