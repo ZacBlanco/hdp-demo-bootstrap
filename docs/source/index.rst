@@ -43,7 +43,8 @@ To install this project...
 
 - Open up a shell/terminal on your **Ambari server host machine**
     - You can SSH or if running on the Hortonworks Sandbox open up http://sandbox.hortonworks.com:4200
-- Run the following commands
+- Run the following commands (if on the Hortonworks Sandbox/CentOS)
+    - Make sure to change version for HDP 2.4/2.5 etc..
 
 .. code-block:: bash
   :linenos:

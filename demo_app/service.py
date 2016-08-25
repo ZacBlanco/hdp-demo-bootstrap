@@ -64,8 +64,10 @@ def on_service_install():
   '''
   print 'Running on_service_install'
   
+#  service_installer.install_nifi()
   service_installer.add_zeppelin_notebooks()
   service_installer.add_nifi_templates()
+  
   
   
   

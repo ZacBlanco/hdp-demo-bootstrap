@@ -129,36 +129,17 @@ def get_kafka_topics():
 def generate_queries(schema, table_name='demo_table'):
   '''Generate test queries based on a configuration for the data generator
   
-  Currently supported components:
+  Currently supported components
   
   - Spark
   - Hive
-  
-  Sample JSON Return:
-  
-  ..code-block:: json
-  
-    {
-      'HIVE': [
-        {
-          'name': '{CODE}',
-          'name2: '{CODE2}',
-          'name3': '{CODE3}',
-          'name4: '{CODE4}',
-        }
-      ],
-      'SPARK': [
-        {
-          'name': '{CODE}'
-        }
-      ]
-    }
   
   Args:
     schema (str): The schema for the generator as a JSON string
     
   Returns:
     dict: An object that holds keys for different objects, where each key points to a list of strings (queries) for various components.
+    
   '''
   logger.info('Building queries')
   fields = json.loads(schema)
